@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Roletas - Datamining</title>
+    <link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <style>
+        body {
+            background-color: #11806A;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .quadro-roleta {
+            background-color: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 8px solid #000;
+            width: 1000px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .header-datamine {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #000;
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            text-transform: uppercase;
+            text-decoration: underline;
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .seletor-modo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .btn-modo {
+            padding: 5px 12px;
+            border: 2px solid #000;
+            background-color: #000;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 11px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .btn-modo:hover {
+            background-color: #333;
+        }
+
+        .conteudo-principal {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .area-roleta {
+            position: relative;
+            cursor: pointer;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        canvas {
+            border: 8px solid #000;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+        .ponteiro {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0; 
+            height: 0; 
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-right: 35px solid #000;
+            z-index: 10;
+        }
+
+        .painel-lateral {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-width: 0;
+        }
+
+        .caixa-config {
+            border: 3px solid #000;
+            padding: 12px;
+            background: #f0f0f0;
+            border-radius: 8px;
+        }
+
+        .container-botoes-roletas {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .btn-roleta-opcao {
+            height: 45px;
+            padding: 4px;
+            font-size: 15px;
+            background: #fff;
+            border: 2px solid #000;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .btn-roleta-opcao.ativa {
+            background: #000;
+            color: #fff;
+        }
+
+        .lista-itens {
+            max-height: 350px;
+            overflow-y: auto;
+            border: 3px solid #000;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+        }
+
+        .item-linha {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        input[type="text"], input[type="number"], select {
+            padding: 6px;
+            border: 2px solid #000;
+            font-weight: bold;
+            height: 32px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"] { flex: 1; font-size: 13px; min-width: 0; }
+        input[type="number"] { width: 45px; }
+        input[type="color"] { width: 35px; height: 32px; border: 2px solid #000; cursor: pointer; padding: 0; box-sizing: border-box; }
+
+        .btn {
+            padding: 10px;
+            background: #000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .btn-excluir { background: #FF4D4D; }
+        .btn-adicionar { background: #11806A; margin-top: 10px; font-size: 13px; display: none; }
+
+        #modal-vencedor {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-resultado {
+            background: white;
+            padding: 40px;
+            border: 8px solid #000;
+            border-radius: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div id="modal-vencedor" onclick="this.style.display='none'">
+    <div class="card-resultado">
+        <h2 style="text-transform: uppercase; margin-top: 0;">Resultado:</h2>
+        <h1 id="vencedor-nome" style="font-size: 50px; color: #11806A;">-</h1>
+    </div>
+</div>
+
+<div class="quadro-roleta">
+    <div class="header-datamine">
+        <h1 id="titulo-pagina">Sorteio Principal</h1>
+        <div class="seletor-modo">
+            <label>MODO:</label>
+            <button id="btn-modo" class="btn-modo" onclick="alternarModo()">PvP</button>
+        </div>
+    </div>
+
+    <div class="conteudo-principal">
+        <div class="area-roleta" onclick="girarRoleta()">
+            <div class="ponteiro"></div>
+            <canvas id="canvas-roleta" width="500" height="500"></canvas>
+        </div>
+
+        <div class="painel-lateral">
+            <div class="caixa-config">
+                <label style="font-weight: bold; font-size: 11px;">BIBLIOTECA DE ROLETAS:</label>
+                <div id="grade-botoes-roletas" class="container-botoes-roletas"></div>
+            </div>
+
+            <div class="lista-itens" id="lista-itens-container"></div>
+            <button class="btn btn-adicionar" onclick="adicionarNovoItem()">+ Adicionar Item</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let bancoDados = {
+        "Antivírus": { imagem: "Roleta (1).png", itens: [
+            { texto: "Jogador 1", cor: "#C40026", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Jogador 2", cor: "#EC9800", corTexto: "#000000", peso: 1 },
+            { texto: "Jogador 3", cor: "#FFEB00", corTexto: "#000000", peso: 1 },
+            { texto: "Jogador 4", cor: "#4DA619", corTexto: "#000000", peso: 1 },
+            { texto: "Jogador 5", cor: "#00A0DD", corTexto: "#000000", peso: 1 },
+            { texto: "Jogador 6", cor: "#00468B", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Jogador 7", cor: "#6C005F", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Jogador 8", cor: "#C50067", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Antivírus-c": { imagem: "Roleta (1).png", itens: [
+            { texto: "Jogador 1", cor: "#C40026", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Jogador 2", cor: "#EC9800", corTexto: "#000000", peso: 1 },
+            { texto: "Jogador 3", cor: "#FFEB00", corTexto: "#000000", peso: 1 },
+            { texto: "Jogador 4", cor: "#4DA619", corTexto: "#000000", peso: 1 },
+            { texto: "Jogador 5", cor: "#00A0DD", corTexto: "#000000", peso: 1 },
+            { texto: "Jogador 6", cor: "#00468B", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Jogador 7", cor: "#6C005F", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Jogador 8", cor: "#C50067", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Arquivo Desconhecido": { imagem: "Roleta (2).png", itens: [
+            { texto: "Escolha o que quiser desta roleta", cor: "#000000", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba 1 Patch", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Bloqueie um caminho aleatório adjacente", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba 1 Recurso Comum aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Lute contra outro jogador", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba +2A", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Dê +1B a cada outro jogador", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba +3B", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba 1 Bug", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Ganhe 1 movimento extra neste turno", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba -1V", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba 1 Recurso do tipo Tecla aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba -2A", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Jogue um jogo Cooperativo com os outros jogadores", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba -3B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba uma Datamine Portátil", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Rode a roleta de Quarentena", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba +1B de cada outro jogador", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Perca sua Zona Segura", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba 1 Recurso Incomum aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Não se mova no seu próximo turno", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Escolha um jogador para ganhar 1 Bug", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Descarte 1 Recurso a sua escolha", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba +1V", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba até 2 Arquivos Pesados", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba um Pedaço de Mapa imediatamente", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba -1A e -2B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba 1 Recurso Raro aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Retorne para a última pasta que você esteve", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Copie 1 Recurso não Único no seu Banco de Dados a sua escolha", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Retorne para sua Zona Segura (Aplicando as regras de retorno para Zona Segura)", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba +1A e +2B", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Tenha sua posição revelada a todos os jogadores", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Arquivo Desconhecido-c": { imagem: "Roleta (2).png", itens: [
+            { texto: "Escolham o que quiserem desta roleta", cor: "#000000", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam 1 Recurso Comum aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Bloqueie um caminho aleatório adjacente a cada jogador", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "O próximo jogador ganha 1 movimento extra neste turno", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "-1 ao número máximo de turnos", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam +3A", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Percam uma de suas Zonas Seguras aleatoriamente", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam +5B", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam 1 Bug", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam 1 Recurso do tipo Tecla aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam -1V", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Escolham o próximo jogo Cooperativo, quando forem jogar", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam -3A", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "+1 ao número máximo de turnos", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam -5B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam uma Datamine Portátil", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Rodem a roleta de Quarentena", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam 1 Recurso Incomum aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam -1B por jogador Antivírus", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam +1V", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Durante a próxima rodada, nenhuma Pasta Especial será ativada (Todas as pastas serão tratadas com Pastas Vazias)", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Joguem um jogo Cooperativo", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Descartem 1 Recurso a escolha do grupo", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam 1 Patch", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam até 3 Arquivos Pesados", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam um Pedaço de Mapa imediatamente", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam -2A e -3B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam 1 Recurso Raro aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "O próximo recurso que o grupo for comprar custará +2B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Copie 1 Recurso não Único do Banco de Dados a escolha do grupo", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Retorne um jogador aleatório para sua Zona Segura (Aplicando as regras de retorno para Zona Segura)", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba +2A e +3B", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Rodem esta roleta +2 vezes e fiquem com o pior resultado (A decisão do SO)", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Cara ou Coroa": { imagem: "Roleta (3).png", itens: [
+            { texto: "Cara", cor: "#333333", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Coroa", cor: "#FFFFFF", corTexto: "#000000", peso: 1 }
+        ]},
+        "Cara ou Coroa-c": { imagem: "Roleta (3).png", itens: [
+            { texto: "Cara", cor: "#333333", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Coroa", cor: "#FFFFFF", corTexto: "#000000", peso: 1 }
+        ]},
+        "Combate": { imagem: "Roleta (4).png", itens: [
+            { texto: "Stopots", cor: "#008080", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Nem a Pato", cor: "#014A4A", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Geoguessr", cor: "#008080", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Duelo de Dados", cor: "#014A4A", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Batalha de Rimas", cor: "#008080", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Gartic", cor: "#014A4A", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Quiz", cor: "#008080", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Jo-Ken-Po", cor: "#014A4A", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Cooperativo-c": { imagem: "Roleta (5).png", itens: [
+            { texto: "Top 10", cor: "#D600D6", corTexto: "#000000", peso: 1 },
+            { texto: "Conexo", cor: "#A500A5", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Segue o Fluxo", cor: "#D600D6", corTexto: "#000000", peso: 1 },
+            { texto: "C-S-Composto", cor: "#A500A5", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Nem a Pato", cor: "#D600D6", corTexto: "#000000", peso: 1 },
+            { texto: "Sintonia", cor: "#A500A5", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Tibitar", cor: "#D600D6", corTexto: "#000000", peso: 1 },
+            { texto: "Batata Quente Alfabética", cor: "#A500A5", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Quarentena": { imagem: "Roleta (6).png", itens: [
+            { texto: "Nada acontece", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba -3B", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Perca sua Zona Segura", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba -2A", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Dê 1 Recurso seu de maior raridade a outro jogador", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba 2 Arquivos Pesados", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba 2 Bugs", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Seja teletransportado para um Pasta Vazia aleatória", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Receba -1V", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Dê a outro jogador uma cópia de um de seus pedaços de mapa", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Esvazie seu Banco de Dados", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Não realize nenhuma ação no próximo turno, além de se mover", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Quarentena-c": { imagem: "Roleta (6).png", itens: [
+            { texto: "Nada acontece", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam -5B", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "-3 ao número máximo de rodadas", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam -4A", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam 3 Arquivos Pesados", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Percam 1 de suas Zonas Seguras aleatoriamente", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam 2 Bugs", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Sejam teletransportados para Pastas Vazias aleatórias", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Recebam -1V", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Percam 2 Recursos aleatórios", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Esvaziem seu Banco de Dados", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Não realizem nenhuma ação no próximo turno, além de se mover", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Quiz": { imagem: "Roleta (7).png", itens: [
+            { texto: "Artes", cor: "#8300D6", corTexto: "#FFFFFF", peso: 3 },
+            { texto: "Artes ou Ciências", cor: "#5B35DF", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Ciências", cor: "#3369E8", corTexto: "#FFFFFF", peso: 3 },
+            { texto: "Ciências ou Entretenimento", cor: "#1A8187", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Entretenimento", cor: "#009925", corTexto: "#000000", peso: 3 },
+            { texto: "Entretenimento ou Esportes", cor: "#80CC13", corTexto: "#000000", peso: 1 },
+            { texto: "Esportes", cor: "#FFFF00", corTexto: "#000000", peso: 3 },
+            { texto: "Esportes ou Geografia", cor: "#FFC000", corTexto: "#000000", peso: 1 },
+            { texto: "Geografia", cor: "#FF8000", corTexto: "#000000", peso: 3 },
+            { texto: "Geografia ou História", cor: "#EB406B", corTexto: "#000000", peso: 1 },
+            { texto: "História", cor: "#D600D6", corTexto: "#000000", peso: 3 },
+            { texto: "História ou Artes", cor: "#AC00D6", corTexto: "#FFFFFF", peso: 1 }
+        ]},
+        "Quiz-c": { imagem: "Roleta (7).png", itens: [
+            { texto: "Artes", cor: "#8300D6", corTexto: "#FFFFFF", peso: 3 },
+            { texto: "Artes ou Ciências", cor: "#5B35DF", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Ciências", cor: "#3369E8", corTexto: "#FFFFFF", peso: 3 },
+            { texto: "Ciências ou Entretenimento", cor: "#1A8187", corTexto: "#FFFFFF", peso: 1 },
+            { texto: "Entretenimento", cor: "#009925", corTexto: "#000000", peso: 3 },
+            { texto: "Entretenimento ou Esportes", cor: "#80CC13", corTexto: "#000000", peso: 1 },
+            { texto: "Esportes", cor: "#FFFF00", corTexto: "#000000", peso: 3 },
+            { texto: "Esportes ou Geografia", cor: "#FFC000", corTexto: "#000000", peso: 1 },
+            { texto: "Geografia", cor: "#FF8000", corTexto: "#000000", peso: 3 },
+            { texto: "Geografia ou História", cor: "#EB406B", corTexto: "#000000", peso: 1 },
+            { texto: "História", cor: "#D600D6", corTexto: "#000000", peso: 3 },
+            { texto: "História ou Artes", cor: "#AC00D6", corTexto: "#FFFFFF", peso: 1 }
+        ]}
+    };
+
+    let roletaAtualKey = "Antivírus";
+    let anguloAtual = 0;
+    let anguloOffset = 0; 
+    let girando = false;
+    let modoAtual = "PvP";
+    const canvas = document.getElementById('canvas-roleta');
+    const ctx = canvas.getContext('2d');
+    const imagensCarregadas = {};
+
+    // Função para truncar texto com reticências
+    function truncarTexto(texto, larguraMaxima) {
+        let largura = ctx.measureText(texto).width;
+        if (largura <= larguraMaxima) return texto;
+        
+        let stringCortada = texto;
+        while (stringCortada.length > 0 && ctx.measureText(stringCortada + "...").width > larguraMaxima) {
+            stringCortada = stringCortada.substring(0, stringCortada.length - 1);
+        }
+        return stringCortada + "...";
+    }
+
+    function desenhar() {
+        const data = bancoDados[roletaAtualKey];
+        if(!data) return;
+        const itensVisiveis = data.itens.filter(i => (parseInt(i.peso) || 0) > 0);
+        const centro = 250;
+        const raio = 240;
+        
+        ctx.clearRect(0,0,500,500);
+        if(itensVisiveis.length === 0) return;
+
+        const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
+        let anguloAcumulado = anguloAtual;
+
+        itensVisiveis.forEach((item) => {
+            const peso = parseInt(item.peso) || 0;
+            const tamanhoFatia = (peso / pesoTotal) * (Math.PI * 2);
+            
+            ctx.beginPath();
+            ctx.moveTo(centro, centro);
+            ctx.arc(centro, centro, raio, anguloAcumulado, anguloAcumulado + tamanhoFatia);
+            ctx.fillStyle = item.cor;
+            ctx.fill();
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.save();
+            ctx.translate(centro, centro);
+            ctx.rotate(anguloAcumulado + tamanhoFatia / 2);
+            ctx.textAlign = "left"; 
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = item.corTexto || "#FFFFFF";
+            ctx.font = "bold 15px Arial";
+            
+            // Lógica de reticências: largura máxima é a distância do centro até o fim (raio) 
+            // menos o espaço do ícone central (80) e uma margem de segurança (20)
+            const larguraMaxPermitida = raio - 80 - 20;
+            const textoTratado = truncarTexto(item.texto, larguraMaxPermitida);
+            
+            ctx.fillText(textoTratado, 90, 0);
+            ctx.restore();
+            anguloAcumulado += tamanhoFatia;
+        });
+
+        desenharCentro(centro, data.imagem);
+    }
+
+    function desenharCentro(centro, src) {
+        ctx.save();
+        ctx.translate(centro, centro);
+        ctx.rotate(anguloAtual - anguloOffset);
+
+        ctx.beginPath();
+        ctx.arc(0, 0, 80, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 6;
+        ctx.stroke();
+        
+        ctx.clip();
+
+        if (src) {
+            if (!imagensCarregadas[src]) {
+                const img = new Image();
+                img.src = src;
+                img.onload = () => {
+                    imagensCarregadas[src] = img;
+                    desenhar();
+                };
+            } else {
+                ctx.drawImage(imagensCarregadas[src], -80, -80, 160, 160);
+            }
+        }
+        ctx.restore();
+    }
+
+    function alternarModo() {
+        modoAtual = modoAtual === "PvP" ? "Coop" : "PvP";
+        document.getElementById('btn-modo').innerText = modoAtual;
+        renderizarPainel();
+    }
+
+    function renderizarPainel() {
+        const modo = modoAtual;
+        const containerItens = document.getElementById('lista-itens-container');
+        const gradeBotoes = document.getElementById('grade-botoes-roletas');
+        
+        const chavesFiltradas = Object.keys(bancoDados).filter(k => {
+            return modo === "Coop" ? k.endsWith("-c") : !k.endsWith("-c");
+        });
+
+        if (!chavesFiltradas.includes(roletaAtualKey)) roletaAtualKey = chavesFiltradas[0] || "";
+
+        const data = bancoDados[roletaAtualKey];
+        const itensVisiveis = data.itens.filter(i => (parseInt(i.peso) || 0) > 0);
+        if(itensVisiveis.length > 0) {
+            const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
+            const primeiraFatia = (parseInt(itensVisiveis[0].peso) / pesoTotal) * (Math.PI * 2);
+            anguloOffset = - (primeiraFatia / 2);
+            anguloAtual = anguloOffset;
+        } else {
+            anguloOffset = 0;
+            anguloAtual = 0;
+        }
+
+        document.getElementById('titulo-pagina').innerText = `${roletaAtualKey.replace("-c", "")} - ${modo}`;
+
+        gradeBotoes.innerHTML = "";
+        chavesFiltradas.forEach(k => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-roleta-opcao' + (k === roletaAtualKey ? ' ativa' : '');
+            btn.innerText = k.replace("-c", "");
+            btn.onclick = () => { 
+                roletaAtualKey = k; 
+                renderizarPainel(); 
+            };
+            gradeBotoes.appendChild(btn);
+        });
+
+        containerItens.innerHTML = "";
+        bancoDados[roletaAtualKey].itens.forEach((item, i) => {
+            const div = document.createElement('div');
+            div.className = 'item-linha';
+            div.innerHTML = `
+                <input type="color" value="${item.cor}" onchange="editarItem(${i}, 'cor', this.value)">
+                <input type="text" value="${item.texto}" oninput="editarItem(${i}, 'texto', this.value)">
+                <input type="number" value="${item.peso}" min="0" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" oninput="editarItem(${i}, 'peso', this.value)">
+            `;
+            containerItens.appendChild(div);
+        });
+        desenhar();
+    }
+
+    function editarItem(i, campo, val) { 
+        bancoDados[roletaAtualKey].itens[i][campo] = val; 
+        if(campo === 'peso') {
+             const itensVisiveis = bancoDados[roletaAtualKey].itens.filter(it => (parseInt(it.peso) || 0) > 0);
+             if(itensVisiveis.length > 0) {
+                 const pesoTotal = itensVisiveis.reduce((acc, it) => acc + (parseInt(it.peso) || 0), 0);
+                 const primeiraFatia = (parseInt(itensVisiveis[0].peso) / pesoTotal) * (Math.PI * 2);
+                 anguloOffset = - (primeiraFatia / 2);
+                 anguloAtual = anguloOffset;
+             }
+        }
+        desenhar(); 
+    }
+    
+    function adicionarNovoItem() { 
+        bancoDados[roletaAtualKey].itens.push({texto: "Novo", cor: "#11806A", corTexto: "#FFFFFF", peso: 1}); 
+        renderizarPainel(); 
+    }
+
+    function girarRoleta() {
+        if(girando) return;
+        const itensVisiveis = bancoDados[roletaAtualKey].itens.filter(i => (parseInt(i.peso) || 0) > 0);
+        if(itensVisiveis.length === 0) return;
+        girando = true;
+        
+        const duracao = 4000;
+        const forcaGiro = (Math.random() * 8 + 10) * (Math.PI * 2);
+        const anguloInicial = anguloAtual;
+        const timestampInicial = performance.now();
+        
+        function step(agora) {
+            const progresso = Math.min((agora - timestampInicial) / duracao, 1);
+            const easing = 1 - Math.pow(1 - progresso, 4);
+            anguloAtual = anguloInicial + (forcaGiro * easing);
+            desenhar();
+            if(progresso < 1) requestAnimationFrame(step);
+            else {
+                girando = false;
+                processarVencedor(itensVisiveis);
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    function processarVencedor(itensVisiveis) {
+        const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
+        let normalized = (2 * Math.PI - (anguloAtual % (Math.PI * 2))) % (Math.PI * 2);
+        let acumulado = 0;
+        let vencedor = itensVisiveis[0].texto;
+        for(let i=0; i < itensVisiveis.length; i++) {
+            const fatia = (parseInt(itensVisiveis[i].peso) / pesoTotal) * (Math.PI * 2);
+            if(normalized >= acumulado && normalized <= acumulado + fatia) {
+                vencedor = itensVisiveis[i].texto;
+                break;
+            }
+            acumulado += fatia;
+        }
+        document.getElementById('vencedor-nome').innerText = vencedor;
+        document.getElementById('modal-vencedor').style.display = 'flex';
+    }
+
+    window.onload = renderizarPainel;
+</script>
+</body>
+</html>

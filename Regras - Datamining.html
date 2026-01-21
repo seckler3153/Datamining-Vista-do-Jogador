@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Regras - Datamining</title>
+	<link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <style>
+        body {
+            background-color: #11806A;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+            gap: 20px;
+        }
+
+        .quadro-regras-completo {
+            background-color: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 8px solid #000;
+            width: 950px;
+            height: auto;
+            position: relative;
+        }
+
+        /* Estilo do botão lateral */
+        .apendice-botoes {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 8px solid #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 150px; 
+            position: sticky;
+            top: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-nav {
+            padding: 10px;
+            background-color: #11806A;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            text-align: center;
+            text-decoration: underline;
+            text-transform: uppercase;
+            font-size: 32px;
+            margin-top: 0;
+            margin-bottom: 40px;
+            color: #000;
+        }
+
+        .categoria-bloco {
+            border: 4px solid #000;
+            padding: 25px;
+            margin-bottom: 60px;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .titulo-secao {
+            background-color: #000;
+            color: #fff;
+            padding: 8px 20px;
+            display: inline-block;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 18px;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+        }
+
+        .regra-com-imagem {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            margin-bottom: 0px;
+        }
+
+        .regra-com-imagem .texto-regra {
+            flex: 1;
+        }
+
+        .imagem-regra {
+            max-width: 250px;
+            max-height: 250px;
+            object-fit: contain;
+            border: none;
+            box-shadow: none;
+            cursor: zoom-in;
+        }
+
+        .texto-regra {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #000;
+            text-align: justify;
+        }
+
+        .subtitulo-dif {
+            background-color: #f0f0f0;
+            border: 2px solid #000;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        ul { padding-left: 25px; margin: 15px 0; }
+        li { margin-bottom: 10px; }
+        b { color: #000; text-decoration: underline; }
+        .separador { border-top: 2px dashed #000; margin: 20px 0; }
+        .hidden { display: none; }
+
+        #overlay-imagem {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            cursor: zoom-out;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        #imagem-expandida {
+            max-width: 95%;
+            max-height: 95%;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay-imagem" onclick="fecharImagem()">
+        <img id="imagem-expandida" src="">
+    </div>
+
+    <div class="quadro-regras-completo">
+        <h1 id="titulo-principal">Protocolos do Modo Competitivo</h1>
+
+        <div id="conteudo-pvp">
+            <div class="categoria-bloco">
+                <div class="titulo-secao">Regras Gerais (PvP)</div>
+                <div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Objetivo:</b> Proteger o <strong>Arquivo Vital</strong>, que está na pasta de Diretório Principal, e levá-lo até sua Zona Segura. Vence o jogador que iniciar seu turno na própria pasta de Zona Segura com o Arquivo Vital no seu <strong>Banco de Dados</strong>.</p>
+						<p>• <b>Jogadores:</b> Um jogador é o <strong>Sistema Operacional (SO)</strong> sendo corrompido e os outros são <strong>Antivírus</strong> concorrentes entre si. <i><u>(Mínimo de 3 e máximo de 8 jogadores além do SO)</u></i></p>
+                        <p>• <b>SO:</b> Apenas o SO vê a <strong>Tabela Mestra de Diretórios (TMD)</strong>. Ele informa as direções possíveis e a distância após a escolha do jogador sobre qual caminho seguir.</p>
+						<p>• <b>Antivírus:</b> Os jogadores Antivírus têm como ações: realizar um movimento, usar um <strong>Recurso</strong>, usar seus <strong>Patches</strong>, realizar um <strong>Combate</strong> ou rodar uma roleta. <i><u>(Não pode repetir uma ação no mesmo turno normalmente)</u></i></p>
+                    </div>
+                    <img src="Regras PvP (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Setup:</b> Cada jogador escolhe sua cor e inicia o jogo com seus status <strong>1V-0A-5B</strong>. <i><u>(Versão, Atualização e Bits)</u></i></p>
+                    </div>
+                    <img src="Regras PvP (2).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Esgotamento:</b> Caso um jogador fique com ambos V e A abaixo de zero, coloque-o de volta na sua pasta de Zona Segura <i><u>(Se não tiver, vai para uma pasta de Download aleatória pelo mapa)</u></i>. Ele dá seus Recursos para os outros jogadores <i><u>(O Arquivo Vital volta para a pasta de Diretório Principal)</u></i> e recomeça com seus status iniciais.</p>
+						<p>• <b>Início:</b> A ordem dos jogadores é escolhida pela roleta de Antivírus.</p>
+						<p>• <b>Exploração:</b> Com exceção das pasta de Zona Segura, do Diretório Principal, de Quarentena e de Downloads, encontrar uma pasta nunca explorada concede ao jogador uma <strong>Criptomoeda</strong>, que dá +1A ou +1B pro jogador a sua escolha.</p>
+                    </div>
+                    <img src="Regras PvP (3).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Datamine:</b> Com exceção das pasta de Zona Segura, do Diretório Principal, de Quarentena e de Downloads, existe uma Datamine escondida no mapa que, ao ser encontrada, revela para o jogador a parte do mapa em que ele está. Depois disso, ela é colocada escondida em outro lugar do mapa.</p>
+                    </div>
+                    <img src="Regras PvP (4).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Progressão:</b> A cada 5A, o jogador recebe +1V e um Patch e fica com 0A. Se seu A cair abaixo de 0, recebe -1V, um Bug e volta a 4A.</p>
+						<div class="separador"></div>
+                    </div>
+                    <img src="Regras PvP (5).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+						<p>• <b>Patch:</b> O jogador do turno sempre usa seus patches antes dos demais, durante suas ações. Máximo de 3 patches por jogador <i><u>(Não pode ser usado para remover um elemento da roleta que já tenha sido duplicado)</u></i>.</p>
+							<p>- <strong>1 Patch:</strong> Duplicar ou remover a chance de algum elemento na roleta de Arquivo Desconhecido própria ou de outro jogador; Bloquear ou desbloquear um caminho adjacente a si.</p>
+							<p>- <strong>2 Patches:</strong> Ganhar um movimento adicional neste turno; Remover 1 Bug próprio; Lutar contra outro jogador a sua escolha <i><u>(Para lutas, ele pode usar 1 Patch próprio e 1 Bug do outro jogador)</u></i>.</p>
+							<p>- <strong>3 Patches:</strong> Fazer aparecer um Recurso a sua escolha, que já tenha sido usado por algum jogador durante esta partida, na pasta de Download; Ganhar +1V.</p>
+						<div class="separador"></div>
+                    </div>
+                    <img src="Regras PvP (6).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+						<p>• <b>Bug:</b> Outros jogadores podem usar os bugs do jogador a qualquer momento do turno deste. Máximo de 3 bugs por jogador.</p>
+							<p>- <strong>1 Bug:</strong> Duplicar ou remover a chance de algum elemento na roleta de Arquivo Desconhecido do jogador; Bloquear ou desbloquear um caminho adjacente do jogador do turno.</p>
+							<p>- <strong>2 Bugs:</strong> Impedir o jogador de fazer um movimento; Fazer o jogador perder 1 Patch; Forçar o jogador a entrar em uma luta <i><u>(Para lutas, o jogador pode usar 1 patch próprio e 1 bug do jogador do turno)</u></i>.</p>
+							<p>- <strong>3 Bugs:</strong> Remover um Recurso do Banco de Dados do jogador que não seja o Arquivo Vital; Receber -1V.</p>
+						<div class="separador"></div>
+                    </div>
+                    <img src="Regras PvP (7).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+						<p>• <b>Recursos:</b> O Banco de Dados de cada jogador leva até 4 Recursos diferentes. Limite de 1 uso por turno para cada jogador.</p>
+						<p>• <b>Combate:</b> Toda vez que dois ou mais jogadores estiverem na mesma pasta, eles lutam entre si. O último jogador a entrar escolhe contra quem luta, caso tenham dois ou mais outros jogadores na mesma pasta. O vencedor recebe +2A ou +3B a sua escolha e uma <strong>Datamine Portátil</strong>. O perdedor recebe -1A, -2B ou um bug, a escolha do jogador vencedor.</p>
+                    </div>
+                    <img src="Regras PvP (8).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="texto-regra">
+                    <p>• <b>Diretório Principal:</b> É disfarçada de uma Pasta Vazia e é tratada como tal até o jogador encontrar todas as Chaves de Acesso e estiver com o V necessário ou acima para acessá-la.</p>
+					<p>• <b>Arquivo Vital:</b> Enquanto estiver fora do Diretório Principal, qualquer jogador pode ter o Arquivo Vital em seu Banco de Dados, independente de ter todas as Chaves de Acesso ou de estar no V necessário.</p>
+					<p>• <b>Empate:</b> No caso de empate em alguma luta ou indecisão do resultado de alguma roleta ou escolha, quem desempata são os jogadores externos à ação. Caso haja mais de um jogador externo, esta escolha deverá ser feita de forma unânime. Caso os jogadores externos não entrem num consenso sobre o que fazer por muito tempo, o SO pode, a qualquer momento, interromper a decisão e rodar a roleta de Quarentena para todos os jogadores <i><u>(internos ou externos à ação)</u></i>.</p>
+                </div>
+            </div>
+
+            <div class="categoria-bloco">
+                <div class="titulo-secao">Níveis de Dificuldade (PvP)</div>
+                <div class="subtitulo-dif">Muito Fácil</div>
+                <ul class="regra-com-imagem">
+                    <div class="texto-regra">
+						<li>Recomendado para o máximo de 4 jogadores.</li>
+						<li>O mapa é 5x5 e não possui pastas de Chave de Acesso.</li>
+						<li>O mapa é completo, não tendo espaços vazios entre as pastas no mapa.</li>
+						<li>Sem caminhos bloqueados no início do jogo.</li>
+						<li>O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.</li>
+						<li>Zonas Seguras estão sempre nos mesmos locais do mapa e cada jogador saberá onde ele mesmo inicia o jogo, mas não sabe onde iniciam os outros jogadores.</li>
+						<li>Ao invés de escolher entre receber +A ou +B, seja por vitórias ou encontrar criptomoedas, os jogadores recebem ambos.</li>
+						<li>Não há limite de uso de Recursos por turno.</li>
+						<li>Sem pasta de Quarentena pelo mapa.</li>
+						<li>Recursos à venda na pasta de Downloads custam -2B que seus preços normais <i><u>(Mínimo de 1B)</u></i>.</li>
+					</div>
+					<img src="Regras PvP (9).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </ul>
+
+                <div class="subtitulo-dif">Fácil</div>
+                <ul class="regra-com-imagem">
+                    <div class="texto-regra">
+						<li>Recomendado para o máximo de 5 jogadores.</li>
+						<li>O mapa é 7x7 e tem 1 pasta de Chave de Acesso.</li>
+						<li>A pasta de Diretório Principal só pode ser acessada por jogadores no 3V.</li>
+						<li>Sem caminhos bloqueados no início do jogo.</li>
+						<li>O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.</li>
+						<li>Zonas Seguras estão sempre nos mesmos locais do mapa e cada jogador saberá onde ele mesmo inicia o jogo, mas não sabe onde iniciam os outros jogadores.</li>
+						<li>Ao invés de escolher entre receber +A ou +B, seja por vitórias ou encontrar criptomoedas, os jogadores recebem ambos.</li>
+						<li>Limite de uso de 2 Recursos por jogador a cada turno.</li>
+						<li>Sem pasta de Quarentena pelo mapa.</li>
+						<li>Recursos à venda na pasta de Downloads custam -1B que seus preços normais <i><u>(Mínimo de 1B)</u></i>.</li>
+					</div>
+					<img src="Regras PvP (10).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </ul>
+
+                <div class="subtitulo-dif">Normal</div>
+                <ul class="regra-com-imagem">
+                    <div class="texto-regra">
+						<li>Recomendado para 3 a 6 jogadores.</li>
+						<li>O mapa é 9x9 e tem 2 pastas de Chave de Acesso.</li>
+						<li>A pasta de Diretório Principal só pode ser acessada por jogadores no 5V.</li>
+						<li>Alguns caminhos podem começar o jogo já bloqueados.</li>
+						<li>O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.</li>
+						<li>Zonas Seguras estão sempre nos mesmos locais do mapa e cada jogador saberá onde ele mesmo inicia o jogo, mas não sabe onde iniciam os outros jogadores.</li>
+						<li>Limite de uso de 1 Recurso por jogador a cada turno.</li>
+						<li>Há 1 pasta de Quarentena pelo mapa.</li>
+						<li>Recursos à venda na pasta de Downloads custam os seus preços normais.</li>
+					</div>
+					<img src="Regras PvP (11).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </ul>
+
+                <div class="subtitulo-dif">Difícil</div>
+                <ul class="regra-com-imagem">
+                    <div class="texto-regra">
+						<li>Recomendado para 4 a 6 jogadores.</li>
+						<li>O mapa é 12x12 e tem 3 pastas de Chave de Acesso.</li>
+						<li>A pasta de Diretório Principal só pode ser acessada por jogadores no 7V.</li>
+						<li>Mais caminhos podem começar o jogo já bloqueados.</li>
+						<li>O SO não informará a distância que deslocará, após o jogador escolher um caminho, nem quais caminhos poderão ser seguidos da pasta que o jogador está <i><u>(O jogador informará uma direção e o SO dirá se o jogador se moveu ou falará para o jogador escolher outra)</u></i>.</li>
+						<li>Zonas Seguras, apesar de estarem sempre nos mesmos locais do mapa, não são informadas aos seus respectivos jogadores onde iniciam o jogo.</li>
+						<li>Limite de uso de 1 Recurso por jogador a cada turno.</li>
+						<li>Há 2 pastas de Quarentena pelo mapa e o jogador fica 1 turno preso nelas.</li>
+						<li>Recursos à venda na pasta de Downloads custam +1B que seus preços normais.</li>
+					</div>
+					<img src="Regras PvP (12).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </ul>
+
+                <div class="subtitulo-dif">Extremo</div>
+                <ul class="regra-com-imagem">
+                    <div class="texto-regra">
+						<li>Recomendado para 6 a 8 jogadores.</li>
+						<li>O mapa é 15x15 e tem 5 pastas de Chave de Acesso.</li>
+						<li>A pasta de Diretório Principal só pode ser acessada por jogadores no 10V.</li>
+						<li>Muitos caminhos podem começar o jogo já bloqueados.</li>
+						<li>O SO não informará a distância que deslocará, após o jogador escolher um caminho, nem quais caminhos poderão ser seguidos da pasta que o jogador está <i><u>(O jogador informará uma direção e o SO dirá se o jogador se moveu ou falará para o jogador escolher outra)</u></i>.</li>
+						<li>Zonas Seguras não são informadas aos seus respectivos jogadores onde iniciam o jogo, além disso elas não têm localização fixa, podendo estar em qualquer lugar do mapa.</li>
+						<li>Caminhos diagonais não são necessariamente em 45º.</li>
+						<li>Limite de uso de 1 Recurso por jogador a cada rodada.</li>
+						<li>Todas as perdas de A ou B são duplicadas.</li>
+						<li>Apenas 3 Recursos são vendidos na pasta de Download no máximo normalmente <i><u>(3 Comuns no primeiro patamar; 2 Comuns e 1 Incomum no segundo patamar; e 1 Comum, 1 Incomum e 1 Raro no terceiro patamar)</u></i>.</li>
+						<li>Há 4 pastas de Quarentena pelo mapa e o jogador fica 2 turnos preso nelas.</li>
+						<li>Recursos à venda na pasta de Downloads custam +3B que seus preços normais.</li>
+					</div>
+					<img src="Regras PvP (13).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </ul>
+            </div>
+        </div>
+
+        <div id="conteudo-coop" class="hidden">
+            <div class="categoria-bloco">
+                <div class="titulo-secao">Regras Gerais (Coop)</div>
+                <div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Objetivo:</b> Proteger o <strong>Arquivo Vital</strong>, que está na pasta de Diretório Principal, e levá-lo até sua Zona Segura. O grupo vence se todos iniciarem a rodada na Zona Segura com o Arquivo Vital em seu <strong>Banco de Dados</strong>.</p>
+						<p>• <b>Jogadores:</b> Um jogador é o <strong>Sistema Operacional (SO)</strong> sendo corrompido e os outros são um programa de <strong>Antivírus</strong> trabalhando juntos para resgatar o SO. (Mínimo de 3 e máximo de 8 jogadores além do SO)
+						<p>• <b>SO:</b> Apenas o SO vê a <strong>Tabela Mestra de Diretórios (TMD)</strong>. Ele informa as direções possíveis e a distância após a escolha do jogador sobre qual caminho seguir.
+						<p>• <b>Antivírus:</b> Os jogadores Antivírus têm como ações: realizar um movimento, usar um <strong>Recurso</strong>, usar seus <strong>Patches</strong>, realizar um <strong>Jogo Cooperativo</strong> ou rodar uma roleta. (Não pode repetir uma ação no mesmo turno normalmente)
+                    </div>
+                    <img src="Regras Coop (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Setup:</b> Cada jogador escolhe sua cor e inicia o jogo com seus status <strong>1V-0A-5B</strong>. <i><u>(Versão, Atualização e Bits).</u></i></p>
+                    </div>
+                    <img src="Regras Coop (2).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Turnos:</b> O jogo terá 120 turnos inicialmente.</p>
+						<p>• <b>Esgotamento:</b> Caso o grupo fique com ambos V e A abaixo de zero ou o número de turnos chegue a 0, o jogo acaba.</p>
+						<p>• <b>Exploração:</b> Com exceção das pasta de Zona Segura, do Diretório Principal, de Quarentena e de Downloads, encontrar uma pasta nunca explorada concede ao jogador uma <strong>Criptomoeda</strong>, que dá +1A ou +1B pro grupo a escolha do jogador que a encontrou.
+						<p>• <b>Rodadas:</b> Durante uma rodada, cada jogador do grupo pode ter seu turno em qualquer ordem, mas cada jogador deve ter um turno por rodada. Ao final de cada rodada, é rolada a roleta de Arquivo Desconhecido.</p>
+                    </div>
+                    <img src="Regras Coop (3).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Datamine:</b> Com exceção das pasta de Zona Segura, do Diretório Principal, de Quarentena e de Downloads, existe uma Datamine escondida no mapa que, ao ser encontrada, revela para o grupo a parte do mapa em que o jogador que a encontrou está. Depois disso, ela é colocada escondida em outro lugar do mapa.</p>
+                    </div>
+                    <img src="Regras Coop (4).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Progressão:</b> A cada 10A, o jogador recebe +1V e um Patch e fica com 0A. Se seu A cair abaixo de 0, recebe -1V, um Bug, volta a 9A e perde 1 da contagem total de turnos</p>
+						<div class="separador"></div>
+                    </div>
+                    <img src="Regras Coop (5).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Patch:</b> Máximo de 3 patches pro grupo <i><u>(Não pode ser usado para remover um elemento da roleta que já tenha sido duplicado)</u></i>.</p>
+							<p>- <strong>1 Patch:</strong> Duplicar ou remover a chance de algum elemento na roleta de Arquivo Desconhecido; Bloquear ou desbloquear um caminho adjacente.</p>
+							<p>- <strong>2 Patches:</strong> Ganhar um movimento adicional neste turno; Remover 1 Bug; Ganhar 3 turnos.</p>
+							<p>- <strong>3 Patches:</strong> Fazer aparecer um Recurso a sua escolha, que já tenha sido usado por algum jogador durante esta partida, na pasta de Download; Ganhar +1V.</p>
+						<div class="separador"></div>
+                    </div>
+                    <img src="Regras Coop (6).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Bug:</b> São usados pelo SO. Máximo de 3 bugs pro grupo.</p>
+							<p>- <strong>1 Bug:</strong> Duplicar ou remover a chance de algum elemento na roleta de Arquivo Desconhecido; Bloquear um caminho adjacente.</p>
+							<p>- <strong>2 Bugs:</strong> Negar um movimento de um jogador; Anular o uso de um Recurso.</p>
+							<p>- <strong>3 Bugs:</strong> O SO automaticamente gasta todos e tira 4 turnos da contagem total restante ou dá ao grupo -1V <i><u>(O grupo não recebe 1 bug pela perda de V, neste caso, mas ainda perde 1 turno da contagem total restante)</u></i> escolhido aleatoriamente.</p>
+						<div class="separador"></div>
+                    </div>
+                    <img src="Regras Coop (7).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+				
+				<div class="regra-com-imagem">
+                    <div class="texto-regra">
+                        <p>• <b>Recursos:</b> O Banco de Dados do grupo leva até 6 Recursos diferentes. Limite de 1 uso por turno.</p>
+						<p>• <b>Jogo Cooperativo:</b> Quando dois ou mais jogadores terminam a rodada na mesma pasta, é iniciado um jogo Cooperativo apenas entre eles. Caso vençam, recebem +3A ou +3B, a escolha do grupo, e uma Datamine Portátil. Caso percam, recebem um bug e -2B ou -2A, escolhido pelo SO. Estes mesmos jogadores não podem ter outro jogo Cooperativo exclusivamente entre si até que já tenha acontecido outro jogo entre qualquer outra combinação de jogadores ou com o grupo inteiro.</p>
+                    </div>
+                    <img src="Regras Coop (8).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="texto-regra">
+                    <p>• <b>Diretório Principal:</b> É disfarçada de uma Pasta Vazia e é tratada como tal até o grupo encontrar todas as Chaves de Acesso e estiver com o V necessário ou acima para acessá-la.</p>
+					<p>• <b>Empate:</b> No caso de demora ou indecisão do resultado de alguma roleta ou escolha, o SO pode, a qualquer momento, interromper a decisão e rodar a roleta de Quarentena para o grupo.</p>
+                </div>
+            </div>
+
+            <div class="categoria-bloco">
+                <div class="titulo-secao">Níveis de Dificuldade (Coop)</div>
+                <div class="subtitulo-dif">Fácil</div>
+                <ul class="regra-com-imagem">
+                    <div class="texto-regra">
+						<li>Recomendado para o máximo de 4 jogadores</li>
+						<li>O mapa é 9x9 e tem 2 pastas de Chave de Acesso.</li>
+						<li>A pasta de Diretório Principal só pode ser acessada pelo grupo no 3V.</li>
+						<li>Sem caminhos bloqueados no início do jogo.</li>
+						<li>Limite de uso de 1 Recurso do grupo por turno.</li>
+						<li>O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.</li>
+						<li>Zonas Seguras estão sempre nos mesmos locais do mapa e são informadas aos seus respectivos jogadores onde iniciam o jogo.</li>
+						<li>Ao invés de escolher entre ganhar +A ou +B, seja por vitórias ou encontrar criptomoedas, o grupo recebe ambos.</li>
+						<li>Ao final de cada rodada, a roleta de Arquivo Desconhecido é rolada.</li>
+						<li>Há 1 pasta de Quarentena pelo mapa.</li>
+						<li>Adquirir uma nova Zona Segura custa 6B.</li>
+						<li>Recursos à venda na pasta de Downloads custam -2B que seus preços normais (Mínimo de 1B).</li>
+					</div>
+					<img src="Regras Coop (9).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </ul>
+
+                <div class="subtitulo-dif">Normal</div>
+                <ul class="regra-com-imagem">
+                    <div class="texto-regra">
+						<li>Recomendado para 3 a 6 jogadores.</li>
+						<li>O mapa é 12x12 e tem 3 pastas de Chave de Acesso.</li>
+						<li>A pasta de Diretório Principal só pode ser acessada pelo grupo no 5V.</li>
+						<li>Alguns caminhos podem começar o jogo já bloqueados.</li>
+						<li>Limite de uso de 1 Recurso do grupo por turno.</li>
+						<li>O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.</li>
+						<li>Zonas Seguras estão sempre nos mesmos locais do mapa e são informadas aos seus respectivos jogadores onde iniciam o jogo.</li>
+						<li>Ao final de cada rodada, a roleta de Arquivo Desconhecido é rolada.</li>
+						<li>Há 2 pastas de Quarentena pelo mapa e o jogador fica 1 turno preso nelas.</li>
+						<li>Adquirir uma nova Zona Segura custa 8B.</li>
+						<li>Recursos à venda na pasta de Downloads custam seus preços normais.</li>
+					</div>
+					<img src="Regras Coop (10).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </ul>
+
+                <div class="subtitulo-dif">Difícil</div>
+                <ul class="regra-com-imagem">
+                    <div class="texto-regra">
+						<li>Recomendado para 5 a 8 jogadores.</li>
+						<li>O mapa é 15x15 e tem 5 pastas de Chave de Acesso.</li>
+						<li>A pasta de Diretório Principal só poderá ser acessada pelo grupo no 7V.</li>
+						<li>Muitos caminhos podem começar o jogo já bloqueados.</li>
+						<li>Todas as perdas de A ou B são duplicadas.</li>
+						<li>Limite de uso de 1 Recurso do grupo por rodada.</li>
+						<li>O SO não informará a distância que deslocará, após o jogador escolher um caminho, nem quais caminhos poderão ser seguidos da pasta que o jogador está.</li>
+						<li>Zonas Seguras, apesar de estarem sempre nos mesmos locais do mapa, não serão informadas aos seus respectivos jogadores onde iniciam o jogo.</li>
+						<li>Caminhos diagonais não são necessariamente em 45º.</li>
+						<li>Ao final de cada rodada, a roleta de Quarentena é rolada.</li>
+						<li>Há 4 pastas de Quarentena pelo mapa e o jogador fica 2 turnos preso nelas.</li>
+						<li>Adquirir uma nova Zona Segura custa 12B.</li>
+						<li>Recursos à venda na pasta de Downloads custam +3B que seus preços normais.</li>
+					</div>
+					<img src="Regras Coop (11).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="apendice-botoes">
+        <button class="btn-nav" onclick="trocarModoManual()">Mudar Modo</button>
+    </div>
+
+    <script>
+        let modoAtual = 'pvp';
+
+        function trocarModoManual() {
+            modoAtual = modoAtual === 'pvp' ? 'coop' : 'pvp';
+            alternarModo();
+        }
+
+        function alternarModo() {
+            const titulo = document.getElementById('titulo-principal');
+            const pvp = document.getElementById('conteudo-pvp');
+            const coop = document.getElementById('conteudo-coop');
+
+            if (modoAtual === 'pvp') {
+                titulo.innerText = "Protocolos do Modo Competitivo";
+                pvp.classList.remove('hidden');
+                coop.classList.add('hidden');
+            } else {
+                titulo.innerText = "Protocolos do Modo Cooperativo";
+                pvp.classList.add('hidden');
+                coop.classList.remove('hidden');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function expandirImagem(src) {
+            const overlay = document.getElementById('overlay-imagem');
+            const imgExpandida = document.getElementById('imagem-expandida');
+            imgExpandida.src = src;
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharImagem() {
+            const overlay = document.getElementById('overlay-imagem');
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") fecharImagem();
+        });
+    </script>
+</body>
+</html>
