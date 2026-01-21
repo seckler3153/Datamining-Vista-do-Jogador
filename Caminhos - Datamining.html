@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Caminhos - Datamining</title>
+	<link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <style>
+        body {
+            background-color: #11806A; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 150px);
+            grid-gap: 20px;
+            justify-items: center;
+            align-items: center;
+        }
+
+        /* Estilo base das setas */
+        svg {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.4));
+        }
+
+        /* ESTADO APAGADO: Sem fundo e 50% de opacidade */
+        .vazada {
+            fill: transparent !important;
+            opacity: 0.5;
+        }
+
+        .pasta-central {
+            width: 140px;
+            height: auto;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <svg class="vazada" viewBox="0 0 100 100" onclick="toggleSeta(this)" style="fill: #4da619;"><path d="M20,50 L50,20 L80,50 L65,50 L65,80 L35,80 L35,50 Z" stroke="#000" stroke-width="5" transform="rotate(-45 50 50)"/></svg>
+    <svg class="vazada" viewBox="0 0 100 100" onclick="toggleSeta(this)" style="fill: #ffeb00;"><path d="M20,50 L50,20 L80,50 L65,50 L65,80 L35,80 L35,50 Z" stroke="#000" stroke-width="5"/></svg>
+    <svg class="vazada" viewBox="0 0 100 100" onclick="toggleSeta(this)" style="fill: #ec9800;"><path d="M20,50 L50,20 L80,50 L65,50 L65,80 L35,80 L35,50 Z" stroke="#000" stroke-width="5" transform="rotate(45 50 50)"/></svg>
+
+    <svg class="vazada" viewBox="0 0 100 100" onclick="toggleSeta(this)" style="fill: #00a0dd;"><path d="M20,50 L50,20 L80,50 L65,50 L65,80 L35,80 L35,50 Z" stroke="#000" stroke-width="5" transform="rotate(-90 50 50)"/></svg>
+    
+    <img src="Ícone 10 - Pasta Vazia.png" alt="Pasta" class="pasta-central">
+    
+    <svg class="vazada" viewBox="0 0 100 100" onclick="toggleSeta(this)" style="fill: #c40026;"><path d="M20,50 L50,20 L80,50 L65,50 L65,80 L35,80 L35,50 Z" stroke="#000" stroke-width="5" transform="rotate(90 50 50)"/></svg>
+
+    <svg class="vazada" viewBox="0 0 100 100" onclick="toggleSeta(this)" style="fill: #00468b;"><path d="M20,50 L50,20 L80,50 L65,50 L65,80 L35,80 L35,50 Z" stroke="#000" stroke-width="5" transform="rotate(-135 50 50)"/></svg>
+    <svg class="vazada" viewBox="0 0 100 100" onclick="toggleSeta(this)" style="fill: #6c005f;"><path d="M20,50 L50,20 L80,50 L65,50 L65,80 L35,80 L35,50 Z" stroke="#000" stroke-width="5" transform="rotate(180 50 50)"/></svg>
+    <svg class="vazada" viewBox="0 0 100 100" onclick="toggleSeta(this)" style="fill: #c50067;"><path d="M20,50 L50,20 L80,50 L65,50 L65,80 L35,80 L35,50 Z" stroke="#000" stroke-width="5" transform="rotate(135 50 50)"/></svg>
+</div>
+
+<script>
+    const todasSetas = document.querySelectorAll('svg');
+
+    // Função para alternar individualmente
+    function toggleSeta(elemento) {
+        elemento.classList.toggle('vazada');
+    }
+
+    // Atalhos de teclado
+    window.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            // Ligar todas (remover classe vazada)
+            todasSetas.forEach(seta => seta.classList.remove('vazada'));
+        } 
+        else if (event.code === 'Space') {
+            // Previne o scroll da página ao apertar espaço
+            event.preventDefault(); 
+            // Apagar todas (adicionar classe vazada)
+            todasSetas.forEach(seta => seta.classList.add('vazada'));
+        }
+    });
+</script>
+
+</body>
+</html>

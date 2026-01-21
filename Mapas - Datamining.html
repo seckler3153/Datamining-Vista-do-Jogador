@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Mapas - Datamining</title>
+    <link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <style>
+        :root {
+            --cor-esconder: #11806A;
+        }
+
+        body {
+            background-color: #11806A;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .layout-principal {
+            display: flex;
+            align-items: stretch; 
+            gap: 20px;
+        }
+
+        /* Apêndices alargados para 320px para melhor equilíbrio com o mapa */
+        .apendice-regras, .apendice-botoes {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 8px solid #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 320px; 
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .apendice-regras {
+            justify-content: space-between;
+        }
+
+        .regras-texto {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.6;
+            color: #000;
+        }
+
+        .quadro-mapa-completo {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 8px solid #000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        h1 {
+            width: 100%;
+            text-align: center;
+            text-decoration: underline;
+            text-transform: uppercase;
+            font-size: 22px;
+            margin: 0 0 20px 0;
+            color: #000;
+        }
+
+        .grid-container-master {
+            display: grid;
+            grid-template-areas: 
+                ". topo"
+                "lateral mapa";
+            grid-template-columns: 30px auto;
+            grid-template-rows: 30px auto;
+        }
+
+        .regua-topo { grid-area: topo; display: flex; justify-content: space-around; align-items: center; font-weight: bold; }
+        .regua-lateral { grid-area: lateral; display: flex; flex-direction: column; justify-content: space-around; align-items: center; font-weight: bold; }
+
+        .coord-label {
+            font-size: 14px;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+        }
+
+        .mapa-wrapper {
+            grid-area: mapa;
+            position: relative;
+            display: inline-block;
+            border: 4px solid #000;
+            background-color: #000;
+            user-select: none;
+            line-height: 0;
+            max-width: 60vw; /* Ajustado levemente para acomodar apêndices maiores */
+            max-height: 70vh;
+            overflow: hidden;
+        }
+
+        .mapa-imagem {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            z-index: 10;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: grid;
+            z-index: 20; 
+        }
+
+        #svgLinhas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 30; 
+        }
+
+        #camadaIconesBase, #camadaIconesSuperior, #camadaIconesUltra { 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            pointer-events: none; 
+        }
+        #camadaIconesBase { z-index: 40; }
+        #camadaIconesSuperior { z-index: 50; }
+        #camadaIconesUltra { z-index: 60; }
+
+        .icone-mapa {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .icone-mapa.arrastavel {
+            pointer-events: auto !important;
+            cursor: move;
+        }
+
+        .grid-cell {
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        .grid-cell.escondido { background-color: var(--cor-esconder); }
+
+        .apendice-botoes {
+            gap: 15px;
+        }
+
+        .btn-nav {
+            padding: 10px 2px;
+            background-color: #11806A;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .btn-nav.ativo { background-color: #000; }
+        .btn-reset { background-color: #a00; margin-top: 10px; }
+
+        .container-tamanhos {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+        }
+
+        .grid-componentes {
+            display: grid;
+            grid-template-rows: repeat(9, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-flow: column;
+            gap: 6px;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #333;
+            flex-grow: 1; 
+        }
+
+        .btn-componente {
+            aspect-ratio: 1/1;
+            background-color: #fff;
+            border: 1px solid #000;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.1s;
+        }
+
+        .btn-componente.selecionado {
+            background-color: #ffd700;
+            border: 2px solid #ff4500;
+            transform: scale(1.1);
+        }
+
+        .btn-componente img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .label-secao {
+            text-align: center;
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="layout-principal">
+        <div class="apendice-regras">
+            <div class="regras-texto">
+                INSTRUÇÕES:<br><br>
+                • Clique no botão de componente e em seguida no quadrante que quiser para inserir a imagem do botão.<br>
+                • Ao clicar em um quadrante e arrastar para outro, cria um caminho entre um quadrante e outro.<br>
+                • Os botões de Meeple e de Firewall entram no meio do mapa e podem ser arrastados pelo mapa.<br>
+                • Clicar com o botão direito sobre um quadrante o faz ficar invisível, para representar quadrantes sem pastas.<br>
+                • Para apagar uma imagem de um botão em um quadrante, clique duas vezes com o botão esquerdo do mouse sobre ela.<br>
+                • Para apagar um caminho, clique com o botão direito do mouse ou crie outro caminho por cima de mesmo tamanho e mesma direção.<br>
+                • Para apagar um Meeple ou uma Firewall, clique com o botão direito sobre eles.<br>
+                • Para qualquer problema, Ctrl + Z é seu amigo.
+            </div>
+            <button class="btn-nav btn-reset" onclick="resetarGridAtual()">Resetar Mapa Atual</button>
+        </div>
+
+        <div class="quadro-mapa-completo">
+            <h1 id="tituloMapa">Normal - PvP | Fácil - Coop (9x9)</h1>
+            <div class="grid-container-master">
+                <div id="reguaTopo" class="regua-topo"></div>
+                <div id="reguaLateral" class="regua-lateral"></div>
+                <div class="mapa-wrapper" id="containerMapa">
+                    <img id="mapaPrincipal" src="Mapa (5).png" alt="Mapa Base" class="mapa-imagem" onload="ajustarTamanhoReguas()">
+                    <div class="grid-overlay" id="gridInterativo"></div>
+                    <svg id="svgLinhas">
+                        <line id="linhaGuia" x1="0" y1="0" x2="0" y2="0" stroke="rgba(0,0,0,0.6)" stroke-dasharray="5,5" style="display:none;"></line>
+                    </svg>
+                    <div id="camadaIconesBase"></div>
+                    <div id="camadaIconesSuperior"></div>
+                    <div id="camadaIconesUltra"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="apendice-botoes">
+            <button class="btn-nav" onclick="alternarCorFundo()">Alternar Fundo</button>
+            <div>
+                <div class="label-secao">Tamanho do Mapa:</div>
+                <div class="container-tamanhos">
+                    <button class="btn-nav" onclick="mudarTamanho('5x5')">5x5</button>
+                    <button class="btn-nav" onclick="mudarTamanho('7x7')">7x7</button>
+                    <button class="btn-nav ativo" onclick="mudarTamanho('9x9')">9x9</button>
+                    <button class="btn-nav" onclick="mudarTamanho('12x12')">12x12</button>
+                    <button class="btn-nav" onclick="mudarTamanho('15x15')">15x15</button>
+                </div>
+            </div>
+            <hr style="width: 100%; border: 1px solid #ddd;">
+            <div style="flex-grow: 1; display: flex; flex-direction: column;">
+                <div class="label-secao">Componentes:</div>
+                <div class="grid-componentes" id="gridComponentes"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const configMapas = {
+            '5x5':   { dim: 5,   imgVerde: 'Mapa (1).png', imgBranco: 'Mapa (2).png', nome: "Muito Fácil - PvP" },
+            '7x7':   { dim: 7,   imgVerde: 'Mapa (3).png', imgBranco: 'Mapa (4).png', nome: "Fácil - PvP" },
+            '9x9':   { dim: 9,   imgVerde: 'Mapa (5).png', imgBranco: 'Mapa (6).png', nome: "Normal - PvP | Fácil - Coop" },
+            '12x12': { dim: 12, imgVerde: 'Mapa (7).png', imgBranco: 'Mapa (8).png', nome: "Difícil - PvP | Normal - Coop" },
+            '15x15': { dim: 15, imgVerde: 'Mapa (9).png', imgBranco: 'Mapa (10).png', nome: "Extremo - PvP | Difícil - Coop" }
+        };
+
+        let estadoGrids = {
+            '5x5': { icones: [], linhas: [], escondidos: [] },
+            '7x7': { icones: [], linhas: [], escondidos: [] },
+            '9x9': { icones: [], linhas: [], escondidos: [] },
+            '12x12': { icones: [], linhas: [], escondidos: [] },
+            '15x15': { icones: [], linhas: [], escondidos: [] }
+        };
+
+        let tamanhoAtual = '9x9';
+        let fundoVerde = true;
+        let cellInicial = null;
+        let criandoLinha = false;
+        let componenteSelecionado = null;
+        let arrastandoElemento = null;
+        let historico = [];
+
+        function resetarGridAtual() {
+            if(confirm(`Deseja limpar todos os desenhos e ícones do mapa ${tamanhoAtual}?`)) {
+                estadoGrids[tamanhoAtual] = { icones: [], linhas: [], escondidos: [] };
+                limparVisualParaTroca();
+                gerarGrid();
+                historico = [];
+            }
+        }
+
+        function salvarAcao(tipo, elemento) {
+            historico.push({ tipo, elemento });
+            if (historico.length > 50) historico.shift();
+        }
+
+        function desfazer() {
+            if (historico.length === 0) return;
+            const acao = historico.pop();
+            if (acao.tipo === 'icone' || acao.tipo === 'linha') {
+                acao.elemento.remove();
+            } else if (acao.tipo === 'esconder') {
+                acao.elemento.classList.toggle('escondido');
+            }
+        }
+
+        function gerarBotoesComponentes() {
+            const container = document.getElementById('gridComponentes');
+            container.innerHTML = '';
+            for (let i = 1; i <= 36; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'btn-componente';
+                btn.dataset.id = i;
+                const img = document.createElement('img');
+                img.src = `Componente (${i}).png`;
+                btn.appendChild(img);
+                
+                btn.onclick = () => {
+                    if (i >= 28 && i <= 35) {
+                        const existente = document.querySelector(`.icone-mapa[data-comp-id="${i}"]`);
+                        if (existente) {
+                            if (confirm("Tem certeza que quer apagar o meeple do jogador?")) {
+                                existente.remove();
+                            }
+                            return;
+                        } else {
+                            posicionarMeepleOuEspecial(i);
+                            return;
+                        }
+                    }
+
+                    if (i === 36) {
+                        posicionarMeepleOuEspecial(36);
+                        return;
+                    }
+
+                    document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+                    if (componenteSelecionado === i) {
+                        componenteSelecionado = null;
+                    } else {
+                        componenteSelecionado = i;
+                        btn.classList.add('selecionado');
+                    }
+                };
+                container.appendChild(btn);
+            }
+        }
+
+        function posicionarMeepleOuEspecial(idComp, posSalva = null) {
+            const camada = document.getElementById('camadaIconesUltra');
+            const img = document.createElement('img');
+            img.src = `Componente (${idComp}).png`;
+            img.className = 'icone-mapa arrastavel';
+            img.dataset.compId = idComp;
+            
+            const dim = configMapas[tamanhoAtual].dim;
+            const containerMapa = document.getElementById('containerMapa');
+            const multiplicador = (idComp >= 28 && idComp <= 36) ? 0.4 : 0.8;
+            const size = (containerMapa.offsetWidth / dim) * multiplicador;
+            
+            img.style.width = size + "px";
+            
+            if(posSalva) {
+                img.style.left = posSalva.left;
+                img.style.top = posSalva.top;
+            } else {
+                img.style.left = "50%";
+                img.style.top = "50%";
+            }
+
+            img.onmousedown = (e) => {
+                if (e.button === 0) {
+                    e.stopPropagation();
+                    arrastandoElemento = img;
+                }
+            };
+
+            img.oncontextmenu = (e) => {
+                e.preventDefault();
+                if(confirm("Deseja remover este meeple?")) {
+                    img.remove();
+                }
+            };
+
+            camada.appendChild(img);
+            if(!posSalva) salvarAcao('icone', img);
+        }
+
+        function salvarEstadoAtual() {
+            const estado = { icones: [], linhas: [], escondidos: [] };
+            const camadas = ['camadaIconesBase', 'camadaIconesSuperior', 'camadaIconesUltra'];
+            camadas.forEach(idCamada => {
+                document.getElementById(idCamada).querySelectorAll('.icone-mapa').forEach(img => {
+                    estado.icones.push({
+                        idComp: img.dataset.compId,
+                        cellId: img.dataset.cellId,
+                        left: img.style.left,
+                        top: img.style.top,
+                        camada: idCamada
+                    });
+                });
+            });
+            document.getElementById('svgLinhas').querySelectorAll('line:not(#linhaGuia)').forEach(l => {
+                estado.linhas.push({
+                    x1: l.getAttribute("x1"), y1: l.getAttribute("y1"),
+                    x2: l.getAttribute("x2"), y2: l.getAttribute("y2")
+                });
+            });
+            document.querySelectorAll('.grid-cell.escondido').forEach(c => {
+                estado.escondidos.push(c.dataset.index);
+            });
+            estadoGrids[tamanhoAtual] = estado;
+        }
+
+        function mudarTamanho(novoTamanho) {
+            salvarEstadoAtual();
+            tamanhoAtual = novoTamanho;
+            document.querySelectorAll('.container-tamanhos .btn-nav').forEach(btn => {
+                btn.classList.toggle('ativo', btn.innerText === novoTamanho);
+            });
+            const config = configMapas[tamanhoAtual];
+            document.getElementById('mapaPrincipal').src = fundoVerde ? config.imgVerde : config.imgBranco;
+            
+            // MODIFICAÇÃO DO TÍTULO CONFORME SOLICITADO
+            document.getElementById('tituloMapa').innerText = `${config.nome} (${novoTamanho})`;
+            
+            limparVisualParaTroca();
+            gerarGrid();
+            gerarReguas();
+            carregarEstado(novoTamanho);
+            historico = [];
+        }
+
+        function limparVisualParaTroca() {
+            document.getElementById('camadaIconesBase').innerHTML = '';
+            document.getElementById('camadaIconesSuperior').innerHTML = '';
+            document.getElementById('camadaIconesUltra').innerHTML = '';
+            limparLinhas();
+        }
+
+        function carregarEstado(tamanho) {
+            const estado = estadoGrids[tamanho];
+            estado.escondidos.forEach(idx => {
+                const cell = document.querySelector(`.grid-cell[data-index="${idx}"]`);
+                if(cell) cell.classList.add('escondido');
+            });
+            estado.linhas.forEach(l => {
+                const svg = document.getElementById('svgLinhas');
+                const novaLinha = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                novaLinha.setAttribute("x1", l.x1); novaLinha.setAttribute("y1", l.y1);
+                novaLinha.setAttribute("x2", l.x2); novaLinha.setAttribute("y2", l.y2);
+                novaLinha.setAttribute("stroke", "black");
+                novaLinha.setAttribute("stroke-width", calcularGrossura());
+                novaLinha.style.pointerEvents = "auto";
+                novaLinha.onmousedown = (e) => {
+                    if(e.button === 2) { 
+                        e.preventDefault(); e.stopPropagation(); 
+                        novaLinha.remove(); 
+                    }
+                };
+                svg.appendChild(novaLinha);
+            });
+            estado.icones.forEach(dado => {
+                if (dado.camada === 'camadaIconesUltra') {
+                    posicionarMeepleOuEspecial(dado.idComp, {left: dado.left, top: dado.top});
+                } else {
+                    const cell = document.querySelector(`.grid-cell[data-index="${dado.cellId}"]`);
+                    if(cell) restaurarIconeFixo(cell, dado);
+                }
+            });
+        }
+
+        function restaurarIconeFixo(cell, dado) {
+            const camada = document.getElementById(dado.camada);
+            const img = document.createElement('img');
+            img.src = `Componente (${dado.idComp}).png`;
+            img.className = 'icone-mapa';
+            img.dataset.cellId = dado.cellId;
+            img.dataset.compId = dado.idComp;
+            const dim = configMapas[tamanhoAtual].dim;
+            const containerMapa = document.getElementById('containerMapa');
+            const size = (containerMapa.offsetWidth / dim) * 0.8;
+            img.style.width = size + "px";
+            img.style.left = dado.left;
+            img.style.top = dado.top;
+            camada.appendChild(img);
+        }
+
+        function gerarGrid() {
+            const grid = document.getElementById('gridInterativo');
+            grid.innerHTML = '';
+            const dim = configMapas[tamanhoAtual].dim;
+            grid.style.gridTemplateColumns = `repeat(${dim}, 1fr)`;
+            grid.style.gridTemplateRows = `repeat(${dim}, 1fr)`;
+            for (let i = 0; i < dim * dim; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('grid-cell');
+                cell.dataset.index = i;
+                cell.onmousedown = (e) => lidarMouseDown(e, cell);
+                cell.onmouseup = (e) => lidarMouseUp(e, cell);
+                cell.ondblclick = (e) => {
+                    e.preventDefault();
+                    const index = cell.dataset.index;
+                    const camadas = ['camadaIconesUltra', 'camadaIconesSuperior', 'camadaIconesBase'];
+                    for (const idCamada of camadas) {
+                        const icone = document.getElementById(idCamada).querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+                        if (icone) { icone.remove(); return; }
+                    }
+                };
+                grid.appendChild(cell);
+            }
+        }
+
+        function lidarMouseDown(e, cell) {
+            if (e.button === 0 && componenteSelecionado) {
+                posicionarIconeFixo(cell);
+                return;
+            }
+            if (e.button === 0) {
+                cellInicial = cell;
+                criandoLinha = true;
+                const centro = getCentro(cell);
+                const lg = document.getElementById('linhaGuia');
+                lg.setAttribute("x1", centro.x); lg.setAttribute("y1", centro.y);
+                lg.setAttribute("x2", centro.x); lg.setAttribute("y2", centro.y);
+                lg.setAttribute("stroke-width", calcularGrossura());
+                lg.style.display = "block";
+            } else if (e.button === 2) {
+                cell.classList.toggle('escondido');
+                salvarAcao('esconder', cell);
+            }
+        }
+
+        function posicionarIconeFixo(cell) {
+            const index = cell.dataset.index;
+            const centro = getCentro(cell);
+            let idCamada = (componenteSelecionado >= 19) ? 'camadaIconesSuperior' : 'camadaIconesBase';
+            const camada = document.getElementById(idCamada);
+            const antigo = camada.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+            if (antigo) antigo.remove();
+            const img = document.createElement('img');
+            img.src = `Componente (${componenteSelecionado}).png`;
+            img.className = 'icone-mapa';
+            img.dataset.cellId = index;
+            img.dataset.compId = componenteSelecionado;
+            const dim = configMapas[tamanhoAtual].dim;
+            const size = (document.getElementById('containerMapa').offsetWidth / dim) * 0.8;
+            img.style.width = size + "px";
+            img.style.left = centro.x + "px";
+            img.style.top = centro.y + "px";
+            camada.appendChild(img);
+            salvarAcao('icone', img);
+            componenteSelecionado = null;
+            document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+        }
+
+        function lidarMouseUp(e, cell) {
+            if (e.button === 0 && criandoLinha && cellInicial && cellInicial !== cell) {
+                const c1 = getCentro(cellInicial);
+                const c2 = getCentro(cell);
+                criarLinhaFinal(c1, c2);
+            }
+            finalizarCriacao();
+        }
+
+        function criarLinhaFinal(c1, c2) {
+            const svg = document.getElementById('svgLinhas');
+            const linhasExistentes = svg.querySelectorAll('line:not(#linhaGuia)');
+            let linhaDuplicada = null;
+            linhasExistentes.forEach(linha => {
+                const x1 = parseFloat(linha.getAttribute("x1")), y1 = parseFloat(linha.getAttribute("y1")),
+                      x2 = parseFloat(linha.getAttribute("x2")), y2 = parseFloat(linha.getAttribute("y2"));
+                if ((Math.abs(x1 - c1.x) < 2 && Math.abs(y1 - c1.y) < 2 && Math.abs(x2 - c2.x) < 2 && Math.abs(y2 - c2.y) < 2) ||
+                    (Math.abs(x1 - c2.x) < 2 && Math.abs(y1 - c2.y) < 2 && Math.abs(x2 - c1.x) < 2 && Math.abs(y2 - c1.y) < 2)) 
+                    linhaDuplicada = linha;
+            });
+            if (linhaDuplicada) { linhaDuplicada.remove(); } 
+            else {
+                const novaLinha = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                novaLinha.setAttribute("x1", c1.x); novaLinha.setAttribute("y1", c1.y);
+                novaLinha.setAttribute("x2", c2.x); novaLinha.setAttribute("y2", c2.y);
+                novaLinha.setAttribute("stroke", "black");
+                novaLinha.setAttribute("stroke-width", calcularGrossura());
+                novaLinha.style.pointerEvents = "auto";
+                novaLinha.onmousedown = (e) => { if(e.button === 2) { e.preventDefault(); novaLinha.remove(); } };
+                svg.appendChild(novaLinha);
+                salvarAcao('linha', novaLinha);
+            }
+        }
+
+        function getCentro(element) {
+            const rect = element.getBoundingClientRect();
+            const containerRect = document.getElementById('containerMapa').getBoundingClientRect();
+            return { x: (rect.left + rect.width / 2) - containerRect.left, y: (rect.top + rect.height / 2) - containerRect.top };
+        }
+
+        function calcularGrossura() {
+            const dim = configMapas[tamanhoAtual].dim;
+            return Math.max(6, (10 - Math.floor(dim / 2)) * 2);
+        }
+
+        function gerarReguas() {
+            const dim = configMapas[tamanhoAtual].dim;
+            const regTopo = document.getElementById('reguaTopo'), regLat = document.getElementById('reguaLateral');
+            regTopo.innerHTML = ''; regLat.innerHTML = '';
+            for (let i = 0; i < dim; i++) {
+                const letra = document.createElement('div'); letra.className = 'coord-label'; letra.innerText = String.fromCharCode(65 + i);
+                regTopo.appendChild(letra);
+                const numero = document.createElement('div'); numero.className = 'coord-label'; numero.innerText = i + 1;
+                regLat.appendChild(numero);
+            }
+            ajustarTamanhoReguas();
+        }
+
+        function ajustarTamanhoReguas() {
+            const mapa = document.getElementById('containerMapa');
+            if(mapa){
+                document.getElementById('reguaTopo').style.width = mapa.offsetWidth + "px";
+                document.getElementById('reguaLateral').style.height = mapa.offsetHeight + "px";
+            }
+        }
+
+        function alternarCorFundo() {
+            fundoVerde = !fundoVerde;
+            const config = configMapas[tamanhoAtual];
+            document.getElementById('mapaPrincipal').src = fundoVerde ? config.imgVerde : config.imgBranco;
+            document.documentElement.style.setProperty('--cor-esconder', fundoVerde ? '#11806A' : '#FFFFFF');
+        }
+
+        function finalizarCriacao() {
+            criandoLinha = false; arrastandoElemento = null;
+            document.getElementById('linhaGuia').style.display = "none";
+        }
+
+        function limparLinhas() {
+            Array.from(document.getElementById('svgLinhas').querySelectorAll('line:not(#linhaGuia)')).forEach(l => l.remove());
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const rect = document.getElementById('containerMapa').getBoundingClientRect();
+            if (criandoLinha) {
+                const lg = document.getElementById('linhaGuia');
+                lg.setAttribute("x2", e.clientX - rect.left); lg.setAttribute("y2", e.clientY - rect.top);
+            }
+            if (arrastandoElemento) {
+                let x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+                let y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+                arrastandoElemento.style.left = x + "px"; arrastandoElemento.style.top = y + "px";
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" || e.code === "Space") {
+                if(e.code === "Space") e.preventDefault();
+                componenteSelecionado = null;
+                document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+            }
+            if (e.ctrlKey && e.key === 'z') { e.preventDefault(); desfazer(); }
+        });
+
+        window.onmouseup = finalizarCriacao;
+        window.onresize = ajustarTamanhoReguas;
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        gerarGrid();
+        gerarReguas();
+        gerarBotoesComponentes();
+    </script>
+</body>
+</html>

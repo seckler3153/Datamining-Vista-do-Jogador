@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Banco de Dados - All - Datamining</title>
+	<link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <style>
+        :root {
+            --bg-color: #11806A;
+            --sidebar-color: #484848;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            font-family: 'Arial Black', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .control-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: white;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            border: 3px solid #000;
+            z-index: 100;
+        }
+
+        .btn-modo {
+            padding: 8px 15px;
+            font-family: 'Arial Black', sans-serif;
+            cursor: pointer;
+            border: 2px solid #000;
+            background: #fff;
+            color: #000;
+            transition: 0.2s;
+        }
+
+        .btn-modo:hover {
+            background: #ddd;
+        }
+
+        .btn-modo.active {
+            background: #11806A;
+            color: white;
+            border-color: white;
+        }
+
+        .grid-players {
+            display: grid;
+            gap: 15px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .mode-1 { grid-template-columns: 900px; } 
+        .mode-4 { grid-template-columns: repeat(2, 700px); }
+        .mode-6 { grid-template-columns: repeat(3, 460px); }
+        .mode-8 { grid-template-columns: repeat(4, 340px); }
+
+        .main-container {
+            display: flex;
+            background-color: #fff;
+            border: 5px solid #000;
+            box-sizing: border-box;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .mode-1 .main-container { width: 900px; height: 600px; border-width: 8px; }
+        .mode-4 .main-container { width: 700px; height: 450px; border-width: 6px; }
+        .mode-6 .main-container { width: 460px; height: 320px; border-width: 5px; }
+        .mode-8 .main-container { width: 340px; height: 280px; border-width: 4px; }
+
+        .sidebar {
+            background-color: var(--sidebar-color);
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            border-right: 5px solid #000;
+            box-sizing: border-box;
+        }
+
+        .stat-item { display: flex; align-items: center; color: white; }
+        .icon-box { display: flex; justify-content: center; align-items: center; }
+        .icon-box img { width: 90%; height: 90%; object-fit: contain; image-rendering: pixelated; }
+        .editable-num { font-weight: 900; outline: none; background: transparent; border: none; color: white; }
+
+        .mode-1 .sidebar { width: 250px; justify-content: space-around; }
+        .mode-1 .icon-box { width: 85px; height: 85px; }
+        .mode-1 .editable-num { font-size: 50px; width: 100px; }
+
+        .mode-4 .sidebar { width: 180px; justify-content: space-around; }
+        .mode-4 .icon-box { width: 72px; height: 72px; }
+        .mode-4 .editable-num { font-size: 40px; width: 80px; }
+
+        .mode-6 .sidebar { width: 130px; justify-content: space-around; }
+        .mode-6 .icon-box { width: 40px; height: 40px; }
+        .mode-6 .editable-num { font-size: 28px; width: 50px; }
+
+        .mode-8 .sidebar { width: 100px; justify-content: space-around; }
+        .mode-8 .icon-box { width: 40px; height: 40px; }
+        .mode-8 .editable-num { font-size: 22px; width: 40px; }
+
+        .player-name { text-decoration: underline; outline: none; }
+        .mode-1 .player-name { font-size: 45px; }
+        .mode-4 .player-name { font-size: 32px; }
+
+        .grid-frame { border: 5px solid #000; flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+        .drop-zone { border: 1px solid #000; position: relative; background-color: #fff; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; }
+        .drop-zone img { max-width: 72%; max-height: 72%; object-fit: contain; display: none; pointer-events: none; }
+        .box-index { position: absolute; top: 2px; left: 5px; font-weight: bold; }
+
+        .coop-container { display: flex; background-color: #fff; border: 8px solid #000; width: 1100px; height: 650px; box-sizing: border-box; }
+        .coop-container .sidebar { width: 250px; border-right: 8px solid #000; padding: 15px 10px; justify-content: space-evenly; }
+        .coop-container .icon-box { width: 90px; height: 90px; }
+        .coop-container .editable-num { font-size: 70px; width: auto; flex-grow: 1; }
+        .coop-container .grid-frame { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; border: 8px solid #000; }
+        .coop-container #player-name { font-size: 50px; text-decoration: underline; outline: none; }
+        .coop-container #contador-header { font-size: 80px; font-weight: bold; color: #333; background: #eee; padding: 0 20px; border: 4px solid #000; text-align: center; }
+
+        /* ESTILO DO MENU DE CORES */
+        .color-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 3px solid black;
+            z-index: 1000;
+            flex-direction: column;
+            width: 120px;
+            box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
+            right: 15px;
+            top: 50px;
+        }
+
+        .color-menu button {
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-family: 'Arial Black', sans-serif;
+            text-transform: uppercase;
+            text-align: left;
+            background: white;
+        }
+
+        .color-menu button:hover { background: #eee; }
+
+        .btn-cor-toggle {
+            padding: 4px 8px;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 10px;
+            cursor: pointer;
+            border: 2px solid #000;
+            background: #fff;
+            text-transform: uppercase;
+        }
+
+        .hidden { display: none !important; }
+        .content { flex-grow: 1; padding: 15px; display: flex; flex-direction: column; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; position: relative; }
+    </style>
+</head>
+<body>
+
+<div class="control-header">
+    <label>MODO DE JOGO:</label>
+    <button id="btn-1" class="btn-modo" onclick="updateLayout('1')">PvP (1 Jogador)</button>
+    <button id="btn-4" class="btn-modo active" onclick="updateLayout('4')">PvP (3-4 Jogadores)</button>
+    <button id="btn-6" class="btn-modo" onclick="updateLayout('6')">PvP (5-6 Jogadores)</button>
+    <button id="btn-8" class="btn-modo" onclick="updateLayout('8')">PvP (7-8 Jogadores)</button>
+    <button id="btn-coop" class="btn-modo" onclick="updateLayout('coop')">Coop</button>
+</div>
+
+<div id="coop-view" class="coop-container hidden">
+    <div class="sidebar" id="coop-sidebar"></div>
+    <div class="content">
+        <div class="header">
+            <div id="player-name" contenteditable="true">Grupo</div>
+            <div id="contador-header">120</div>
+        </div>
+        <div class="grid-frame" id="coop-grid-frame"></div>
+    </div>
+</div>
+
+<div id="pvp-grid" class="grid-players"></div>
+
+<script>
+    const icons = ['V', 'A', 'B', 'Mini Patch', 'Mini Bug', 'Pedaço do Mapa'];
+    let valorContador = 120;
+    let modoAtual = '4';
+
+    function syncPlayerData(index) {
+        const card = document.querySelector(`.pvp-card-${index}`);
+        const name = card.querySelector('.player-name').innerText;
+        // Pega a cor atual do estilo do nome
+        const color = card.querySelector('.player-name').style.color || 'black';
+        window.parent.postMessage({ type: 'syncPlayer', index, name, color }, '*');
+    }
+
+    // Novas funções para o menu de cores
+    function toggleColorMenu(p) {
+        const menu = document.getElementById(`menu-cor-${p}`);
+        const isVisible = menu.style.display === 'flex';
+        document.querySelectorAll('.color-menu').forEach(m => m.style.display = 'none');
+        menu.style.display = isVisible ? 'none' : 'flex';
+    }
+
+    function mudarCor(p, cor) {
+        const card = document.querySelector(`.pvp-card-${p}`);
+        card.querySelector('.player-name').style.color = cor;
+        document.getElementById(`menu-cor-${p}`).style.display = 'none';
+        syncPlayerData(p);
+    }
+
+    const coopSidebar = document.getElementById('coop-sidebar');
+    coopSidebar.innerHTML = icons.map((icon, i) => `
+        <div class="stat-item">
+            <div class="icon-box"><img src="Ícone ${i+1} - ${icon}.png" alt="${icon}"></div>
+            <div class="editable-num" contenteditable="true">${i === 0 ? 1 : i === 2 ? 5 : 0}</div>
+        </div>
+    `).join('');
+
+    const coopGridFrame = document.getElementById('coop-grid-frame');
+    for(let i=1; i<=6; i++) {
+        coopGridFrame.innerHTML += `
+            <div class="drop-zone" id="dz-coop-${i}" onclick="triggerInput('coop-${i}')">
+                <span class="box-index">${i}</span>
+                <img id="i-coop-${i}">
+                <input type="file" id="f-coop-${i}" hidden accept="image/*" onchange="handleFile(this.files[0], 'coop-${i}')">
+            </div>
+        `;
+    }
+
+    const pvpGrid = document.getElementById('pvp-grid');
+    for (let p = 1; p <= 8; p++) {
+        const card = document.createElement('div');
+        card.className = `main-container pvp-card-${p}`;
+        card.innerHTML = `
+            <div class="sidebar">
+                ${icons.map((icon, i) => `
+                    <div class="stat-item">
+                        <div class="icon-box"><img src="Ícone ${i+1} - ${icon}.png" alt="${icon}"></div>
+                        <div class="editable-num" contenteditable="true">${i === 0 ? 1 : i === 2 ? 5 : 0}</div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="content">
+                <div class="header">
+                    <div class="player-name" contenteditable="true" oninput="syncPlayerData(${p})">Jogador ${p}</div>
+                    <button class="btn-cor-toggle" onclick="toggleColorMenu(${p})">Cor</button>
+                    <div class="color-menu" id="menu-cor-${p}">
+                        <button onclick="mudarCor(${p}, 'black')">Padrão</button>
+                        <button onclick="mudarCor(${p}, 'red')">Vermelho</button>
+                        <button onclick="mudarCor(${p}, 'orange')">Laranja</button>
+                        <button onclick="mudarCor(${p}, 'yellow')">Amarelo</button>
+                        <button onclick="mudarCor(${p}, 'green')">Verde</button>
+                        <button onclick="mudarCor(${p}, 'cyan')">Ciano</button>
+                        <button onclick="mudarCor(${p}, 'darkblue')">Azul</button>
+                        <button onclick="mudarCor(${p}, 'purple')">Roxo</button>
+                        <button onclick="mudarCor(${p}, 'magenta')">Magenta</button>
+                    </div>
+                </div>
+                <div class="grid-frame">
+                    ${[1, 2, 3, 4].map(i => `
+                        <div class="drop-zone" id="dz-${p}-${i}" onclick="triggerInput('${p}-${i}')">
+                            <span class="box-index">${i}</span>
+                            <img id="i-${p}-${i}">
+                            <input type="file" id="f-${p}-${i}" hidden accept="image/*" onchange="handleFile(this.files[0], '${p}-${i}')">
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+        pvpGrid.appendChild(card);
+    }
+
+    function updateLayout(mode) {
+        modoAtual = mode;
+        const pvpContainer = document.getElementById('pvp-grid');
+        const coopContainer = document.getElementById('coop-view');
+
+        document.querySelectorAll('.btn-modo').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        if (mode === '1') document.getElementById('btn-1').classList.add('active');
+        else if (mode === '4') document.getElementById('btn-4').classList.add('active');
+        else if (mode === '6') document.getElementById('btn-6').classList.add('active');
+        else if (mode === '8') document.getElementById('btn-8').classList.add('active');
+        else if (mode === 'coop') document.getElementById('btn-coop').classList.add('active');
+
+        if (mode === 'coop') {
+            pvpContainer.classList.add('hidden');
+            coopContainer.classList.remove('hidden');
+        } else {
+            coopContainer.classList.add('hidden');
+            pvpContainer.classList.remove('hidden');
+            pvpContainer.className = `grid-players mode-${mode}`;
+            
+            for (let p = 1; p <= 8; p++) {
+                const card = document.querySelector(`.pvp-card-${p}`);
+                const limite = parseInt(mode);
+                p > limite ? card.classList.add('hidden') : card.classList.remove('hidden');
+            }
+        }
+    }
+
+    function triggerInput(id) { document.getElementById('f-' + id).click(); }
+
+    function handleFile(file, id) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = document.getElementById('i-' + id);
+            img.src = e.target.result;
+            img.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (e.target.getAttribute('contenteditable') === 'true') return;
+        if (modoAtual !== 'coop') return;
+        if (e.key === "Enter") { valorContador--; e.preventDefault(); }
+        else if (e.code === "Space") { valorContador++; e.preventDefault(); }
+        document.getElementById('contador-header').innerText = valorContador;
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateLayout('4');
+        
+        // Fecha menus de cor ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!e.target.matches('.btn-cor-toggle')) {
+                document.querySelectorAll('.color-menu').forEach(m => m.style.display = 'none');
+            }
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            const id = zone.id.replace('dz-', '');
+            zone.addEventListener('dragover', (e) => e.preventDefault());
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0], id);
+            });
+            zone.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                const img = document.getElementById('i-' + id);
+                img.src = ""; img.style.display = "none";
+            });
+        });
+    });
+</script>
+</body>
+</html>

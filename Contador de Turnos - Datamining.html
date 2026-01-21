@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Contador de Turnos - Datamining</title>
+	<link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #11806A;
+        }
+        #contador {
+            font-size: 200px;
+            font-weight: bold;
+            color: #333;
+        }
+        .instrucoes {
+            position: absolute;
+            bottom: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        strong {
+            color: #fff;
+            background-color: rgba(0,0,0,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="contador">120</div>
+
+    <div class="instrucoes">
+        Pressione <strong>Enter</strong> para reduzir (-1) <br>
+        Pressione <strong>Espaço</strong> para aumentar (+1)
+    </div>
+
+    <script>
+    let valor = 120;
+    const display = document.getElementById('contador');
+
+    window.addEventListener('keydown', function(event) {
+        // Usando event.key para pegar qualquer tecla "Enter"
+        if (event.key === "Enter" || event.code === "Space") {
+            event.preventDefault();
+        }
+
+        if (event.key === "Enter") {
+            valor--;
+        } else if (event.code === "Space") {
+            valor++;
+        }
+
+        display.innerText = valor;
+    });
+</script>

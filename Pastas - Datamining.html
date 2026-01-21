@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pastas - Datamining</title>
+	<link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <style>
+        body {
+            background-color: #11806A;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+            gap: 20px;
+        }
+
+        .quadro-regras-completo {
+            background-color: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 8px solid #000;
+            width: 950px;
+            height: auto;
+            position: relative;
+        }
+
+        /* Estilo do Apêndice para o botão de troca */
+        .apendice-botoes {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 8px solid #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 150px; 
+            position: sticky;
+            top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn-nav {
+            padding: 10px;
+            background-color: #11806A;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .btn-nav:hover {
+            background-color: #0d6352;
+        }
+
+        h1 {
+            text-align: center;
+            text-decoration: underline;
+            text-transform: uppercase;
+            font-size: 32px;
+            margin-top: 0;
+            margin-bottom: 40px;
+            color: #000;
+        }
+
+        .categoria-bloco {
+            border: 4px solid #000;
+            padding: 25px;
+            margin-bottom: 60px;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .titulo-secao {
+            background-color: #000;
+            color: #fff;
+            padding: 8px 20px;
+            display: inline-block;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 18px;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+        }
+
+        .secao-dificuldade {
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 25px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            align-items: flex-start;
+        }
+
+        .conteudo-dificuldade {
+            flex: 1;
+        }
+
+        .imagem-regra {
+            max-width: 250px;
+            max-height: 250px;
+            object-fit: contain;
+            border: none;
+            box-shadow: none;
+            cursor: zoom-in;
+        }
+
+        .texto-regra {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #000;
+            text-align: justify;
+        }
+
+        .subtitulo-dif {
+            background-color: #f0f0f0;
+            border: 2px solid #000;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        ul { padding-left: 25px; margin: 15px 0; }
+        li { margin-bottom: 10px; }
+        b { color: #000; text-decoration: underline; }
+        .hidden { display: none; }
+
+        #overlay-imagem {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            cursor: zoom-out;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        #imagem-expandida {
+            max-width: 95%;
+            max-height: 95%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay-imagem" onclick="fecharImagem()">
+        <img id="imagem-expandida" src="">
+    </div>
+
+    <div class="quadro-regras-completo">
+        <h1 id="titulo-principal">Pastas do Modo Competitivo</h1>
+
+        <div id="conteudo-pvp">
+            <div class="categoria-bloco">
+                <div class="titulo-secao">Pastas (PvP)</div>
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Zona Segura</div>
+							<div class="texto-regra">
+							<p>Onde cada jogador inicia o jogo. Seus locais no mapa são sempre os mesmos <i>(Exceto no Modo Extremo)</i>, variando apenas qual é a pasta inicial de cada jogador. São informados onde estão no mapa aos seus respectivos jogadores <i>(Exceto nos Modos Difícil e Extremo)</i>. Independente de quantos jogadores tenham no jogo, sempre tem 8 pastas de Zona Segura espalhadas pelo mapa, uma para cada cor de jogador. Toda vez que um jogador passar pela sua própria Zona Segura, recebe +2B. Caso jogador entre na pasta de Zona Segura de outro jogador, deve pagar 2B ao dono da pasta. Caso um jogador encontre uma pasta de Zona Segura que não pertença a nenhum jogador, ele pode pagar 5B para trocar a sua pasta de Zona Segura por esta, recebendo também uma parte do mapa com suas pastas adjacentes, do contrário, recebe +2A. Um jogador com o Arquivo Vital não pode adquirir uma pasta de Zona Segura nova, enquanto já possuir uma. Caso um jogador esteja em sua pasta de Zona Segura e outro jogador entre nela, o dono da pasta pode escolher entre lutar contra o outro jogador ou não. Caso escolha não lutar, deve dar um Recurso seu para o outro jogador e não recebe o pagamento do outro jogador por entrar em sua Zona Segura <i>(Este efeito não imuniza o jogador dentro de sua Zona Segura de entrar em luta com outros jogadores por outros métodos)</i>.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+							<ul class="texto-regra">
+                            <li><i><u>Uma pasta de Zona Segura tem um contorno branco no mapa, mas seu interior varia entre ser branco, se não pertencer a nenhum jogador, ou ter a cor do jogador que a possuir.</u></i></li>
+							</ul>
+                    </div>
+                    <img src="Pasta (2).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Pasta Vazia</div>
+							<div class="texto-regra">
+							<p>O jogador ganha um movimento adicional <i>(Apenas se for a primeira Pasta Vazia do turno. Não é obrigatório)</i>. O jogador não pode retornar a pasta que estava anteriormente antes de entrar numa Pasta Vazia no mesmo turno.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (3).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Downloads</div>
+							<div class="texto-regra">
+							<p>Os jogadores podem usar seus Bits para comprar Recursos. A cada vez que um jogador entrar nesta pasta, são aleatorizados entre 4 a 7 Recursos que estão à venda. Recursos melhores aparecem conforme o jogador progride pelo jogo. Os Recursos à venda e seus efeitos somente aparecem para o jogador que está comprando, porém são mostrados aos outros jogadores a imagem representativa dos Recursos comprados. Máximo de 2 Recursos podem ser comprados por turno.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (4).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Combate</div>
+							<div class="texto-regra">
+							<p>O jogador escolhe outro jogador para lutar contra e roda a roleta de Combate. O vencedor recebe +2A ou +3B, a sua escolha, além de 1 Patch e 1 Datamine Portátil. O perdedor receberá com -1A, -2B ou um bug, a escolha do jogador vencedor.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (5).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Arquivo Desconhecido</div>
+							<div class="texto-regra">
+							<p>O SO roda a roleta de Arquivo Desconhecido para o jogador, que fica com o que a roleta disser, podendo ser algo bom ou ruim. <i>(O elemento em preto na roleta não pode ter sua chance aumentada ou zerada)</i>.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (6).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Chave de Acesso</div>
+							<div class="texto-regra">
+							<p>O jogador recebe secretamente uma pista de onde está a pasta do Diretório Principal <i>(É tratada como uma Pasta Vazia, durante o turno do jogador que a encontrou)</i>. A cada final de rodada que algum jogador tenha encontrado pelo menos uma pasta de Chave de Acesso, o SO informa a todos quantos jogadores possuem Chaves de Acesso e quantas cada um possui, sem informar quais jogadores as têm. Encontrando todas, permite ao jogador encontrar o Diretório Principal.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (7).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Diretório Principal</div>
+							<div class="texto-regra">
+							<p>É disfarçada de alguma outra Pasta Vazia até o jogador encontrar todas as Chaves de Acesso e ter V necessário para acessá-la. É onde está o Arquivo Vital.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (8).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Quarentena</div>
+							<div class="texto-regra">
+							<p>O SO roda a roleta de Quarentena para o jogador, que fica com o que a roleta disser. A roleta de Quarentena não pode ser negada.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (9).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+        </div>
+
+        <div id="conteudo-coop" class="hidden">
+            <div class="categoria-bloco">
+                <div class="titulo-secao">Pastas (CooP)</div>
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Zona Segura</div>
+							<div class="texto-regra">
+							<p>Onde cada jogador inicia o jogo. Seus locais no mapa são sempre os mesmos, variando apenas qual é a pasta inicial de cada jogador. Serão informados onde estarão no mapa a todos os jogadores <i>(Exceto no Modo Difícil)</i>. Independente de quantos jogadores tenham no jogo, sempre tem 8 pastas de Zona Segura no mapa. Toda vez que um jogador passar por alguma Zona Segura pertencente ao grupo que não seja da sua mesma cor, o grupo recebe +2B. Caso um jogador encontre uma pasta de Zona Segura que não pertença ao grupo, ele pode pagar 8B para trocar a sua Zona Segura por esta, recebendo também uma parte do mapa com suas pastas adjacentes, do contrário, recebe +3A. Enquanto o grupo possuir o Arquivo Vital, todas as pastas de Zona Segura são dadas como perdidas e apenas uma delas é escolhida aleatoriamente para ser a única saída do grupo. Enquanto possuírem o Arquivo Vital, o grupo não pode adquirir uma nova pasta de Zona Segura e, caso esta seja perdida por algum efeito, apenas altera a Zona Segura para outra escolhida aleatoriamente.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+							<ul class="texto-regra">
+                            <li><i><u>Uma pasta de Zona Segura sempre tem um contorno branco no mapa, mas seu interior pode variar entre ser branco, se não pertencer a nenhum jogador, ser da cor do jogador que a possuir ou colorida, caso o grupo possua o Arquivo Vital em seu Banco de Dados.</u></i></li>
+							</ul>
+                    </div>
+                    <img src="Pasta (2)c.png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Pasta Vazia</div>
+							<div class="texto-regra">
+							<p>O jogador ganha um movimento adicional <i>(Apenas se for a primeira Pasta Vazia do turno. Não é obrigatório)</i>. O jogador não pode retornar a pasta que estava anteriormente antes de entrar numa Pasta Vazia no mesmo turno.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (3).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Downloads</div>
+							<div class="texto-regra">
+							<p>O grupo pode usar seus Bits para comprar Recursos. A cada vez que um jogador entrar nesta pasta, são aleatorizados entre 4 a 7 Recursos que estão à venda. Recursos melhores aparecem conforme o jogo progride. Máximo de 2 Recursos podem ser comprados por turno.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (4).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Jogo Cooperativo</div>
+							<div class="texto-regra">
+							<p>O grupo roda a roleta Cooperativa. Caso ganhem o jogo, recebem +3A ou +3B, a escolha do grupo, além de 1 Patch e 1 Datamine Portátil. Caso percam, recebem -3B, -3A ou se perdem um Recurso aleatoriamente, a escolha do SO, e 1 Bug.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (5)c.png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Arquivo Desconhecido</div>
+							<div class="texto-regra">
+							<p>O SO roda a roleta de Arquivo Desconhecido para o grupo, que fica com o que a roleta disser, podendo ser algo bom ou ruim. <i>(O elemento em preto na roleta não pode ter sua chance aumentada ou zerada)</i>.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (6).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Chave de Acesso</div>
+							<div class="texto-regra">
+							<p>O grupo recebe uma pista de onde está a pasta do Diretório Principal. Encontrando todas, permite ao grupo encontrar o Diretório Principal.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (7).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Diretório Principal</div>
+							<div class="texto-regra">
+							<p>É disfarçada de alguma outra pasta até o grupo encontrar todas as Chaves de Acesso e ter V necessário para acessá-la. Local onde está o Arquivo Vital.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (8).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+
+                <div class="secao-dificuldade">
+                    <div class="conteudo-dificuldade">
+                        <div class="subtitulo-dif">Quarentena</div>
+							<div class="texto-regra">
+							<p>O SO roda a roleta de Quarentena para o grupo, que fica com o que a roleta disser. A roleta de Quarentena não pode ser negada.</p>
+						</div>
+                    </div>
+                    <img src="Pasta (9).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="apendice-botoes">
+        <button class="btn-nav" onclick="trocarModoManual()">Mudar Modo</button>
+    </div>
+
+    <script>
+        let modoAtual = 'pvp';
+
+        function trocarModoManual() {
+            modoAtual = modoAtual === 'pvp' ? 'coop' : 'pvp';
+            alternarModo();
+        }
+
+        function alternarModo() {
+            const titulo = document.getElementById('titulo-principal');
+            const pvp = document.getElementById('conteudo-pvp');
+            const coop = document.getElementById('conteudo-coop');
+
+            if (modoAtual === 'pvp') {
+                titulo.innerText = "Pastas do Modo Competitivo";
+                pvp.classList.remove('hidden');
+                coop.classList.add('hidden');
+            } else {
+                titulo.innerText = "Pastas do Modo Cooperativo";
+                pvp.classList.add('hidden');
+                coop.classList.remove('hidden');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function expandirImagem(src) {
+            const overlay = document.getElementById('overlay-imagem');
+            const imgExpandida = document.getElementById('imagem-expandida');
+            imgExpandida.src = src;
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharImagem() {
+            const overlay = document.getElementById('overlay-imagem');
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") fecharImagem();
+        });
+    </script>
+</body>
+</html>

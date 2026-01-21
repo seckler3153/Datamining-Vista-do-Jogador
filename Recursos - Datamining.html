@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Recursos - Datamining</title>
+	<link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <style>
+        body {
+            background-color: #11806A;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 40px 20px;
+            font-family: Arial, sans-serif;
+            gap: 20px;
+        }
+
+        .quadro-regras-completo {
+            background-color: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 8px solid #000;
+            width: 950px;
+            height: auto;
+            position: relative;
+        }
+
+        .apendice-sorteio {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 8px solid #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 440px; 
+            position: sticky;
+            top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .apendice-sorteio h2 {
+            margin-top: 0;
+            text-align: center;
+            text-decoration: underline;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        .grid-sorteios {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .linha-sorteio {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f0f0f0;
+            padding: 10px;
+            border: 2px solid #000;
+            border-radius: 8px;
+        }
+
+        .label-sorteio {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .resultado-sorteio {
+            font-size: 18px;
+            font-weight: bold;
+            color: #11806A;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        .btn-sortear, .btn-acao, .btn-nav {
+            padding: 5px 10px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .btn-sortear:hover, .btn-acao:hover, .btn-nav:hover {
+            background-color: #333;
+        }
+
+        .btn-acao {
+            width: 100%;
+            margin-bottom: 5px;
+            background-color: #d9534f;
+        }
+
+        .nav-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            border-top: 2px solid #eee;
+            padding-top: 10px;
+        }
+
+        .btn-nav {
+            background-color: #555;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Destaque para o botão de mudar modo */
+        .btn-nav-modo {
+            background-color: #11806A;
+        }
+
+        h1 {
+            text-align: center;
+            text-decoration: underline;
+            text-transform: uppercase;
+            font-size: 32px;
+            margin-top: 0;
+            margin-bottom: 40px;
+            color: #000;
+        }
+
+        .categoria-bloco {
+            border: 4px solid #000;
+            padding: 25px;
+            margin-bottom: 60px;
+            background-color: #fff;
+            position: relative;
+            scroll-margin-top: 40px;
+        }
+
+        .titulo-secao {
+            background-color: #000;
+            color: #fff;
+            padding: 8px 20px;
+            display: inline-block;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 18px;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+        }
+
+        .secao-dificuldade {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            align-items: flex-start;
+        }
+
+        .imagem-regra {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border: none;
+            box-shadow: none;
+            cursor: zoom-in;
+            order: 2;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .subtitulo-dif {
+            background-color: #f0f0f0;
+            border: 2px solid #000;
+            padding: 6px 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 14px;
+            order: 1;
+        }
+
+        .hidden { display: none; }
+
+        #overlay-imagem {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            cursor: zoom-out;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        #imagem-expandida {
+            max-width: 95%;
+            max-height: 95%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay-imagem" onclick="fecharImagem()">
+        <img id="imagem-expandida" src="">
+    </div>
+
+    <div class="quadro-regras-completo">
+        <h1 id="titulo-principal">Recursos do Modo Competitivo</h1>
+
+        <div id="conteudo-pvp">
+            <div id="cat-comuns-pvp" class="categoria-bloco">
+                <div class="titulo-secao">Recursos Comuns</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">01 - Cookie</div>
+                    <img src="Recursos PvP (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">02 - Tecla Home</div>
+                    <img src="Recursos PvP (2).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">03 - Adware</div>
+                    <img src="Recursos PvP (3).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">04 - Caixa de Spam</div>
+                    <img src="Recursos PvP (4).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">05 - Flag</div>
+                    <img src="Recursos PvP (5).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">06 - Firewall</div>
+                    <img src="Recursos PvP (6).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">07 - E-Loja</div>
+                    <img src="Recursos PvP (7).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">08 - Reboot</div>
+                    <img src="Recursos PvP (8).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">09 - Machine Learning</div>
+                    <img src="Recursos PvP (9).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">10 - Blacklist</div>
+                    <img src="Recursos PvP (10).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">11 - Enviar à Lixeira</div>
+                    <img src="Recursos PvP (11).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">12 - Cashback</div>
+                    <img src="Recursos PvP (12).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+            <div id="cat-incomuns-pvp" class="categoria-bloco">
+                <div class="titulo-secao">Recursos Incomuns</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">13 - Espelhar a Tela</div>
+                    <img src="Recursos PvP (13).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">14 - Patch Notes</div>
+                    <img src="Recursos PvP (14).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">15 - Recarregar</div>
+                    <img src="Recursos PvP (15).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">16 - Tecla Page Up</div>
+                    <img src="Recursos PvP (16).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">17 - Tecla Page Down</div>
+                    <img src="Recursos PvP (17).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">18 - Tecla Adiantar</div>
+                    <img src="Recursos PvP (18).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">19 - Tecla Retroceder</div>
+                    <img src="Recursos PvP (19).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">20 - Phising</div>
+                    <img src="Recursos PvP (20).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">21 - Malware</div>
+                    <img src="Recursos PvP (21).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">22 - Conversão de Formato de Recursos</div>
+                    <img src="Recursos PvP (22).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+            <div id="cat-raros-pvp" class="categoria-bloco">
+                <div class="titulo-secao">Recursos Raros</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">23 - Varredura</div>
+                    <img src="Recursos PvP (23).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">24 - Arquivo Compactado</div>
+                    <img src="Recursos PvP (24).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">25 - Tecla Esc</div>
+                    <img src="Recursos PvP (25).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">26 - Tecla Pause Break</div>
+                    <img src="Recursos PvP (26).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">27 - VPN</div>
+                    <img src="Recursos PvP (27).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">28 - Backbone</div>
+                    <img src="Recursos PvP (28).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">29 - Ransomware</div>
+                    <img src="Recursos PvP (29).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">30 - Troca de Memória RAM</div>
+                    <img src="Recursos PvP (30).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+            <div id="cat-fd-pvp" class="categoria-bloco">
+                <div class="titulo-secao">Recursos de Fontes Desconhecidas</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">31 - Arquivo Pesado</div>
+                    <img src="Recursos PvP (31).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">32 - Datamine Portátil</div>
+                    <img src="Recursos PvP (32).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+            <div id="cat-unico-pvp" class="categoria-bloco">
+                <div class="titulo-secao">Recurso Único</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">33 - Arquivo Vital</div>
+                    <img src="Recursos PvP (33).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+        </div>
+
+        <div id="conteudo-coop" class="hidden">
+            <div id="cat-comuns-coop" class="categoria-bloco">
+                <div class="titulo-secao">Recursos Comuns</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">01 - Adware</div>
+                    <img src="Recursos Coop (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">02 - Tecla Home</div>
+                    <img src="Recursos Coop (2).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">03 - Firewall</div>
+                    <img src="Recursos Coop (3).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">04 - Machine Learning</div>
+                    <img src="Recursos Coop (4).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">05 - Cookie</div>
+                    <img src="Recursos Coop (5).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">06 - Flag</div>
+                    <img src="Recursos Coop (6).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">07 - Spyware</div>
+                    <img src="Recursos Coop (7).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">08 - Conexão em LAN</div>
+                    <img src="Recursos Coop (8).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">09 - E-Loja</div>
+                    <img src="Recursos Coop (9).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">10 - Compartilhamento</div>
+                    <img src="Recursos Coop (10).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">11 - Reboot</div>
+                    <img src="Recursos Coop (11).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">12 - Cashback</div>
+                    <img src="Recursos Coop (12).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+            <div id="cat-incomuns-coop" class="categoria-bloco">
+                <div class="titulo-secao">Recursos Incomuns</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">13 - Tecla Page Up</div>
+                    <img src="Recursos Coop (13).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">14 - Tecla Page Down</div>
+                    <img src="Recursos Coop (14).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">15 - Tecla Adiantar</div>
+                    <img src="Recursos Coop (15).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">16 - Tecla Retroceder</div>
+                    <img src="Recursos Coop (16).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">17 - Atalho de Programa</div>
+                    <img src="Recursos Coop (17).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">18 - Conversão de Formato de Recursos</div>
+                    <img src="Recursos Coop (18).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">19 - Recarregar</div>
+                    <img src="Recursos Coop (19).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">20 - Patch Notes</div>
+                    <img src="Recursos Coop (20).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">21 - Backup</div>
+                    <img src="Recursos Coop (21).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">22 - Varredura</div>
+                    <img src="Recursos Coop (22).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+            <div id="cat-raros-coop" class="categoria-bloco">
+                <div class="titulo-secao">Recursos Raros</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">23 - Alterar Código Binário</div>
+                    <img src="Recursos Coop (23).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">24 - Mover Arquivos Entre Pastas</div>
+                    <img src="Recursos Coop (24).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">25 - Limpar Cache</div>
+                    <img src="Recursos Coop (25).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">26 - Tecla Pause Break</div>
+                    <img src="Recursos Coop (26).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">27 - Blacklist</div>
+                    <img src="Recursos Coop (27).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">28 - Tecla Esc</div>
+                    <img src="Recursos Coop (28).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">29 - Clock Rate</div>
+                    <img src="Recursos Coop (29).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">30 - Arquivo Compactado</div>
+                    <img src="Recursos Coop (30).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+            <div id="cat-fd-coop" class="categoria-bloco">
+                <div class="titulo-secao">Recursos de Fontes Desconhecidas</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">31 - Arquivo Pesado</div>
+                    <img src="Recursos Coop (31).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">32 - Datamine Portátil</div>
+                    <img src="Recursos Coop (32).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+            <div id="cat-unico-coop" class="categoria-bloco">
+                <div class="titulo-secao">Recurso Único</div>
+                <div class="secao-dificuldade">
+                    <div class="subtitulo-dif">33 - Arquivo Vital</div>
+                    <img src="Recursos Coop (33).png" class="imagem-regra" onclick="expandirImagem(this.src)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="apendice-sorteio">
+        <h2>Recursos Aleatórios</h2>
+        
+        <button class="btn-acao" onclick="resetarTudo()">Resetar Tudo</button>
+
+        <div class="grid-sorteios">
+            <div class="coluna-sorteio">
+                <div class="linha-sorteio" style="margin-bottom: 5px;">
+                    <span class="label-sorteio">C:</span>
+                    <span id="res-C" class="resultado-sorteio">-</span>
+                    <button class="btn-sortear" onclick="sortear('C', 1, 12)">Sortear</button>
+                </div>
+                <div class="linha-sorteio" style="margin-bottom: 5px;">
+                    <span class="label-sorteio">I:</span>
+                    <span id="res-I" class="resultado-sorteio">-</span>
+                    <button class="btn-sortear" onclick="sortear('I', 13, 22)">Sortear</button>
+                </div>
+                <div class="linha-sorteio">
+                    <span class="label-sorteio">R:</span>
+                    <span id="res-R" class="resultado-sorteio">-</span>
+                    <button class="btn-sortear" onclick="sortear('R', 23, 30)">Sortear</button>
+                </div>
+            </div>
+
+            <div class="coluna-sorteio">
+                <div class="linha-sorteio" style="margin-bottom: 5px;">
+                    <span class="label-sorteio">T:</span>
+                    <span id="res-T" class="resultado-sorteio">-</span>
+                    <button class="btn-sortear" onclick="sortear('T', 1, 7)">Sortear</button>
+                </div>
+                <div class="linha-sorteio" style="margin-bottom: 5px;">
+                    <span class="label-sorteio">FD:</span>
+                    <span id="res-FD" class="resultado-sorteio">-</span>
+                    <button class="btn-sortear" onclick="sortear('FD', 1, 32)">Sortear</button>
+                </div>
+                <div class="linha-sorteio">
+                    <span class="label-sorteio">A:</span>
+                    <span id="res-A" class="resultado-sorteio">-</span>
+                    <button class="btn-sortear" onclick="sortear('A', 1, 33)">Sortear</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-container">
+            <button class="btn-nav" onclick="irPara('cat-comuns')">Comuns</button>
+            <button class="btn-nav" onclick="irPara('cat-incomuns')">Incomuns</button>
+            <button class="btn-nav" onclick="irPara('cat-raros')">Raros</button>
+            <button class="btn-nav" onclick="irPara('cat-fd')">F. Desconhecidas</button>
+            <button class="btn-nav" onclick="irPara('cat-unico')">Único</button>
+            <button class="btn-nav btn-nav-modo" onclick="trocarModoManual()">Mudar Modo</button>
+        </div>
+    </div>
+
+    <script>
+        let modoAtual = 'pvp';
+
+        function sortear(tipo, min, max) {
+            const resultado = Math.floor(Math.random() * (max - min + 1)) + min;
+            document.getElementById(`res-${tipo}`).innerText = resultado;
+        }
+
+        function resetarTudo() {
+            ['C', 'I', 'R', 'T', 'FD', 'A'].forEach(tipo => {
+                const el = document.getElementById(`res-${tipo}`);
+                if(el) el.innerText = '-';
+            });
+        }
+
+        function irPara(idBase) {
+            const elemento = document.getElementById(`${idBase}-${modoAtual}`);
+            if (elemento) {
+                elemento.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function trocarModoManual() {
+            modoAtual = modoAtual === 'pvp' ? 'coop' : 'pvp';
+            alternarModo();
+        }
+
+        function alternarModo() {
+            const titulo = document.getElementById('titulo-principal');
+            const pvp = document.getElementById('conteudo-pvp');
+            const coop = document.getElementById('conteudo-coop');
+
+            if (modoAtual === 'pvp') {
+                titulo.innerText = "Recursos do Modo Competitivo";
+                pvp.classList.remove('hidden');
+                coop.classList.add('hidden');
+            } else {
+                titulo.innerText = "Recursos do Modo Cooperativo";
+                pvp.classList.add('hidden');
+                coop.classList.remove('hidden');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function expandirImagem(src) {
+            const overlay = document.getElementById('overlay-imagem');
+            const imgExpandida = document.getElementById('imagem-expandida');
+            imgExpandida.src = src;
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharImagem() {
+            const overlay = document.getElementById('overlay-imagem');
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") fecharImagem();
+        });
+    </script>
+</body>
+</html>
