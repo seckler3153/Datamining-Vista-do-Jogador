@@ -115,6 +115,7 @@
             padding: 12px;
             background: #f0f0f0;
             border-radius: 8px;
+            position: relative;
         }
 
         .container-botoes-roletas {
@@ -188,7 +189,7 @@
         .btn-excluir { background: #FF4D4D; }
         .btn-adicionar { background: #11806A; margin-top: 10px; font-size: 13px; display: none; }
 
-        #modal-vencedor {
+        #modal-vencedor, #modal-ajuda {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -205,6 +206,22 @@
             border-radius: 15px;
             text-align: center;
         }
+
+        /* Estilo para a imagem em modo lightbox */
+        .img-ajuda {
+            max-width: 90%;
+            max-height: 90%;
+            border: 5px solid white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Botão posicionado no canto superior direito da caixa-config */
+        .btn-ajuda-pos {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -214,6 +231,10 @@
         <h2 style="text-transform: uppercase; margin-top: 0;">Resultado:</h2>
         <h1 id="vencedor-nome" style="font-size: 50px; color: #11806A;">-</h1>
     </div>
+</div>
+
+<div id="modal-ajuda" onclick="this.style.display='none'">
+    <img id="img-ajuda-src" class="img-ajuda" src="" alt="Ajuda">
 </div>
 
 <div class="quadro-roleta">
@@ -234,6 +255,7 @@
         <div class="painel-lateral">
             <div class="caixa-config">
                 <label style="font-weight: bold; font-size: 11px;">BIBLIOTECA DE ROLETAS:</label>
+                <button class="btn-modo btn-ajuda-pos" onclick="mostrarAjuda()">¿?</button>
                 <div id="grade-botoes-roletas" class="container-botoes-roletas"></div>
             </div>
 
@@ -244,6 +266,7 @@
 </div>
 
 <script>
+    // Banco de dados (Mantido conforme original)
     let bancoDados = {
         "Antivírus": { imagem: "Roleta (1).png", itens: [
             { texto: "Jogador 1", cor: "#C40026", corTexto: "#FFFFFF", peso: 1 },
@@ -430,11 +453,16 @@
     const ctx = canvas.getContext('2d');
     const imagensCarregadas = {};
 
-    // Função para truncar texto com reticências
+    function mostrarAjuda() {
+        const modal = document.getElementById('modal-ajuda');
+        const img = document.getElementById('img-ajuda-src');
+        img.src = modoAtual === "PvP" ? "AD PvP.png" : "AD Coop.png";
+        modal.style.display = 'flex';
+    }
+
     function truncarTexto(texto, larguraMaxima) {
         let largura = ctx.measureText(texto).width;
         if (largura <= larguraMaxima) return texto;
-        
         let stringCortada = texto;
         while (stringCortada.length > 0 && ctx.measureText(stringCortada + "...").width > larguraMaxima) {
             stringCortada = stringCortada.substring(0, stringCortada.length - 1);
@@ -448,17 +476,13 @@
         const itensVisiveis = data.itens.filter(i => (parseInt(i.peso) || 0) > 0);
         const centro = 250;
         const raio = 240;
-        
         ctx.clearRect(0,0,500,500);
         if(itensVisiveis.length === 0) return;
-
         const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
         let anguloAcumulado = anguloAtual;
-
         itensVisiveis.forEach((item) => {
             const peso = parseInt(item.peso) || 0;
             const tamanhoFatia = (peso / pesoTotal) * (Math.PI * 2);
-            
             ctx.beginPath();
             ctx.moveTo(centro, centro);
             ctx.arc(centro, centro, raio, anguloAcumulado, anguloAcumulado + tamanhoFatia);
@@ -467,7 +491,6 @@
             ctx.strokeStyle = "white";
             ctx.lineWidth = 2;
             ctx.stroke();
-
             ctx.save();
             ctx.translate(centro, centro);
             ctx.rotate(anguloAcumulado + tamanhoFatia / 2);
@@ -475,17 +498,12 @@
             ctx.textBaseline = "middle";
             ctx.fillStyle = item.corTexto || "#FFFFFF";
             ctx.font = "bold 15px Arial";
-            
-            // Lógica de reticências: largura máxima é a distância do centro até o fim (raio) 
-            // menos o espaço do ícone central (80) e uma margem de segurança (20)
             const larguraMaxPermitida = raio - 80 - 20;
             const textoTratado = truncarTexto(item.texto, larguraMaxPermitida);
-            
             ctx.fillText(textoTratado, 90, 0);
             ctx.restore();
             anguloAcumulado += tamanhoFatia;
         });
-
         desenharCentro(centro, data.imagem);
     }
 
@@ -493,7 +511,6 @@
         ctx.save();
         ctx.translate(centro, centro);
         ctx.rotate(anguloAtual - anguloOffset);
-
         ctx.beginPath();
         ctx.arc(0, 0, 80, 0, Math.PI * 2);
         ctx.fillStyle = "white";
@@ -501,9 +518,7 @@
         ctx.strokeStyle = "black";
         ctx.lineWidth = 6;
         ctx.stroke();
-        
         ctx.clip();
-
         if (src) {
             if (!imagensCarregadas[src]) {
                 const img = new Image();
@@ -529,13 +544,10 @@
         const modo = modoAtual;
         const containerItens = document.getElementById('lista-itens-container');
         const gradeBotoes = document.getElementById('grade-botoes-roletas');
-        
         const chavesFiltradas = Object.keys(bancoDados).filter(k => {
             return modo === "Coop" ? k.endsWith("-c") : !k.endsWith("-c");
         });
-
         if (!chavesFiltradas.includes(roletaAtualKey)) roletaAtualKey = chavesFiltradas[0] || "";
-
         const data = bancoDados[roletaAtualKey];
         const itensVisiveis = data.itens.filter(i => (parseInt(i.peso) || 0) > 0);
         if(itensVisiveis.length > 0) {
@@ -547,9 +559,7 @@
             anguloOffset = 0;
             anguloAtual = 0;
         }
-
         document.getElementById('titulo-pagina').innerText = `${roletaAtualKey.replace("-c", "")} - ${modo}`;
-
         gradeBotoes.innerHTML = "";
         chavesFiltradas.forEach(k => {
             const btn = document.createElement('button');
@@ -561,7 +571,6 @@
             };
             gradeBotoes.appendChild(btn);
         });
-
         containerItens.innerHTML = "";
         bancoDados[roletaAtualKey].itens.forEach((item, i) => {
             const div = document.createElement('div');
@@ -600,12 +609,10 @@
         const itensVisiveis = bancoDados[roletaAtualKey].itens.filter(i => (parseInt(i.peso) || 0) > 0);
         if(itensVisiveis.length === 0) return;
         girando = true;
-        
         const duracao = 4000;
         const forcaGiro = (Math.random() * 8 + 10) * (Math.PI * 2);
         const anguloInicial = anguloAtual;
         const timestampInicial = performance.now();
-        
         function step(agora) {
             const progresso = Math.min((agora - timestampInicial) / duracao, 1);
             const easing = 1 - Math.pow(1 - progresso, 4);
