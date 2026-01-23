@@ -2,9 +2,13 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Roletas - Datamining</title>
+    <title>Mapas - Datamining</title>
     <link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
     <style>
+        :root {
+            --cor-esconder: #11806A;
+        }
+
         body {
             background-color: #11806A;
             margin: 0;
@@ -12,639 +16,763 @@
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
-            padding: 40px 20px;
             font-family: Arial, sans-serif;
+            padding: 20px;
+            gap: 20px;
         }
 
-        .quadro-roleta {
+        .layout-principal {
+            display: flex;
+            align-items: stretch; 
+            gap: 20px;
+        }
+
+        .apendice-regras, .apendice-botoes {
             background-color: white;
-            padding: 40px;
+            padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
             border: 8px solid #000;
-            width: 1000px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 320px; 
             display: flex;
             flex-direction: column;
-            position: relative;
-        }
-
-        .header-datamine {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 4px solid #000;
-            padding-bottom: 15px;
-        }
-
-        h1 {
-            text-transform: uppercase;
-            text-decoration: underline;
-            margin: 0;
-            font-size: 28px;
-        }
-
-        .seletor-modo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 12px;
-        }
-
-        .btn-modo {
-            padding: 5px 12px;
-            border: 2px solid #000;
-            background-color: #000;
-            color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 11px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-
-        .btn-modo:hover {
-            background-color: #333;
-        }
-
-        .conteudo-principal {
-            display: flex;
-            gap: 40px;
-            align-items: flex-start;
-        }
-
-        .area-roleta {
-            position: relative;
-            cursor: pointer;
-            user-select: none;
-            flex-shrink: 0;
-        }
-
-        canvas {
-            border: 8px solid #000;
-            border-radius: 50%;
-            background: #fff;
-        }
-
-        .ponteiro {
-            position: absolute;
-            right: -15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0; 
-            height: 0; 
-            border-top: 20px solid transparent;
-            border-bottom: 20px solid transparent;
-            border-right: 35px solid #000;
-            z-index: 10;
-        }
-
-        .painel-lateral {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            min-width: 0;
-        }
-
-        .caixa-config {
-            border: 3px solid #000;
-            padding: 12px;
-            background: #f0f0f0;
-            border-radius: 8px;
-            position: relative;
-        }
-
-        .container-botoes-roletas {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
-            margin-top: 10px;
-        }
-
-        .btn-roleta-opcao {
-            height: 45px;
-            padding: 4px;
-            font-size: 15px;
-            background: #fff;
-            border: 2px solid #000;
-            cursor: pointer;
-            font-weight: bold;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .btn-roleta-opcao.ativa {
-            background: #000;
-            color: #fff;
-        }
-
-        .lista-itens {
-            max-height: 350px;
-            overflow-y: auto;
-            border: 3px solid #000;
-            padding: 10px;
-            background: #fff;
-            border-radius: 8px;
-        }
-
-        .item-linha {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 8px;
-            align-items: center;
-        }
-
-        input[type="text"], input[type="number"], select {
-            padding: 6px;
-            border: 2px solid #000;
-            font-weight: bold;
-            height: 32px;
             box-sizing: border-box;
         }
 
-        input[type="text"] { flex: 1; font-size: 13px; min-width: 0; }
-        input[type="number"] { width: 45px; }
-        input[type="color"] { width: 35px; height: 32px; border: 2px solid #000; cursor: pointer; padding: 0; box-sizing: border-box; }
+        .apendice-regras {
+            justify-content: space-between;
+        }
 
-        .btn {
-            padding: 10px;
-            background: #000;
-            color: #fff;
+        .regras-texto {
+            font-size: 13px;
+            font-weight: bold;
+            line-height: 1.6;
+            color: #000;
+        }
+
+        .quadro-mapa-completo {
+            background-color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            border: 8px solid #000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        h1 {
+            width: 100%;
+            text-align: center;
+            text-decoration: underline;
+            text-transform: uppercase;
+            font-size: 22px;
+            margin: 0 0 20px 0;
+            color: #000;
+        }
+
+        .grid-container-master {
+            display: grid;
+            grid-template-areas: 
+                ". topo"
+                "lateral mapa";
+            grid-template-columns: 30px auto;
+            grid-template-rows: 30px auto;
+        }
+
+        .regua-topo { grid-area: topo; display: flex; justify-content: space-around; align-items: center; font-weight: bold; }
+        .regua-lateral { grid-area: lateral; display: flex; flex-direction: column; justify-content: space-around; align-items: center; font-weight: bold; }
+
+        .coord-label {
+            font-size: 14px;
+            color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+        }
+
+        .mapa-wrapper {
+            grid-area: mapa;
+            position: relative;
+            display: inline-block;
+            border: 4px solid #000;
+            background-color: #000;
+            user-select: none;
+            line-height: 0;
+            max-width: 60vw;
+            max-height: 70vh;
+            overflow: hidden;
+        }
+
+        .mapa-imagem {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 70vh;
+            object-fit: contain;
+            z-index: 10;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: grid;
+            z-index: 20; 
+        }
+
+        #svgLinhas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 30; 
+            overflow: visible;
+        }
+
+        #camadaIconesBase, #camadaIconesSuperior, #camadaIconesUltra { 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            pointer-events: none; 
+        }
+        #camadaIconesBase { z-index: 40; }
+        #camadaIconesSuperior { z-index: 50; }
+        #camadaIconesUltra { z-index: 60; }
+
+        .icone-mapa {
+            position: absolute;
+            transform: translate(-50%, -50%); 
+            pointer-events: none;
+        }
+
+        .icone-mapa.arrastavel {
+            pointer-events: auto !important;
+            cursor: move;
+        }
+
+        .grid-cell {
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        .grid-cell.escondido { background-color: var(--cor-esconder); }
+
+        .apendice-botoes {
+            gap: 15px;
+        }
+
+        .btn-nav {
+            padding: 10px 2px;
+            background-color: #11806A;
+            color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 10px;
             text-transform: uppercase;
-            font-size: 11px;
         }
 
-        .btn-excluir { background: #FF4D4D; }
-        .btn-adicionar { background: #11806A; margin-top: 10px; font-size: 13px; display: none; }
+        .btn-nav.ativo { background-color: #000; }
+        .btn-reset { background-color: #a00; margin-top: 10px; }
 
-        #modal-vencedor, #modal-ajuda {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 1000;
+        .container-tamanhos {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+        }
+
+        .grid-componentes {
+            display: grid;
+            grid-template-rows: repeat(9, 1fr);
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-flow: column;
+            gap: 6px;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px solid #333;
+            flex-grow: 1; 
+        }
+
+        .btn-componente {
+            aspect-ratio: 1/1;
+            background-color: #11806A;
+            border: 1px solid #000;
+            border-radius: 4px;
+            cursor: pointer;
+            padding: 2px;
+            display: flex;
             justify-content: center;
             align-items: center;
+            transition: all 0.1s;
         }
 
-        .card-resultado {
-            background: white;
-            padding: 40px;
-            border: 8px solid #000;
-            border-radius: 15px;
+        .btn-componente.selecionado {
+            background-color: #ffd700;
+            border: 2px solid #ff4500;
+            transform: scale(1.1);
+        }
+
+        .btn-componente img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .label-secao {
             text-align: center;
-        }
-
-        /* Estilo para a imagem em modo lightbox */
-        .img-ajuda {
-            max-width: 90%;
-            max-height: 90%;
-            border: 5px solid white;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        /* Botão posicionado no canto superior direito da caixa-config */
-        .btn-ajuda-pos {
-            position: absolute;
-            top: 8px;
-            right: 8px;
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
-
-<div id="modal-vencedor" onclick="this.style.display='none'">
-    <div class="card-resultado">
-        <h2 style="text-transform: uppercase; margin-top: 0;">Resultado:</h2>
-        <h1 id="vencedor-nome" style="font-size: 50px; color: #11806A;">-</h1>
-    </div>
-</div>
-
-<div id="modal-ajuda" onclick="this.style.display='none'">
-    <img id="img-ajuda-src" class="img-ajuda" src="" alt="Ajuda">
-</div>
-
-<div class="quadro-roleta">
-    <div class="header-datamine">
-        <h1 id="titulo-pagina">Sorteio Principal</h1>
-        <div class="seletor-modo">
-            <label>MODO:</label>
-            <button id="btn-modo" class="btn-modo" onclick="alternarModo()">PvP</button>
-        </div>
-    </div>
-
-    <div class="conteudo-principal">
-        <div class="area-roleta" onclick="girarRoleta()">
-            <div class="ponteiro"></div>
-            <canvas id="canvas-roleta" width="500" height="500"></canvas>
+    <div class="layout-principal">
+        <div class="apendice-regras">
+            <div class="regras-texto">
+                <strong><u>INSTRUÇÕES:</u></strong><br><br>
+                • Clique no botão de componente e em seguida no quadrante que quiser para inserir a imagem do botão.<br>
+                • Segure "Shift" para colocar múltiplos do mesmo componente e aperte "Barra de Espaço" para cancelar a seleção de um botão.<br>
+                • Ao clicar em um quadrante e arrastar para outro, é criado um caminho entre eles.<br>
+                • Segure "Shift" criando um caminho para criá-lo de forma externa ao mapa.<br>
+                • Os botões de Meeple e de Firewall entram no meio do mapa e podem ser arrastados pelo mapa.<br>
+                • Clicar com o botão direito sobre um quadrante o faz ficar invisível, para representar quadrantes sem pastas.<br>
+                • Para apagar uma imagem de um botão em um quadrante, clique duas vezes com o botão esquerdo do mouse sobre ela.<br>
+                • Para apagar um caminho, clique com o botão direito do mouse ou crie outro caminho por cima, de mesmo tamanho e mesma direção.<br>
+                • Para apagar um Meeple ou uma Firewall, clique com o botão direito sobre eles.<br>
+                • Para qualquer problema, Ctrl + Z é seu amigo.
+            </div>
+            <button class="btn-nav btn-reset" onclick="resetarGridAtual()">Resetar Mapa Atual</button>
         </div>
 
-        <div class="painel-lateral">
-            <div class="caixa-config">
-                <label style="font-weight: bold; font-size: 11px;">BIBLIOTECA DE ROLETAS:</label>
-                <button class="btn-modo btn-ajuda-pos" onclick="mostrarAjuda()">¿?</button>
-                <div id="grade-botoes-roletas" class="container-botoes-roletas"></div>
+        <div class="quadro-mapa-completo">
+            <h1 id="tituloMapa">Normal - PvP | Fácil - Coop (9x9)</h1>
+            <div class="grid-container-master">
+                <div id="reguaTopo" class="regua-topo"></div>
+                <div id="reguaLateral" class="regua-lateral"></div>
+                <div class="mapa-wrapper" id="containerMapa">
+                    <img id="mapaPrincipal" src="Mapa (5).png" alt="Mapa Base" class="mapa-imagem" onload="ajustarTamanhoReguas()">
+                    <div class="grid-overlay" id="gridInterativo"></div>
+                    <svg id="svgLinhas">
+                        <line id="linhaGuia" x1="0" y1="0" x2="0" y2="0" stroke="rgba(0,0,0,0.6)" stroke-dasharray="5,5" style="display:none;"></line>
+                    </svg>
+                    <div id="camadaIconesBase"></div>
+                    <div id="camadaIconesSuperior"></div>
+                    <div id="camadaIconesUltra"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="apendice-botoes">
+            <div style="flex-grow: 1; display: flex; flex-direction: column;">
+                <div class="label-secao">Componentes:</div>
+                <div class="grid-componentes" id="gridComponentes"></div>
             </div>
 
-            <div class="lista-itens" id="lista-itens-container"></div>
-            <button class="btn btn-adicionar" onclick="adicionarNovoItem()">+ Adicionar Item</button>
+            <hr style="width: 100%; border: 1px solid #ddd;">
+
+            <button class="btn-nav" onclick="alternarCorFundo()">Alternar Fundo</button>
+            <div>
+                <div class="label-secao">Tamanho do Mapa:</div>
+                <div class="container-tamanhos">
+                    <button class="btn-nav" onclick="mudarTamanho('5x5')">5x5</button>
+                    <button class="btn-nav" onclick="mudarTamanho('7x7')">7x7</button>
+                    <button class="btn-nav ativo" onclick="mudarTamanho('9x9')">9x9</button>
+                    <button class="btn-nav" onclick="mudarTamanho('12x12')">12x12</button>
+                    <button class="btn-nav" onclick="mudarTamanho('15x15')">15x15</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<script>
-    // Banco de dados (Mantido conforme original)
-    let bancoDados = {
-        "Antivírus": { imagem: "Roleta (1).png", itens: [
-            { texto: "Jogador 1", cor: "#C40026", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Jogador 2", cor: "#EC9800", corTexto: "#000000", peso: 1 },
-            { texto: "Jogador 3", cor: "#FFEB00", corTexto: "#000000", peso: 1 },
-            { texto: "Jogador 4", cor: "#4DA619", corTexto: "#000000", peso: 1 },
-            { texto: "Jogador 5", cor: "#00A0DD", corTexto: "#000000", peso: 1 },
-            { texto: "Jogador 6", cor: "#00468B", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Jogador 7", cor: "#6C005F", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Jogador 8", cor: "#C50067", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Antivírus-c": { imagem: "Roleta (1).png", itens: [
-            { texto: "Jogador 1", cor: "#C40026", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Jogador 2", cor: "#EC9800", corTexto: "#000000", peso: 1 },
-            { texto: "Jogador 3", cor: "#FFEB00", corTexto: "#000000", peso: 1 },
-            { texto: "Jogador 4", cor: "#4DA619", corTexto: "#000000", peso: 1 },
-            { texto: "Jogador 5", cor: "#00A0DD", corTexto: "#000000", peso: 1 },
-            { texto: "Jogador 6", cor: "#00468B", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Jogador 7", cor: "#6C005F", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Jogador 8", cor: "#C50067", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Arquivo Desconhecido": { imagem: "Roleta (2).png", itens: [
-            { texto: "Escolha o que quiser desta roleta", cor: "#000000", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba 1 Patch", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Bloqueie um caminho aleatório adjacente", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba 1 Recurso Comum aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Lute contra outro jogador", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba +2A", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Dê +1B a cada outro jogador", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba +3B", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba 1 Bug", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Ganhe 1 movimento extra neste turno", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba -1V", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba 1 Recurso do tipo Tecla aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba -2A", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Jogue um jogo Cooperativo com os outros jogadores", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba -3B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba uma Datamine Portátil", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Rode a roleta de Quarentena", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba +1B de cada outro jogador", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Perca sua Zona Segura", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba 1 Recurso Incomum aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Não se mova no seu próximo turno", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Escolha um jogador para ganhar 1 Bug", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Descarte 1 Recurso a sua escolha", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba +1V", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba até 2 Arquivos Pesados", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba um Pedaço de Mapa imediatamente", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba -1A e -2B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba 1 Recurso Raro aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Retorne para a última pasta que você esteve", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Copie 1 Recurso não Único no seu Banco de Dados a sua escolha", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Retorne para sua Zona Segura (Aplicando as regras de retorno para Zona Segura)", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba +1A e +2B", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Tenha sua posição revelada a todos os jogadores", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Arquivo Desconhecido-c": { imagem: "Roleta (2).png", itens: [
-            { texto: "Escolham o que quiserem desta roleta", cor: "#000000", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam 1 Recurso Comum aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Bloqueie um caminho aleatório adjacente a cada jogador", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "O próximo jogador ganha 1 movimento extra neste turno", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "-1 ao número máximo de turnos", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam +3A", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Percam uma de suas Zonas Seguras aleatoriamente", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam +5B", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam 1 Bug", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam 1 Recurso do tipo Tecla aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam -1V", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Escolham o próximo jogo Cooperativo, quando forem jogar", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam -3A", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "+1 ao número máximo de turnos", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam -5B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam uma Datamine Portátil", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Rodem a roleta de Quarentena", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam 1 Recurso Incomum aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam -1B por jogador Antivírus", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam +1V", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Durante a próxima rodada, nenhuma Pasta Especial será ativada (Todas as pastas serão tratadas com Pastas Vazias)", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Joguem um jogo Cooperativo", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Descartem 1 Recurso a escolha do grupo", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam 1 Patch", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam até 3 Arquivos Pesados", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam um Pedaço de Mapa imediatamente", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam -2A e -3B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam 1 Recurso Raro aleatório", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "O próximo recurso que o grupo for comprar custará +2B", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Copie 1 Recurso não Único do Banco de Dados a escolha do grupo", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Retorne um jogador aleatório para sua Zona Segura (Aplicando as regras de retorno para Zona Segura)", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba +2A e +3B", cor: "#3369E8", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Rodem esta roleta +2 vezes e fiquem com o pior resultado (A decisão do SO)", cor: "#D50F25", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Cara ou Coroa": { imagem: "Roleta (3).png", itens: [
-            { texto: "Cara", cor: "#333333", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Coroa", cor: "#FFFFFF", corTexto: "#000000", peso: 1 }
-        ]},
-        "Cara ou Coroa-c": { imagem: "Roleta (3).png", itens: [
-            { texto: "Cara", cor: "#333333", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Coroa", cor: "#FFFFFF", corTexto: "#000000", peso: 1 }
-        ]},
-        "Combate": { imagem: "Roleta (4).png", itens: [
-            { texto: "Stopots", cor: "#008080", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Nem a Pato", cor: "#014A4A", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Geoguessr", cor: "#008080", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Duelo de Dados", cor: "#014A4A", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Batalha de Rimas", cor: "#008080", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Gartic", cor: "#014A4A", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Quiz", cor: "#008080", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Jo-Ken-Po", cor: "#014A4A", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Cooperativo-c": { imagem: "Roleta (5).png", itens: [
-            { texto: "Top 10", cor: "#D600D6", corTexto: "#000000", peso: 1 },
-            { texto: "Conexo", cor: "#A500A5", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Segue o Fluxo", cor: "#D600D6", corTexto: "#000000", peso: 1 },
-            { texto: "C-S-Composto", cor: "#A500A5", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Nem a Pato", cor: "#D600D6", corTexto: "#000000", peso: 1 },
-            { texto: "Sintonia", cor: "#A500A5", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Tibitar", cor: "#D600D6", corTexto: "#000000", peso: 1 },
-            { texto: "Batata Quente Alfabética", cor: "#A500A5", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Quarentena": { imagem: "Roleta (6).png", itens: [
-            { texto: "Nada acontece", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba -3B", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Perca sua Zona Segura", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba -2A", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Dê 1 Recurso seu de maior raridade a outro jogador", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba 2 Arquivos Pesados", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba 2 Bugs", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Seja teletransportado para um Pasta Vazia aleatória", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Receba -1V", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Dê a outro jogador uma cópia de um de seus pedaços de mapa", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Esvazie seu Banco de Dados", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Não realize nenhuma ação no próximo turno, além de se mover", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Quarentena-c": { imagem: "Roleta (6).png", itens: [
-            { texto: "Nada acontece", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam -5B", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "-3 ao número máximo de rodadas", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam -4A", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam 3 Arquivos Pesados", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Percam 1 de suas Zonas Seguras aleatoriamente", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam 2 Bugs", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Sejam teletransportados para Pastas Vazias aleatórias", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Recebam -1V", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Percam 2 Recursos aleatórios", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Esvaziem seu Banco de Dados", cor: "#2E005C", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Não realizem nenhuma ação no próximo turno, além de se mover", cor: "#5C005C", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Quiz": { imagem: "Roleta (7).png", itens: [
-            { texto: "Artes", cor: "#8300D6", corTexto: "#FFFFFF", peso: 3 },
-            { texto: "Artes ou Ciências", cor: "#5B35DF", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Ciências", cor: "#3369E8", corTexto: "#FFFFFF", peso: 3 },
-            { texto: "Ciências ou Entretenimento", cor: "#1A8187", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Entretenimento", cor: "#009925", corTexto: "#000000", peso: 3 },
-            { texto: "Entretenimento ou Esportes", cor: "#80CC13", corTexto: "#000000", peso: 1 },
-            { texto: "Esportes", cor: "#FFFF00", corTexto: "#000000", peso: 3 },
-            { texto: "Esportes ou Geografia", cor: "#FFC000", corTexto: "#000000", peso: 1 },
-            { texto: "Geografia", cor: "#FF8000", corTexto: "#000000", peso: 3 },
-            { texto: "Geografia ou História", cor: "#EB406B", corTexto: "#000000", peso: 1 },
-            { texto: "História", cor: "#D600D6", corTexto: "#000000", peso: 3 },
-            { texto: "História ou Artes", cor: "#AC00D6", corTexto: "#FFFFFF", peso: 1 }
-        ]},
-        "Quiz-c": { imagem: "Roleta (7).png", itens: [
-            { texto: "Artes", cor: "#8300D6", corTexto: "#FFFFFF", peso: 3 },
-            { texto: "Artes ou Ciências", cor: "#5B35DF", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Ciências", cor: "#3369E8", corTexto: "#FFFFFF", peso: 3 },
-            { texto: "Ciências ou Entretenimento", cor: "#1A8187", corTexto: "#FFFFFF", peso: 1 },
-            { texto: "Entretenimento", cor: "#009925", corTexto: "#000000", peso: 3 },
-            { texto: "Entretenimento ou Esportes", cor: "#80CC13", corTexto: "#000000", peso: 1 },
-            { texto: "Esportes", cor: "#FFFF00", corTexto: "#000000", peso: 3 },
-            { texto: "Esportes ou Geografia", cor: "#FFC000", corTexto: "#000000", peso: 1 },
-            { texto: "Geografia", cor: "#FF8000", corTexto: "#000000", peso: 3 },
-            { texto: "Geografia ou História", cor: "#EB406B", corTexto: "#000000", peso: 1 },
-            { texto: "História", cor: "#D600D6", corTexto: "#000000", peso: 3 },
-            { texto: "História ou Artes", cor: "#AC00D6", corTexto: "#FFFFFF", peso: 1 }
-        ]}
-    };
+    <script>
+        const configMapas = {
+            '5x5':   { dim: 5,   imgVerde: 'Mapa (1).png', imgBranco: 'Mapa (2).png', nome: "Muito Fácil - PvP" },
+            '7x7':   { dim: 7,   imgVerde: 'Mapa (3).png', imgBranco: 'Mapa (4).png', nome: "Fácil - PvP" },
+            '9x9':   { dim: 9,   imgVerde: 'Mapa (5).png', imgBranco: 'Mapa (6).png', nome: "Normal - PvP | Fácil - Coop" },
+            '12x12': { dim: 12, imgVerde: 'Mapa (7).png', imgBranco: 'Mapa (8).png', nome: "Difícil - PvP | Normal - Coop" },
+            '15x15': { dim: 15, imgVerde: 'Mapa (9).png', imgBranco: 'Mapa (10).png', nome: "Extremo - PvP | Difícil - Coop" }
+        };
 
-    let roletaAtualKey = "Antivírus";
-    let anguloAtual = 0;
-    let anguloOffset = 0; 
-    let girando = false;
-    let modoAtual = "PvP";
-    const canvas = document.getElementById('canvas-roleta');
-    const ctx = canvas.getContext('2d');
-    const imagensCarregadas = {};
+        let estadoGrids = {
+            '5x5': { icones: [], linhas: [], escondidos: [] },
+            '7x7': { icones: [], linhas: [], escondidos: [] },
+            '9x9': { icones: [], linhas: [], escondidos: [] },
+            '12x12': { icones: [], linhas: [], escondidos: [] },
+            '15x15': { icones: [], linhas: [], escondidos: [] }
+        };
 
-    function mostrarAjuda() {
-        const modal = document.getElementById('modal-ajuda');
-        const img = document.getElementById('img-ajuda-src');
-        img.src = modoAtual === "PvP" ? "AD PvP.png" : "AD Coop.png";
-        modal.style.display = 'flex';
-    }
+        let tamanhoAtual = '9x9';
+        let fundoVerde = true;
+        let cellInicial = null;
+        let criandoLinha = false;
+        let componenteSelecionado = null;
+        let arrastandoElemento = null;
+        let historico = [];
+        let shiftPressionado = false; // Controle da tecla Shift
 
-    function truncarTexto(texto, larguraMaxima) {
-        let largura = ctx.measureText(texto).width;
-        if (largura <= larguraMaxima) return texto;
-        let stringCortada = texto;
-        while (stringCortada.length > 0 && ctx.measureText(stringCortada + "...").width > larguraMaxima) {
-            stringCortada = stringCortada.substring(0, stringCortada.length - 1);
+        function resetarGridAtual() {
+            if(confirm(`Deseja limpar todos os desenhos e ícones do mapa ${tamanhoAtual}?`)) {
+                estadoGrids[tamanhoAtual] = { icones: [], linhas: [], escondidos: [] };
+                limparVisualParaTroca();
+                gerarGrid();
+                historico = [];
+            }
         }
-        return stringCortada + "...";
-    }
 
-    function desenhar() {
-        const data = bancoDados[roletaAtualKey];
-        if(!data) return;
-        const itensVisiveis = data.itens.filter(i => (parseInt(i.peso) || 0) > 0);
-        const centro = 250;
-        const raio = 240;
-        ctx.clearRect(0,0,500,500);
-        if(itensVisiveis.length === 0) return;
-        const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
-        let anguloAcumulado = anguloAtual;
-        itensVisiveis.forEach((item) => {
-            const peso = parseInt(item.peso) || 0;
-            const tamanhoFatia = (peso / pesoTotal) * (Math.PI * 2);
-            ctx.beginPath();
-            ctx.moveTo(centro, centro);
-            ctx.arc(centro, centro, raio, anguloAcumulado, anguloAcumulado + tamanhoFatia);
-            ctx.fillStyle = item.cor;
-            ctx.fill();
-            ctx.strokeStyle = "white";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-            ctx.save();
-            ctx.translate(centro, centro);
-            ctx.rotate(anguloAcumulado + tamanhoFatia / 2);
-            ctx.textAlign = "left"; 
-            ctx.textBaseline = "middle";
-            ctx.fillStyle = item.corTexto || "#FFFFFF";
-            ctx.font = "bold 15px Arial";
-            const larguraMaxPermitida = raio - 80 - 20;
-            const textoTratado = truncarTexto(item.texto, larguraMaxPermitida);
-            ctx.fillText(textoTratado, 90, 0);
-            ctx.restore();
-            anguloAcumulado += tamanhoFatia;
-        });
-        desenharCentro(centro, data.imagem);
-    }
+        function salvarAcao(tipo, elemento) {
+            historico.push({ tipo, elemento });
+            if (historico.length > 50) historico.shift();
+        }
 
-    function desenharCentro(centro, src) {
-        ctx.save();
-        ctx.translate(centro, centro);
-        ctx.rotate(anguloAtual - anguloOffset);
-        ctx.beginPath();
-        ctx.arc(0, 0, 80, 0, Math.PI * 2);
-        ctx.fillStyle = "white";
-        ctx.fill();
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 6;
-        ctx.stroke();
-        ctx.clip();
-        if (src) {
-            if (!imagensCarregadas[src]) {
-                const img = new Image();
-                img.src = src;
-                img.onload = () => {
-                    imagensCarregadas[src] = img;
-                    desenhar();
+        function desfazer() {
+            if (historico.length === 0) return;
+            const acao = historico.pop();
+            if (acao.tipo === 'icone' || acao.tipo === 'linha') {
+                acao.elemento.remove();
+            } else if (acao.tipo === 'esconder') {
+                acao.elemento.classList.toggle('escondido');
+            } else if (acao.tipo === 'dupla_acao') {
+                acao.icone.remove();
+                const index = acao.quadrante.dataset.index;
+                const temOutro = document.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+                if(!temOutro) acao.quadrante.classList.remove('escondido');
+            }
+        }
+
+        function gerarBotoesComponentes() {
+            const container = document.getElementById('gridComponentes');
+            container.innerHTML = '';
+            for (let i = 1; i <= 36; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'btn-componente';
+                btn.dataset.id = i;
+                const img = document.createElement('img');
+                img.src = `Componente (${i}).png`;
+                btn.appendChild(img);
+                
+                btn.onclick = () => {
+                    if (i >= 28 && i <= 35) {
+                        const existente = document.querySelector(`.icone-mapa[data-comp-id="${i}"]`);
+                        if (existente) {
+                            if (confirm("Tem certeza que quer apagar o meeple do jogador?")) {
+                                existente.remove();
+                            }
+                            return;
+                        } else {
+                            posicionarMeepleOuEspecial(i);
+                            return;
+                        }
+                    }
+
+                    if (i === 36) {
+                        posicionarMeepleOuEspecial(36);
+                        return;
+                    }
+
+                    document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+                    if (componenteSelecionado === i) {
+                        componenteSelecionado = null;
+                    } else {
+                        componenteSelecionado = i;
+                        btn.classList.add('selecionado');
+                    }
                 };
+                container.appendChild(btn);
+            }
+        }
+
+        function posicionarMeepleOuEspecial(idComp, posSalva = null) {
+            const camada = document.getElementById('camadaIconesUltra');
+            const img = document.createElement('img');
+            img.src = `Componente (${idComp}).png`;
+            img.className = 'icone-mapa arrastavel';
+            img.dataset.compId = idComp;
+            
+            const dim = configMapas[tamanhoAtual].dim;
+            const containerMapa = document.getElementById('containerMapa');
+            const multiplicador = (idComp >= 28 && idComp <= 36) ? 0.4 : 0.7;
+            const size = (containerMapa.offsetWidth / dim) * multiplicador;
+            
+            img.style.width = size + "px";
+            
+            if(posSalva) {
+                img.style.left = posSalva.left;
+                img.style.top = posSalva.top;
             } else {
-                ctx.drawImage(imagensCarregadas[src], -80, -80, 160, 160);
+                img.style.left = "50%";
+                img.style.top = "50%";
             }
-        }
-        ctx.restore();
-    }
 
-    function alternarModo() {
-        modoAtual = modoAtual === "PvP" ? "Coop" : "PvP";
-        document.getElementById('btn-modo').innerText = modoAtual;
-        renderizarPainel();
-    }
-
-    function renderizarPainel() {
-        const modo = modoAtual;
-        const containerItens = document.getElementById('lista-itens-container');
-        const gradeBotoes = document.getElementById('grade-botoes-roletas');
-        const chavesFiltradas = Object.keys(bancoDados).filter(k => {
-            return modo === "Coop" ? k.endsWith("-c") : !k.endsWith("-c");
-        });
-        if (!chavesFiltradas.includes(roletaAtualKey)) roletaAtualKey = chavesFiltradas[0] || "";
-        const data = bancoDados[roletaAtualKey];
-        const itensVisiveis = data.itens.filter(i => (parseInt(i.peso) || 0) > 0);
-        if(itensVisiveis.length > 0) {
-            const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
-            const primeiraFatia = (parseInt(itensVisiveis[0].peso) / pesoTotal) * (Math.PI * 2);
-            anguloOffset = - (primeiraFatia / 2);
-            anguloAtual = anguloOffset;
-        } else {
-            anguloOffset = 0;
-            anguloAtual = 0;
-        }
-        document.getElementById('titulo-pagina').innerText = `${roletaAtualKey.replace("-c", "")} - ${modo}`;
-        gradeBotoes.innerHTML = "";
-        chavesFiltradas.forEach(k => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-roleta-opcao' + (k === roletaAtualKey ? ' ativa' : '');
-            btn.innerText = k.replace("-c", "");
-            btn.onclick = () => { 
-                roletaAtualKey = k; 
-                renderizarPainel(); 
+            img.onmousedown = (e) => {
+                if (e.button === 0) {
+                    e.stopPropagation();
+                    arrastandoElemento = img;
+                }
             };
-            gradeBotoes.appendChild(btn);
-        });
-        containerItens.innerHTML = "";
-        bancoDados[roletaAtualKey].itens.forEach((item, i) => {
-            const div = document.createElement('div');
-            div.className = 'item-linha';
-            div.innerHTML = `
-                <input type="color" value="${item.cor}" onchange="editarItem(${i}, 'cor', this.value)">
-                <input type="text" value="${item.texto}" oninput="editarItem(${i}, 'texto', this.value)">
-                <input type="number" value="${item.peso}" min="0" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" oninput="editarItem(${i}, 'peso', this.value)">
-            `;
-            containerItens.appendChild(div);
-        });
-        desenhar();
-    }
 
-    function editarItem(i, campo, val) { 
-        bancoDados[roletaAtualKey].itens[i][campo] = val; 
-        if(campo === 'peso') {
-             const itensVisiveis = bancoDados[roletaAtualKey].itens.filter(it => (parseInt(it.peso) || 0) > 0);
-             if(itensVisiveis.length > 0) {
-                 const pesoTotal = itensVisiveis.reduce((acc, it) => acc + (parseInt(it.peso) || 0), 0);
-                 const primeiraFatia = (parseInt(itensVisiveis[0].peso) / pesoTotal) * (Math.PI * 2);
-                 anguloOffset = - (primeiraFatia / 2);
-                 anguloAtual = anguloOffset;
-             }
+            img.oncontextmenu = (e) => {
+                e.preventDefault();
+                if(confirm("Deseja remover este meeple?")) {
+                    img.remove();
+                }
+            };
+
+            camada.appendChild(img);
+            if(!posSalva) salvarAcao('icone', img);
         }
-        desenhar(); 
-    }
-    
-    function adicionarNovoItem() { 
-        bancoDados[roletaAtualKey].itens.push({texto: "Novo", cor: "#11806A", corTexto: "#FFFFFF", peso: 1}); 
-        renderizarPainel(); 
-    }
 
-    function girarRoleta() {
-        if(girando) return;
-        const itensVisiveis = bancoDados[roletaAtualKey].itens.filter(i => (parseInt(i.peso) || 0) > 0);
-        if(itensVisiveis.length === 0) return;
-        girando = true;
-        const duracao = 4000;
-        const forcaGiro = (Math.random() * 8 + 10) * (Math.PI * 2);
-        const anguloInicial = anguloAtual;
-        const timestampInicial = performance.now();
-        function step(agora) {
-            const progresso = Math.min((agora - timestampInicial) / duracao, 1);
-            const easing = 1 - Math.pow(1 - progresso, 4);
-            anguloAtual = anguloInicial + (forcaGiro * easing);
-            desenhar();
-            if(progresso < 1) requestAnimationFrame(step);
-            else {
-                girando = false;
-                processarVencedor(itensVisiveis);
+        function salvarEstadoAtual() {
+            const estado = { icones: [], linhas: [], escondidos: [] };
+            const camadas = ['camadaIconesBase', 'camadaIconesSuperior', 'camadaIconesUltra'];
+            camadas.forEach(idCamada => {
+                document.getElementById(idCamada).querySelectorAll('.icone-mapa').forEach(img => {
+                    estado.icones.push({
+                        idComp: img.dataset.compId,
+                        cellId: img.dataset.cellId,
+                        left: img.style.left,
+                        top: img.style.top,
+                        camada: idCamada
+                    });
+                });
+            });
+
+            document.getElementById('svgLinhas').querySelectorAll('line:not(#linhaGuia), g').forEach(el => {
+                if (el.tagName === 'line') {
+                    estado.linhas.push({
+                        type: 'line',
+                        x1: el.getAttribute("x1"), y1: el.getAttribute("y1"),
+                        x2: el.getAttribute("x2"), y2: el.getAttribute("y2")
+                    });
+                } else if (el.tagName === 'g') {
+                    const lins = [];
+                    el.querySelectorAll('line').forEach(l => {
+                        lins.push({x1: l.getAttribute("x1"), y1: l.getAttribute("y1"), x2: l.getAttribute("x2"), y2: l.getAttribute("y2")});
+                    });
+                    estado.linhas.push({ type: 'group', lines: lins });
+                }
+            });
+            document.querySelectorAll('.grid-cell.escondido').forEach(c => {
+                estado.escondidos.push(c.dataset.index);
+            });
+            estadoGrids[tamanhoAtual] = estado;
+        }
+
+        function mudarTamanho(novoTamanho) {
+            salvarEstadoAtual();
+            tamanhoAtual = novoTamanho;
+            document.querySelectorAll('.container-tamanhos .btn-nav').forEach(btn => {
+                btn.classList.toggle('ativo', btn.innerText === novoTamanho);
+            });
+            const config = configMapas[tamanhoAtual];
+            document.getElementById('mapaPrincipal').src = fundoVerde ? config.imgVerde : config.imgBranco;
+            document.getElementById('tituloMapa').innerText = `${config.nome} (${novoTamanho})`;
+            
+            limparVisualParaTroca();
+            gerarGrid();
+            gerarReguas();
+            carregarEstado(novoTamanho);
+            historico = [];
+        }
+
+        function limparVisualParaTroca() {
+            document.getElementById('camadaIconesBase').innerHTML = '';
+            document.getElementById('camadaIconesSuperior').innerHTML = '';
+            document.getElementById('camadaIconesUltra').innerHTML = '';
+            limparLinhas();
+        }
+
+        function carregarEstado(tamanho) {
+            const estado = estadoGrids[tamanho];
+            estado.escondidos.forEach(idx => {
+                const cell = document.querySelector(`.grid-cell[data-index="${idx}"]`);
+                if(cell) cell.classList.add('escondido');
+            });
+            estado.linhas.forEach(d => {
+                if (d.type === 'line') {
+                    criarSegmentoSimples(d.x1, d.y1, d.x2, d.y2);
+                } else {
+                    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    g.style.pointerEvents = "auto";
+                    d.lines.forEach(l => {
+                        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", l.x1); line.setAttribute("y1", l.y1);
+                        line.setAttribute("x2", l.x2); line.setAttribute("y2", l.y2);
+                        line.setAttribute("stroke", "black");
+                        line.setAttribute("stroke-width", calcularGrossura());
+                        line.setAttribute("stroke-linecap", "round");
+                        g.appendChild(line);
+                    });
+                    g.onmousedown = (e) => { if(e.button === 2) g.remove(); };
+                    document.getElementById('svgLinhas').appendChild(g);
+                }
+            });
+            estado.icones.forEach(dado => {
+                if (dado.camada === 'camadaIconesUltra') {
+                    posicionarMeepleOuEspecial(dado.idComp, {left: dado.left, top: dado.top});
+                } else {
+                    const cell = document.querySelector(`.grid-cell[data-index="${dado.cellId}"]`);
+                    if(cell) restaurarIconeFixo(cell, dado);
+                }
+            });
+        }
+
+        function criarSegmentoSimples(x1, y1, x2, y2) {
+            const svg = document.getElementById('svgLinhas');
+            const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            l.setAttribute("x1", x1); l.setAttribute("y1", y1);
+            l.setAttribute("x2", x2); l.setAttribute("y2", y2);
+            l.setAttribute("stroke", "black");
+            l.setAttribute("stroke-width", calcularGrossura());
+            l.setAttribute("stroke-linecap", "round");
+            l.style.pointerEvents = "auto";
+            l.onmousedown = (e) => { if(e.button === 2) l.remove(); };
+            svg.appendChild(l);
+        }
+
+        function restaurarIconeFixo(cell, dado) {
+            const camada = document.getElementById(dado.camada);
+            const img = document.createElement('img');
+            img.src = `Componente (${dado.idComp}).png`;
+            img.className = 'icone-mapa';
+            img.dataset.cellId = dado.cellId;
+            img.dataset.compId = dado.idComp;
+            
+            const dim = configMapas[tamanhoAtual].dim;
+            const containerMapa = document.getElementById('containerMapa');
+            const size = (containerMapa.offsetWidth / dim) * 0.7;
+            
+            img.style.width = size + "px";
+            img.style.left = dado.left;
+            img.style.top = dado.top;
+            camada.appendChild(img);
+        }
+
+        function gerarGrid() {
+            const grid = document.getElementById('gridInterativo');
+            grid.innerHTML = '';
+            const dim = configMapas[tamanhoAtual].dim;
+            grid.style.gridTemplateColumns = `repeat(${dim}, 1fr)`;
+            grid.style.gridTemplateRows = `repeat(${dim}, 1fr)`;
+            for (let i = 0; i < dim * dim; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('grid-cell');
+                cell.dataset.index = i;
+                cell.onmousedown = (e) => lidarMouseDown(e, cell);
+                cell.onmouseup = (e) => lidarMouseUp(e, cell);
+                cell.ondblclick = (e) => {
+                    e.preventDefault();
+                    const index = cell.dataset.index;
+                    const camadaSup = document.getElementById('camadaIconesSuperior');
+                    const camadaBase = document.getElementById('camadaIconesBase');
+                    const iconeSuperior = camadaSup.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+                    const iconeBase = camadaBase.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+                    if (iconeSuperior) {
+                        iconeSuperior.remove();
+                    } else if (iconeBase) {
+                        iconeBase.remove();
+                    }
+                    if (!camadaSup.querySelector(`.icone-mapa[data-cell-id="${index}"]`) && 
+                        !camadaBase.querySelector(`.icone-mapa[data-cell-id="${index}"]`)) {
+                        cell.classList.remove('escondido');
+                    }
+                };
+                grid.appendChild(cell);
             }
         }
-        requestAnimationFrame(step);
-    }
 
-    function processarVencedor(itensVisiveis) {
-        const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
-        let normalized = (2 * Math.PI - (anguloAtual % (Math.PI * 2))) % (Math.PI * 2);
-        let acumulado = 0;
-        let vencedor = itensVisiveis[0].texto;
-        for(let i=0; i < itensVisiveis.length; i++) {
-            const fatia = (parseInt(itensVisiveis[i].peso) / pesoTotal) * (Math.PI * 2);
-            if(normalized >= acumulado && normalized <= acumulado + fatia) {
-                vencedor = itensVisiveis[i].texto;
-                break;
+        function lidarMouseDown(e, cell) {
+            if (e.button === 0 && componenteSelecionado) {
+                posicionarIconeFixo(cell);
+                return;
             }
-            acumulado += fatia;
+            if (e.button === 0) {
+                cellInicial = cell;
+                criandoLinha = true;
+                const centro = getCentro(cell);
+                const lg = document.getElementById('linhaGuia');
+                lg.setAttribute("x1", centro.x); lg.setAttribute("y1", centro.y);
+                lg.setAttribute("x2", centro.x); lg.setAttribute("y2", centro.y);
+                lg.setAttribute("stroke-width", calcularGrossura());
+                lg.style.display = "block";
+            } else if (e.button === 2) {
+                cell.classList.toggle('escondido');
+                salvarAcao('esconder', cell);
+            }
         }
-        document.getElementById('vencedor-nome').innerText = vencedor;
-        document.getElementById('modal-vencedor').style.display = 'flex';
-    }
 
-    window.onload = renderizarPainel;
-</script>
+        function posicionarIconeFixo(cell) {
+            const index = cell.dataset.index;
+            const centro = getCentro(cell);
+            let idCamada = (componenteSelecionado >= 19 && componenteSelecionado <= 27) ? 'camadaIconesSuperior' : 'camadaIconesBase';
+            const camada = document.getElementById(idCamada);
+            const antigo = camada.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+            if (antigo) antigo.remove();
+            const img = document.createElement('img');
+            img.src = `Componente (${componenteSelecionado}).png`;
+            img.className = 'icone-mapa';
+            img.dataset.cellId = index;
+            img.dataset.compId = componenteSelecionado;
+            const dim = configMapas[tamanhoAtual].dim;
+            const containerMapa = document.getElementById('containerMapa');
+            const size = (containerMapa.offsetWidth / dim) * 0.7;
+            img.style.width = size + "px";
+            img.style.left = centro.x + "px";
+            img.style.top = centro.y + "px";
+            cell.classList.add('escondido');
+            camada.appendChild(img);
+            historico.push({ tipo: 'dupla_acao', icone: img, quadrante: cell });
+            
+            // Nova lógica: não limpa se shift estiver pressionado
+            if (!shiftPressionado) {
+                componenteSelecionado = null;
+                document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+            }
+        }
+
+        function lidarMouseUp(e, cell) {
+            if (e.button === 0 && criandoLinha && cellInicial && cellInicial !== cell) {
+                const c1 = getCentro(cellInicial);
+                const c2 = getCentro(cell);
+                criarLinhaFinal(c1, c2, e.shiftKey);
+            }
+            finalizarCriacao();
+        }
+
+        function criarLinhaFinal(c1, c2, comShift = false) {
+            const svg = document.getElementById('svgLinhas');
+            const grossura = calcularGrossura();
+            const wrapper = document.getElementById('containerMapa');
+            const idComp = `l-${Math.round(c1.x)}-${Math.round(c1.y)}-${Math.round(c2.x)}-${Math.round(c2.y)}`;
+            const idInv = `l-${Math.round(c2.x)}-${Math.round(c2.y)}-${Math.round(c1.x)}-${Math.round(c1.y)}`;
+            const existente = document.getElementById(idComp) || document.getElementById(idInv);
+            if (existente) { existente.remove(); return; }
+            const grupo = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            grupo.id = idComp;
+            grupo.style.pointerEvents = "auto";
+            if (!comShift) {
+                grupo.appendChild(gerarTagLinha(c1.x, c1.y, c2.x, c2.y, grossura));
+            } else {
+                const borda1 = calcularIntersecaoBorda(c2, c1, wrapper.offsetWidth, wrapper.offsetHeight);
+                const borda2 = calcularIntersecaoBorda(c1, c2, wrapper.offsetWidth, wrapper.offsetHeight);
+                grupo.appendChild(gerarTagLinha(c1.x, c1.y, borda1.x, borda1.y, grossura));
+                grupo.appendChild(gerarTagLinha(c2.x, c2.y, borda2.x, borda2.y, grossura));
+            }
+            grupo.onmousedown = (e) => { if (e.button === 2) grupo.remove(); };
+            svg.appendChild(grupo);
+            salvarAcao('linha', grupo);
+        }
+
+        function calcularIntersecaoBorda(pOrigem, pDestino, largura, altura) {
+            const dx = pDestino.x - pOrigem.x;
+            const dy = pDestino.y - pOrigem.y;
+            if (dx === 0 && dy === 0) return pDestino;
+            let tValores = [];
+            if (dx > 0) tValores.push((largura - pDestino.x) / dx);
+            else if (dx < 0) tValores.push((0 - pDestino.x) / dx);
+            if (dy > 0) tValores.push((altura - pDestino.y) / dy);
+            else if (dy < 0) tValores.push((0 - pDestino.y) / dy);
+            const t = Math.min(...tValores.filter(val => val >= 0));
+            return { x: pDestino.x + dx * t, y: pDestino.y + dy * t };
+        }
+
+        function gerarTagLinha(x1, y1, x2, y2, g) {
+            const l = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            l.setAttribute("x1", x1); l.setAttribute("y1", y1);
+            l.setAttribute("x2", x2); l.setAttribute("y2", y2);
+            l.setAttribute("stroke", "black");
+            l.setAttribute("stroke-width", g);
+            l.setAttribute("stroke-linecap", "round");
+            return l;
+        }
+
+        function getCentro(element) {
+            const rect = element.getBoundingClientRect();
+            const containerRect = document.getElementById('containerMapa').getBoundingClientRect();
+            return { 
+                x: (rect.left - containerRect.left) + (rect.width / 2), 
+                y: (rect.top - containerRect.top) + (rect.height / 2) 
+            };
+        }
+
+        function calcularGrossura() {
+            const dim = configMapas[tamanhoAtual].dim;
+            return Math.max(6, (10 - Math.floor(dim / 2)) * 2);
+        }
+
+        function gerarReguas() {
+            const dim = configMapas[tamanhoAtual].dim;
+            const regTopo = document.getElementById('reguaTopo'), regLat = document.getElementById('reguaLateral');
+            regTopo.innerHTML = ''; regLat.innerHTML = '';
+            for (let i = 0; i < dim; i++) {
+                const letra = document.createElement('div'); letra.className = 'coord-label'; letra.innerText = String.fromCharCode(65 + i);
+                regTopo.appendChild(letra);
+                const numero = document.createElement('div'); numero.className = 'coord-label'; numero.innerText = i + 1;
+                regLat.appendChild(numero);
+            }
+            ajustarTamanhoReguas();
+        }
+
+        function ajustarTamanhoReguas() {
+            const mapa = document.getElementById('containerMapa');
+            if(mapa){
+                document.getElementById('reguaTopo').style.width = mapa.offsetWidth + "px";
+                document.getElementById('reguaLateral').style.height = mapa.offsetHeight + "px";
+            }
+        }
+
+        function alternarCorFundo() {
+            fundoVerde = !fundoVerde;
+            const config = configMapas[tamanhoAtual];
+            document.getElementById('mapaPrincipal').src = fundoVerde ? config.imgVerde : config.imgBranco;
+            document.documentElement.style.setProperty('--cor-esconder', fundoVerde ? '#11806A' : '#FFFFFF');
+        }
+
+        function finalizarCriacao() {
+            criandoLinha = false; arrastandoElemento = null;
+            document.getElementById('linhaGuia').style.display = "none";
+        }
+
+        function limparLinhas() {
+            Array.from(document.getElementById('svgLinhas').querySelectorAll('line:not(#linhaGuia), g')).forEach(l => l.remove());
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            const rect = document.getElementById('containerMapa').getBoundingClientRect();
+            if (criandoLinha) {
+                const lg = document.getElementById('linhaGuia');
+                lg.setAttribute("x2", e.clientX - rect.left); lg.setAttribute("y2", e.clientY - rect.top);
+            }
+            if (arrastandoElemento) {
+                let x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
+                let y = Math.max(0, Math.min(e.clientY - rect.top, rect.height));
+                arrastandoElemento.style.left = x + "px"; arrastandoElemento.style.top = y + "px";
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === "Shift") shiftPressionado = true; // Ativa modo contínuo
+            if (e.key === "Escape" || e.code === "Space") {
+                if(e.code === "Space") e.preventDefault();
+                componenteSelecionado = null;
+                document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+            }
+            if (e.ctrlKey && e.key === 'z') { e.preventDefault(); desfazer(); }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === "Shift") shiftPressionado = false; // Desativa modo contínuo
+        });
+
+        window.onmouseup = finalizarCriacao;
+        window.onresize = ajustarTamanhoReguas;
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        gerarGrid();
+        gerarReguas();
+        gerarBotoesComponentes();
+    </script>
 </body>
 </html>
