@@ -44,23 +44,10 @@
             transition: 0.2s;
         }
 
-        .btn-modo:hover {
-            background: #ddd;
-        }
+        .btn-modo:hover { background: #ddd; }
+        .btn-modo.active { background: #11806A; color: white; border-color: white; }
 
-        .btn-modo.active {
-            background: #11806A;
-            color: white;
-            border-color: white;
-        }
-
-        .grid-players {
-            display: grid;
-            gap: 15px;
-            justify-content: center;
-            width: 100%;
-        }
-
+        .grid-players { display: grid; gap: 15px; justify-content: center; width: 100%; }
         .mode-1 { grid-template-columns: 900px; } 
         .mode-4 { grid-template-columns: repeat(2, 700px); }
         .mode-6 { grid-template-columns: repeat(3, 460px); }
@@ -116,8 +103,11 @@
 
         .grid-frame { border: 5px solid #000; flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
         .drop-zone { border: 1px solid #000; position: relative; background-color: #fff; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; }
-        .drop-zone img { max-width: 72%; max-height: 72%; object-fit: contain; display: none; pointer-events: none; }
-        .box-index { position: absolute; top: 2px; left: 5px; font-weight: bold; }
+        
+        /* Alterado para 70% conforme solicitado */
+        .drop-zone img { width: 70%; height: 70%; object-fit: contain; display: none; pointer-events: none; }
+        
+        .box-index { position: absolute; top: 2px; left: 5px; font-weight: bold; pointer-events: none; }
 
         .coop-container { display: flex; background-color: #fff; border: 8px solid #000; width: 1100px; height: 650px; box-sizing: border-box; }
         .coop-container .sidebar { width: 250px; border-right: 8px solid #000; padding: 15px 10px; justify-content: space-evenly; }
@@ -127,43 +117,37 @@
         .coop-container #player-name { font-size: 50px; text-decoration: underline; outline: none; }
         .coop-container #contador-header { font-size: 80px; font-weight: bold; color: #333; background: #eee; padding: 0 20px; border: 4px solid #000; text-align: center; }
 
-        /* ESTILO DO MENU DE CORES */
-        .color-menu {
+        .color-menu, .image-selector-menu {
             display: none;
             position: absolute;
             background: white;
             border: 3px solid black;
             z-index: 1000;
-            flex-direction: column;
-            width: 120px;
             box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
-            right: 15px;
-            top: 50px;
         }
 
-        .color-menu button {
-            border: none;
-            padding: 8px;
-            cursor: pointer;
-            font-size: 11px;
-            font-family: 'Arial Black', sans-serif;
-            text-transform: uppercase;
-            text-align: left;
-            background: white;
-        }
-
+        .color-menu { flex-direction: column; width: 120px; right: 15px; top: 50px; }
+        .color-menu button { border: none; padding: 8px; cursor: pointer; font-size: 11px; font-family: 'Arial Black', sans-serif; text-transform: uppercase; text-align: left; background: white; }
         .color-menu button:hover { background: #eee; }
 
-        .btn-cor-toggle {
-            padding: 4px 8px;
-            font-family: 'Arial Black', sans-serif;
-            font-size: 10px;
-            cursor: pointer;
-            border: 2px solid #000;
-            background: #fff;
-            text-transform: uppercase;
+        .image-selector-menu {
+            grid-template-columns: repeat(6, 50px);
+            grid-template-rows: repeat(7, 50px);
+            gap: 2px;
+            padding: 5px;
+            background: #484848;
         }
+        .img-option {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #000;
+            background: #fff;
+            cursor: pointer;
+            object-fit: contain;
+        }
+        .img-option:hover { background: #ddd; }
 
+        .btn-cor-toggle { padding: 4px 8px; font-family: 'Arial Black', sans-serif; font-size: 10px; cursor: pointer; border: 2px solid #000; background: #fff; text-transform: uppercase; }
         .hidden { display: none !important; }
         .content { flex-grow: 1; padding: 15px; display: flex; flex-direction: column; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; position: relative; }
@@ -179,6 +163,8 @@
     <button id="btn-8" class="btn-modo" onclick="updateLayout('8')">PvP (7-8 Jogadores)</button>
     <button id="btn-coop" class="btn-modo" onclick="updateLayout('coop')">Coop</button>
 </div>
+
+<div id="global-image-selector" class="image-selector-menu"></div>
 
 <div id="coop-view" class="coop-container hidden">
     <div class="sidebar" id="coop-sidebar"></div>
@@ -197,20 +183,52 @@
     const icons = ['V', 'A', 'B', 'Mini Patch', 'Mini Bug', 'Pedaço do Mapa'];
     let valorContador = 120;
     let modoAtual = '4';
+    let targetZoneId = null;
+
+    const imageSelector = document.getElementById('global-image-selector');
+    for (let i = 1; i <= 42; i++) {
+        const img = document.createElement('img');
+        img.src = `Recurso (${i}).png`; 
+        img.className = 'img-option';
+        img.onclick = () => selectImage(img.src);
+        imageSelector.appendChild(img);
+    }
+
+    function openImageSelector(e, id) {
+        e.preventDefault();
+        targetZoneId = id;
+        imageSelector.style.display = 'grid';
+        imageSelector.style.left = `${e.pageX}px`;
+        imageSelector.style.top = `${e.pageY}px`;
+    }
+
+    function selectImage(src) {
+        if (targetZoneId) {
+            const imgElement = document.querySelector(`#${targetZoneId} img`);
+            imgElement.src = src;
+            imgElement.style.display = 'block';
+        }
+        imageSelector.style.display = 'none';
+    }
+
+    function clearZone(e, id) {
+        e.preventDefault();
+        const imgElement = document.querySelector(`#${id} img`);
+        imgElement.src = '';
+        imgElement.style.display = 'none';
+    }
 
     function syncPlayerData(index) {
         const card = document.querySelector(`.pvp-card-${index}`);
         const name = card.querySelector('.player-name').innerText;
-        // Pega a cor atual do estilo do nome
         const color = card.querySelector('.player-name').style.color || 'black';
         window.parent.postMessage({ type: 'syncPlayer', index, name, color }, '*');
     }
 
-    // Novas funções para o menu de cores
     function toggleColorMenu(p) {
         const menu = document.getElementById(`menu-cor-${p}`);
         const isVisible = menu.style.display === 'flex';
-        document.querySelectorAll('.color-menu').forEach(m => m.style.display = 'none');
+        document.querySelectorAll('.color-menu, .image-selector-menu').forEach(m => m.style.display = 'none');
         menu.style.display = isVisible ? 'none' : 'flex';
     }
 
@@ -232,10 +250,9 @@
     const coopGridFrame = document.getElementById('coop-grid-frame');
     for(let i=1; i<=6; i++) {
         coopGridFrame.innerHTML += `
-            <div class="drop-zone" id="dz-coop-${i}" onclick="triggerInput('coop-${i}')">
+            <div class="drop-zone" id="dz-coop-${i}" onclick="openImageSelector(event, 'dz-coop-${i}')" oncontextmenu="clearZone(event, 'dz-coop-${i}')">
                 <span class="box-index">${i}</span>
-                <img id="i-coop-${i}">
-                <input type="file" id="f-coop-${i}" hidden accept="image/*" onchange="handleFile(this.files[0], 'coop-${i}')">
+                <img>
             </div>
         `;
     }
@@ -271,10 +288,9 @@
                 </div>
                 <div class="grid-frame">
                     ${[1, 2, 3, 4].map(i => `
-                        <div class="drop-zone" id="dz-${p}-${i}" onclick="triggerInput('${p}-${i}')">
+                        <div class="drop-zone" id="dz-${p}-${i}" onclick="openImageSelector(event, 'dz-${p}-${i}')" oncontextmenu="clearZone(event, 'dz-${p}-${i}')">
                             <span class="box-index">${i}</span>
-                            <img id="i-${p}-${i}">
-                            <input type="file" id="f-${p}-${i}" hidden accept="image/*" onchange="handleFile(this.files[0], '${p}-${i}')">
+                            <img>
                         </div>
                     `).join('')}
                 </div>
@@ -287,78 +303,39 @@
         modoAtual = mode;
         const pvpContainer = document.getElementById('pvp-grid');
         const coopContainer = document.getElementById('coop-view');
-
-        document.querySelectorAll('.btn-modo').forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        if (mode === '1') document.getElementById('btn-1').classList.add('active');
-        else if (mode === '4') document.getElementById('btn-4').classList.add('active');
-        else if (mode === '6') document.getElementById('btn-6').classList.add('active');
-        else if (mode === '8') document.getElementById('btn-8').classList.add('active');
-        else if (mode === 'coop') document.getElementById('btn-coop').classList.add('active');
-
+        document.querySelectorAll('.btn-modo').forEach(btn => btn.classList.remove('active'));
+        
         if (mode === 'coop') {
             pvpContainer.classList.add('hidden');
             coopContainer.classList.remove('hidden');
+            document.getElementById('btn-coop').classList.add('active');
         } else {
             coopContainer.classList.add('hidden');
             pvpContainer.classList.remove('hidden');
             pvpContainer.className = `grid-players mode-${mode}`;
-            
+            document.getElementById(`btn-${mode}`).classList.add('active');
             for (let p = 1; p <= 8; p++) {
                 const card = document.querySelector(`.pvp-card-${p}`);
-                const limite = parseInt(mode);
-                p > limite ? card.classList.add('hidden') : card.classList.remove('hidden');
+                p > parseInt(mode) ? card.classList.add('hidden') : card.classList.remove('hidden');
             }
         }
     }
 
-    function triggerInput(id) { document.getElementById('f-' + id).click(); }
-
-    function handleFile(file, id) {
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const img = document.getElementById('i-' + id);
-            img.src = e.target.result;
-            img.style.display = "block";
-        };
-        reader.readAsDataURL(file);
-    }
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.drop-zone') && !e.target.closest('.image-selector-menu') && !e.target.closest('.btn-cor-toggle')) {
+            imageSelector.style.display = 'none';
+            document.querySelectorAll('.color-menu').forEach(m => m.style.display = 'none');
+        }
+    });
 
     window.addEventListener('keydown', (e) => {
-        if (e.target.getAttribute('contenteditable') === 'true') return;
-        if (modoAtual !== 'coop') return;
+        if (e.target.getAttribute('contenteditable') === 'true' || modoAtual !== 'coop') return;
         if (e.key === "Enter") { valorContador--; e.preventDefault(); }
         else if (e.code === "Space") { valorContador++; e.preventDefault(); }
         document.getElementById('contador-header').innerText = valorContador;
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-        updateLayout('4');
-        
-        // Fecha menus de cor ao clicar fora
-        document.addEventListener('click', (e) => {
-            if (!e.target.matches('.btn-cor-toggle')) {
-                document.querySelectorAll('.color-menu').forEach(m => m.style.display = 'none');
-            }
-        });
-
-        document.querySelectorAll('.drop-zone').forEach(zone => {
-            const id = zone.id.replace('dz-', '');
-            zone.addEventListener('dragover', (e) => e.preventDefault());
-            zone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0], id);
-            });
-            zone.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                const img = document.getElementById('i-' + id);
-                img.src = ""; img.style.display = "none";
-            });
-        });
-    });
+    document.addEventListener('DOMContentLoaded', () => updateLayout('4'));
 </script>
 </body>
 </html>
