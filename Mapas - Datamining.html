@@ -200,7 +200,7 @@
 
         .btn-componente {
             aspect-ratio: 1/1;
-            background-color: #fff;
+            background-color: #11806A;
             border: 1px solid #000;
             border-radius: 4px;
             cursor: pointer;
@@ -232,14 +232,15 @@
     <div class="layout-principal">
         <div class="apendice-regras">
             <div class="regras-texto">
-                INSTRUÇÕES:<br><br>
+                <strong><u>INSTRUÇÕES:</u></strong><br><br>
                 • Clique no botão de componente e em seguida no quadrante que quiser para inserir a imagem do botão.<br>
-                • Ao clicar em um quadrante e arrastar para outro, cria um caminho entre um quadrante e outro.<br>
-                • Segure Shift para criar um caminho externo ao mapa.<br>
+                • Segure "Shift" para colocar múltiplos do mesmo componente e aperte "Barra de Espaço" para cancelar a seleção de um botão.<br>
+                • Ao clicar em um quadrante e arrastar para outro, é criado um caminho entre eles.<br>
+                • Segure "Shift" criando um caminho para criá-lo de forma externa ao mapa.<br>
                 • Os botões de Meeple e de Firewall entram no meio do mapa e podem ser arrastados pelo mapa.<br>
                 • Clicar com o botão direito sobre um quadrante o faz ficar invisível, para representar quadrantes sem pastas.<br>
                 • Para apagar uma imagem de um botão em um quadrante, clique duas vezes com o botão esquerdo do mouse sobre ela.<br>
-                • Para apagar um caminho, clique com o botão direito do mouse ou crie outro caminho por cima de mesmo tamanho e mesma direção.<br>
+                • Para apagar um caminho, clique com o botão direito do mouse ou crie outro caminho por cima, de mesmo tamanho e mesma direção.<br>
                 • Para apagar um Meeple ou uma Firewall, clique com o botão direito sobre eles.<br>
                 • Para qualquer problema, Ctrl + Z é seu amigo.
             </div>
@@ -265,6 +266,13 @@
         </div>
 
         <div class="apendice-botoes">
+            <div style="flex-grow: 1; display: flex; flex-direction: column;">
+                <div class="label-secao">Componentes:</div>
+                <div class="grid-componentes" id="gridComponentes"></div>
+            </div>
+
+            <hr style="width: 100%; border: 1px solid #ddd;">
+
             <button class="btn-nav" onclick="alternarCorFundo()">Alternar Fundo</button>
             <div>
                 <div class="label-secao">Tamanho do Mapa:</div>
@@ -275,11 +283,6 @@
                     <button class="btn-nav" onclick="mudarTamanho('12x12')">12x12</button>
                     <button class="btn-nav" onclick="mudarTamanho('15x15')">15x15</button>
                 </div>
-            </div>
-            <hr style="width: 100%; border: 1px solid #ddd;">
-            <div style="flex-grow: 1; display: flex; flex-direction: column;">
-                <div class="label-secao">Componentes:</div>
-                <div class="grid-componentes" id="gridComponentes"></div>
             </div>
         </div>
     </div>
@@ -308,6 +311,7 @@
         let componenteSelecionado = null;
         let arrastandoElemento = null;
         let historico = [];
+        let shiftPressionado = false; // Controle da tecla Shift
 
         function resetarGridAtual() {
             if(confirm(`Deseja limpar todos os desenhos e ícones do mapa ${tamanhoAtual}?`)) {
@@ -330,6 +334,11 @@
                 acao.elemento.remove();
             } else if (acao.tipo === 'esconder') {
                 acao.elemento.classList.toggle('escondido');
+            } else if (acao.tipo === 'dupla_acao') {
+                acao.icone.remove();
+                const index = acao.quadrante.dataset.index;
+                const temOutro = document.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+                if(!temOutro) acao.quadrante.classList.remove('escondido');
             }
         }
 
@@ -556,10 +565,18 @@
                 cell.ondblclick = (e) => {
                     e.preventDefault();
                     const index = cell.dataset.index;
-                    const camadas = ['camadaIconesUltra', 'camadaIconesSuperior', 'camadaIconesBase'];
-                    for (const idCamada of camadas) {
-                        const icone = document.getElementById(idCamada).querySelector(`.icone-mapa[data-cell-id="${index}"]`);
-                        if (icone) { icone.remove(); return; }
+                    const camadaSup = document.getElementById('camadaIconesSuperior');
+                    const camadaBase = document.getElementById('camadaIconesBase');
+                    const iconeSuperior = camadaSup.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+                    const iconeBase = camadaBase.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+                    if (iconeSuperior) {
+                        iconeSuperior.remove();
+                    } else if (iconeBase) {
+                        iconeBase.remove();
+                    }
+                    if (!camadaSup.querySelector(`.icone-mapa[data-cell-id="${index}"]`) && 
+                        !camadaBase.querySelector(`.icone-mapa[data-cell-id="${index}"]`)) {
+                        cell.classList.remove('escondido');
                     }
                 };
                 grid.appendChild(cell);
@@ -589,31 +606,30 @@
         function posicionarIconeFixo(cell) {
             const index = cell.dataset.index;
             const centro = getCentro(cell);
-            let idCamada = (componenteSelecionado >= 19) ? 'camadaIconesSuperior' : 'camadaIconesBase';
+            let idCamada = (componenteSelecionado >= 19 && componenteSelecionado <= 27) ? 'camadaIconesSuperior' : 'camadaIconesBase';
             const camada = document.getElementById(idCamada);
-            
             const antigo = camada.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
             if (antigo) antigo.remove();
-            
             const img = document.createElement('img');
             img.src = `Componente (${componenteSelecionado}).png`;
             img.className = 'icone-mapa';
             img.dataset.cellId = index;
             img.dataset.compId = componenteSelecionado;
-            
             const dim = configMapas[tamanhoAtual].dim;
             const containerMapa = document.getElementById('containerMapa');
             const size = (containerMapa.offsetWidth / dim) * 0.7;
-            
             img.style.width = size + "px";
             img.style.left = centro.x + "px";
             img.style.top = centro.y + "px";
-            
+            cell.classList.add('escondido');
             camada.appendChild(img);
-            salvarAcao('icone', img);
+            historico.push({ tipo: 'dupla_acao', icone: img, quadrante: cell });
             
-            componenteSelecionado = null;
-            document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+            // Nova lógica: não limpa se shift estiver pressionado
+            if (!shiftPressionado) {
+                componenteSelecionado = null;
+                document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+            }
         }
 
         function lidarMouseUp(e, cell) {
@@ -629,26 +645,21 @@
             const svg = document.getElementById('svgLinhas');
             const grossura = calcularGrossura();
             const wrapper = document.getElementById('containerMapa');
-
             const idComp = `l-${Math.round(c1.x)}-${Math.round(c1.y)}-${Math.round(c2.x)}-${Math.round(c2.y)}`;
             const idInv = `l-${Math.round(c2.x)}-${Math.round(c2.y)}-${Math.round(c1.x)}-${Math.round(c1.y)}`;
             const existente = document.getElementById(idComp) || document.getElementById(idInv);
             if (existente) { existente.remove(); return; }
-
             const grupo = document.createElementNS("http://www.w3.org/2000/svg", "g");
             grupo.id = idComp;
             grupo.style.pointerEvents = "auto";
-
             if (!comShift) {
                 grupo.appendChild(gerarTagLinha(c1.x, c1.y, c2.x, c2.y, grossura));
             } else {
                 const borda1 = calcularIntersecaoBorda(c2, c1, wrapper.offsetWidth, wrapper.offsetHeight);
                 const borda2 = calcularIntersecaoBorda(c1, c2, wrapper.offsetWidth, wrapper.offsetHeight);
-                
                 grupo.appendChild(gerarTagLinha(c1.x, c1.y, borda1.x, borda1.y, grossura));
                 grupo.appendChild(gerarTagLinha(c2.x, c2.y, borda2.x, borda2.y, grossura));
             }
-
             grupo.onmousedown = (e) => { if (e.button === 2) grupo.remove(); };
             svg.appendChild(grupo);
             salvarAcao('linha', grupo);
@@ -657,23 +668,14 @@
         function calcularIntersecaoBorda(pOrigem, pDestino, largura, altura) {
             const dx = pDestino.x - pOrigem.x;
             const dy = pDestino.y - pOrigem.y;
-            
             if (dx === 0 && dy === 0) return pDestino;
-
             let tValores = [];
             if (dx > 0) tValores.push((largura - pDestino.x) / dx);
             else if (dx < 0) tValores.push((0 - pDestino.x) / dx);
-            
             if (dy > 0) tValores.push((altura - pDestino.y) / dy);
             else if (dy < 0) tValores.push((0 - pDestino.y) / dy);
-
-            // Filtra apenas valores positivos de t (direção da reta saindo do ponto)
             const t = Math.min(...tValores.filter(val => val >= 0));
-            
-            return { 
-                x: pDestino.x + dx * t, 
-                y: pDestino.y + dy * t 
-            };
+            return { x: pDestino.x + dx * t, y: pDestino.y + dy * t };
         }
 
         function gerarTagLinha(x1, y1, x2, y2, g) {
@@ -751,12 +753,17 @@
         });
 
         window.addEventListener('keydown', (e) => {
+            if (e.key === "Shift") shiftPressionado = true; // Ativa modo contínuo
             if (e.key === "Escape" || e.code === "Space") {
                 if(e.code === "Space") e.preventDefault();
                 componenteSelecionado = null;
                 document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
             }
             if (e.ctrlKey && e.key === 'z') { e.preventDefault(); desfazer(); }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if (e.key === "Shift") shiftPressionado = false; // Desativa modo contínuo
         });
 
         window.onmouseup = finalizarCriacao;
