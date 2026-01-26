@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Banco de Dados - All - Datamining</title>
-	<link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
+    <link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
     <style>
         :root {
             --bg-color: #11806A;
@@ -46,6 +46,27 @@
 
         .btn-modo:hover { background: #ddd; }
         .btn-modo.active { background: #11806A; color: white; border-color: white; }
+        
+        /* Botão Patches & Bugs Preto/Branco */
+        .btn-patch {
+            padding: 8px 15px;
+            font-family: 'Arial Black', sans-serif;
+            cursor: pointer;
+            border: 2px solid #fff;
+            background: #000;
+            color: #fff;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        .btn-patch:hover { background: #333; }
+
+        /* Separador */
+        .separator {
+            width: 3px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin: 0 10px;
+        }
 
         .grid-players { display: grid; gap: 15px; justify-content: center; width: 100%; }
         .mode-1 { grid-template-columns: 900px; } 
@@ -103,10 +124,7 @@
 
         .grid-frame { border: 5px solid #000; flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
         .drop-zone { border: 1px solid #000; position: relative; background-color: #fff; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; }
-        
-        /* Alterado para 70% conforme solicitado */
         .drop-zone img { width: 70%; height: 70%; object-fit: contain; display: none; pointer-events: none; }
-        
         .box-index { position: absolute; top: 2px; left: 5px; font-weight: bold; pointer-events: none; }
 
         .coop-container { display: flex; background-color: #fff; border: 8px solid #000; width: 1100px; height: 650px; box-sizing: border-box; }
@@ -137,20 +155,31 @@
             padding: 5px;
             background: #484848;
         }
-        .img-option {
-            width: 50px;
-            height: 50px;
-            border: 1px solid #000;
-            background: #fff;
-            cursor: pointer;
-            object-fit: contain;
-        }
+        .img-option { width: 50px; height: 50px; border: 1px solid #000; background: #fff; cursor: pointer; object-fit: contain; }
         .img-option:hover { background: #ddd; }
 
         .btn-cor-toggle { padding: 4px 8px; font-family: 'Arial Black', sans-serif; font-size: 10px; cursor: pointer; border: 2px solid #000; background: #fff; text-transform: uppercase; }
         .hidden { display: none !important; }
         .content { flex-grow: 1; padding: 15px; display: flex; flex-direction: column; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; position: relative; }
+
+        /* Estilos do Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 5px solid #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
@@ -162,6 +191,13 @@
     <button id="btn-6" class="btn-modo" onclick="updateLayout('6')">PvP (5-6 Jogadores)</button>
     <button id="btn-8" class="btn-modo" onclick="updateLayout('8')">PvP (7-8 Jogadores)</button>
     <button id="btn-coop" class="btn-modo" onclick="updateLayout('coop')">Coop</button>
+    
+    <span class="separator"></span>
+    <button class="btn-patch" onclick="showLightbox()">Patches & Bugs</button>
+</div>
+
+<div id="lightbox" class="lightbox" onclick="this.style.display='none'">
+    <img id="lightbox-img" src="" alt="Regras">
 </div>
 
 <div id="global-image-selector" class="image-selector-menu"></div>
@@ -184,6 +220,16 @@
     let valorContador = 120;
     let modoAtual = '4';
     let targetZoneId = null;
+
+    const imgPvP = 'P&B PvP.png';
+    const imgCoop = 'P&B Coop.png';
+
+    function showLightbox() {
+        const lb = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lightbox-img');
+        lbImg.src = (modoAtual === 'coop') ? imgCoop : imgPvP;
+        lb.style.display = 'flex';
+    }
 
     const imageSelector = document.getElementById('global-image-selector');
     for (let i = 1; i <= 42; i++) {
@@ -316,7 +362,7 @@
             document.getElementById(`btn-${mode}`).classList.add('active');
             for (let p = 1; p <= 8; p++) {
                 const card = document.querySelector(`.pvp-card-${p}`);
-                p > parseInt(mode) ? card.classList.add('hidden') : card.classList.remove('hidden');
+                if (card) p > parseInt(mode) ? card.classList.add('hidden') : card.classList.remove('hidden');
             }
         }
     }
