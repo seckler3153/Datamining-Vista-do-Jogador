@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Banco de Dados - All - Datamining</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Banco de Dados - All - Datamining</title>
     <link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
     <style>
         :root {
@@ -28,10 +28,12 @@
             margin-bottom: 20px;
             color: white;
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
             border: 3px solid #000;
             z-index: 100;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn-modo {
@@ -47,7 +49,6 @@
         .btn-modo:hover { background: #ddd; }
         .btn-modo.active { background: #11806A; color: white; border-color: white; }
         
-        /* Botão Patches & Bugs Preto/Branco */
         .btn-patch {
             padding: 8px 15px;
             font-family: 'Arial Black', sans-serif;
@@ -60,7 +61,6 @@
         }
         .btn-patch:hover { background: #333; }
 
-        /* Separador */
         .separator {
             width: 3px;
             height: 30px;
@@ -132,8 +132,55 @@
         .coop-container .icon-box { width: 90px; height: 90px; }
         .coop-container .editable-num { font-size: 70px; width: auto; flex-grow: 1; }
         .coop-container .grid-frame { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; border: 8px solid #000; }
-        .coop-container #player-name { font-size: 50px; text-decoration: underline; outline: none; }
+        
+        /* Alterado para metade do tamanho (50px -> 25px) */
+        .coop-container #player-name { font-size: 25px; text-decoration: underline; outline: none; }
         .coop-container #contador-header { font-size: 80px; font-weight: bold; color: #333; background: #eee; padding: 0 20px; border: 4px solid #000; text-align: center; }
+
+        .mobile-counter-controls {
+            display: none;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .btn-counter {
+            padding: 15px 30px;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 24px;
+            background: #fff;
+            border: 4px solid #000;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+        .btn-counter:active { background: #ddd; }
+
+        @media (max-width: 768px) {
+            .control-header { padding: 10px; gap: 8px; }
+            .btn-modo, .btn-patch { font-size: 10px; padding: 6px 10px; }
+            .separator { display: none; }
+            
+            .mode-1, .mode-4, .mode-6, .mode-8 { 
+                grid-template-columns: 1fr !important; 
+                width: 100%;
+            }
+
+            .main-container, .coop-container { 
+                width: 95vw !important; 
+                height: auto !important; 
+                min-height: 250px;
+                flex-direction: row; 
+            }
+
+            .sidebar { width: 25% !important; }
+            .editable-num { font-size: 20px !important; width: 100% !important; }
+            .icon-box { width: 30px !important; height: 30px !important; }
+            .player-name { font-size: 18px !important; }
+            .coop-container #contador-header { font-size: 30px !important; }
+
+            /* Mostra os botões abaixo do grid no mobile */
+            .mobile-counter-controls.visible { display: flex; }
+        }
 
         .color-menu, .image-selector-menu {
             display: none;
@@ -163,7 +210,6 @@
         .content { flex-grow: 1; padding: 15px; display: flex; flex-direction: column; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; position: relative; }
 
-        /* Estilos do Lightbox */
         .lightbox {
             display: none;
             position: fixed;
@@ -211,6 +257,11 @@
         </div>
         <div class="grid-frame" id="coop-grid-frame"></div>
     </div>
+</div>
+
+<div id="mobile-controls" class="mobile-counter-controls">
+    <button class="btn-counter" onclick="alterarContador(-1)">-1</button>
+    <button class="btn-counter" onclick="alterarContador(1)">+1</button>
 </div>
 
 <div id="pvp-grid" class="grid-players"></div>
@@ -349,15 +400,18 @@
         modoAtual = mode;
         const pvpContainer = document.getElementById('pvp-grid');
         const coopContainer = document.getElementById('coop-view');
+        const mobileCtrls = document.getElementById('mobile-controls');
         document.querySelectorAll('.btn-modo').forEach(btn => btn.classList.remove('active'));
         
         if (mode === 'coop') {
             pvpContainer.classList.add('hidden');
             coopContainer.classList.remove('hidden');
+            mobileCtrls.classList.add('visible'); // Mostra botões mobile
             document.getElementById('btn-coop').classList.add('active');
         } else {
             coopContainer.classList.add('hidden');
             pvpContainer.classList.remove('hidden');
+            mobileCtrls.classList.remove('visible'); // Esconde botões mobile
             pvpContainer.className = `grid-players mode-${mode}`;
             document.getElementById(`btn-${mode}`).classList.add('active');
             for (let p = 1; p <= 8; p++) {
@@ -365,6 +419,11 @@
                 if (card) p > parseInt(mode) ? card.classList.add('hidden') : card.classList.remove('hidden');
             }
         }
+    }
+
+    function alterarContador(valor) {
+        valorContador += valor;
+        document.getElementById('contador-header').innerText = valorContador;
     }
 
     document.addEventListener('click', (e) => {
@@ -376,9 +435,8 @@
 
     window.addEventListener('keydown', (e) => {
         if (e.target.getAttribute('contenteditable') === 'true' || modoAtual !== 'coop') return;
-        if (e.key === "Enter") { valorContador--; e.preventDefault(); }
-        else if (e.code === "Space") { valorContador++; e.preventDefault(); }
-        document.getElementById('contador-header').innerText = valorContador;
+        if (e.key === "Enter") { alterarContador(-1); e.preventDefault(); }
+        else if (e.code === "Space") { alterarContador(1); e.preventDefault(); }
     });
 
     document.addEventListener('DOMContentLoaded', () => updateLayout('4'));

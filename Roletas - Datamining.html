@@ -88,6 +88,8 @@
             border: 8px solid #000;
             border-radius: 50%;
             background: #fff;
+            max-width: 100%;
+            height: auto;
         }
 
         .ponteiro {
@@ -208,7 +210,6 @@
             text-align: center;
         }
 
-        /* Estilo para a imagem em modo lightbox */
         .img-ajuda {
             max-width: 90%;
             max-height: 90%;
@@ -217,16 +218,30 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        /* Botão posicionado no canto superior direito da caixa-config */
         .btn-ajuda-pos {
             position: absolute;
             top: 8px;
             right: 8px;
         }
+
+        /* AJUSTES MOBILE */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .quadro-roleta { width: 100%; padding: 15px; box-sizing: border-box; }
+            .conteudo-principal { flex-direction: column; gap: 20px; align-items: center; }
+            .painel-lateral { width: 100%; order: 2; }
+            .area-roleta { order: 1; width: 100%; display: flex; justify-content: center; }
+            canvas { width: 100%; height: auto; max-width: 400px; }
+            .caixa-config { order: -1; } 
+            .lista-itens { order: 3; } 
+            h1 { font-size: 20px; }
+
+            /* MODIFICAÇÃO SOLICITADA: Diminuir fonte apenas dos botões de escolha de roleta */
+            .btn-roleta-opcao { font-size: 11px; }
+        }
     </style>
 </head>
 <body>
-
 <div id="modal-vencedor" onclick="this.style.display='none'">
     <div class="card-resultado">
         <h2 style="text-transform: uppercase; margin-top: 0;">Resultado:</h2>
@@ -267,7 +282,7 @@
 </div>
 
 <script>
-    // Banco de dados (Mantido conforme original)
+    // Scripts originais mantidos...
     let bancoDados = {
         "Antivírus": { imagem: "Roleta (1).png", itens: [
             { texto: "Jogador 1", cor: "#C40026", corTexto: "#FFFFFF", peso: 1 },

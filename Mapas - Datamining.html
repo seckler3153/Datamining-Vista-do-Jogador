@@ -4,229 +4,361 @@
     <meta charset="UTF-8">
     <title>Mapas - Datamining</title>
     <link rel="icon" type="image/png" href="Ícone 11 - Datamine.png">
-    <style>
-        :root {
-            --cor-esconder: #11806A;
+<style>
+    :root {
+        --cor-esconder: #11806A;
+    }
+
+    body {
+        background-color: #11806A;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .layout-principal {
+        display: flex;
+        align-items: stretch; 
+        gap: 20px;
+    }
+
+    /* --- CONTROLES MOBILE (OCULTOS NO DESKTOP) --- */
+    .mobile-controls, 
+	.mobile-controls-row, 
+	#modalInstrucoes {
+		display: none !important;
+    }
+
+    /* --- MODO MOBILE --- */
+    @media (max-width: 850px) {
+        body { padding: 10px; }
+        
+        .layout-principal { 
+            flex-direction: column; 
+            align-items: center; 
         }
 
-        body {
-            background-color: #11806A;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            gap: 20px;
+        /* Esconde o apêndice de regras original apenas no mobile */
+        .apendice-regras { 
+            display: none !important; 
         }
 
-        .layout-principal {
-            display: flex;
-            align-items: stretch; 
-            gap: 20px;
-        }
-
-        .apendice-regras, .apendice-botoes {
-            background-color: white;
-            padding: 20px;
-            border-radius: 15px;
-            border: 8px solid #000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            width: 320px; 
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-        }
-
-        .apendice-regras {
-            justify-content: space-between;
-        }
-
-        .regras-texto {
-            font-size: 13px;
-            font-weight: bold;
-            line-height: 1.6;
-            color: #000;
-        }
-
-        .quadro-mapa-completo {
-            background-color: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-            border: 8px solid #000;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        h1 {
-            width: 100%;
-            text-align: center;
-            text-decoration: underline;
-            text-transform: uppercase;
-            font-size: 22px;
-            margin: 0 0 20px 0;
-            color: #000;
-        }
-
-        .grid-container-master {
-            display: grid;
-            grid-template-areas: 
-                ". topo"
-                "lateral mapa";
-            grid-template-columns: 30px auto;
-            grid-template-rows: 30px auto;
-        }
-
-        .regua-topo { grid-area: topo; display: flex; justify-content: space-around; align-items: center; font-weight: bold; }
-        .regua-lateral { grid-area: lateral; display: flex; flex-direction: column; justify-content: space-around; align-items: center; font-weight: bold; }
-
-        .coord-label {
-            font-size: 14px;
-            color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex: 1;
+        .apendice-botoes { 
+            width: 100% !important; 
+            max-width: 340px; 
         }
 
         .mapa-wrapper {
-            grid-area: mapa;
-            position: relative;
-            display: inline-block;
-            border: 4px solid #000;
-            background-color: #000;
-            user-select: none;
-            line-height: 0;
-            max-width: 60vw;
-            max-height: 70vh;
-            overflow: hidden;
-        }
-
-        .mapa-imagem {
-            display: block;
-            width: 100%;
-            height: auto;
-            max-height: 70vh;
-            object-fit: contain;
-            z-index: 10;
-        }
-
-        .grid-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: grid;
-            z-index: 20; 
-        }
-
-        #svgLinhas {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 30; 
-            overflow: visible;
-        }
-
-        #camadaIconesBase, #camadaIconesSuperior, #camadaIconesUltra { 
-            position: absolute; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            pointer-events: none; 
-        }
-        #camadaIconesBase { z-index: 40; }
-        #camadaIconesSuperior { z-index: 50; }
-        #camadaIconesUltra { z-index: 60; }
-
-        .icone-mapa {
-            position: absolute;
-            transform: translate(-50%, -50%); 
-            pointer-events: none;
-        }
-
-        .icone-mapa.arrastavel {
-            pointer-events: auto !important;
-            cursor: move;
-        }
-
-        .grid-cell {
-            cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.05);
-            box-sizing: border-box;
-        }
-
-        .grid-cell.escondido { background-color: var(--cor-esconder); }
-
-        .apendice-botoes {
-            gap: 15px;
-        }
-
-        .btn-nav {
-            padding: 10px 2px;
-            background-color: #11806A;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 10px;
-            text-transform: uppercase;
-        }
-
-        .btn-nav.ativo { background-color: #000; }
-        .btn-reset { background-color: #a00; margin-top: 10px; }
-
-        .container-tamanhos {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 4px;
+            max-width: 90vw !important;
         }
 
         .grid-componentes {
-            display: grid;
-            grid-template-rows: repeat(9, 1fr);
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-flow: column;
-            gap: 6px;
-            background: #f0f0f0;
-            padding: 10px;
-            border-radius: 8px;
-            border: 2px solid #333;
-            flex-grow: 1; 
+            grid-template-rows: repeat(9, 1fr) !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            grid-auto-flow: column !important;
         }
 
-        .btn-componente {
-            aspect-ratio: 1/1;
-            background-color: #11806A;
-            border: 1px solid #000;
-            border-radius: 4px;
-            cursor: pointer;
-            padding: 2px;
-            display: flex;
+        /* Ativa os botões exclusivos mobile */
+        .mobile-controls, 
+		.mobile-controls-row {
+            display: flex !important;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        /* Estilo do Overlay (Box de Instruções) */
+        .overlay-instrucoes {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            transition: all 0.1s;
+            cursor: pointer; /* Clique fecha */
         }
 
-        .btn-componente.selecionado {
-            background-color: #ffd700;
-            border: 2px solid #ff4500;
-            transform: scale(1.1);
+        .overlay-conteudo {
+            background: white;
+            padding: 20px;
+            border: 8px solid #000;
+            border-radius: 15px;
+            width: 85%;
+            max-height: 80vh; /* Altura aumentada conforme solicitado */
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
         }
-
-        .btn-componente img { max-width: 100%; max-height: 100%; object-fit: contain; }
-
-        .label-secao {
-            text-align: center;
-            font-weight: bold;
-            font-size: 11px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
+        
+        .regras-texto-scroll {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 10px;
+            -webkit-overflow-scrolling: touch;
         }
-    </style>
+		
+		.mobile-controls-row {
+			display: flex;
+			gap: 10px;
+			width: 100%;
+			justify-content: center;
+			margin-top: 10px;
+		}
+
+		.btn-nav.selecionado-mobile {
+			background-color: #ffd700 !important;
+			color: #000 !important;
+			border: 2px solid #ff4500;
+		}
+		
+		.btn-nav.modo-interno {
+			background-color: #00ffff !important; /* Ciano */
+			color: #000 !important;
+			border: 2px solid #008b8b;
+		}
+		
+		.btn-nav.modo-externo {
+			background-color: #ff00ff !important; /* Magenta */
+			color: #fff !important;
+			border: 2px solid #8b008b;
+		}
+		
+		.grid-cell.selecao-caminho {
+			outline: 3px solid #ffd700 !important;
+			outline-offset: -3px;
+			z-index: 50;
+		}
+		
+		.btn-nav.modo-meeple {
+			background-color: #ff8c00 !important; /* Laranja */
+			color: #fff !important;
+			border: 2px solid #cd853f;
+		}
+		
+		.icone-mapa.arrastavel {
+			touch-action: none; /* Melhora a precisão do arraste no mobile */
+		}
+		
+		body.modo-meeple-ativo .icone-mapa.arrastavel {
+			pointer-events: auto !important;
+			z-index: 9999 !important;
+		}
+
+		/* Evita que o grid intercepte o toque no modo Meeple */
+		body.modo-meeple-ativo .grid-overlay {
+			pointer-events: none;
+		}
+		
+		#modalInstrucoes.ativo-mobile {
+			display: flex !important;
+		}
+
+        /* Barra de rolagem personalizada */
+        .regras-texto-scroll::-webkit-scrollbar { width: 8px; }
+        .regras-texto-scroll::-webkit-scrollbar-thumb { background: #000; border-radius: 4px; }
+    }
+
+    /* --- ESTILOS ORIGINAIS PRESERVADOS --- */
+    .apendice-regras, .apendice-botoes {
+        background-color: white;
+        padding: 20px;
+        border-radius: 15px;
+        border: 8px solid #000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        width: 320px; 
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    .apendice-regras { justify-content: space-between; }
+
+    .regras-texto {
+        font-size: 13px;
+        font-weight: bold;
+        line-height: 1.6;
+        color: #000;
+    }
+
+    .quadro-mapa-completo {
+        background-color: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        border: 8px solid #000;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    h1 {
+        width: 100%;
+        text-align: center;
+        text-decoration: underline;
+        text-transform: uppercase;
+        font-size: 22px;
+        margin: 0 0 20px 0;
+        color: #000;
+    }
+
+    .grid-container-master {
+        display: grid;
+        grid-template-areas: ". topo" "lateral mapa";
+        grid-template-columns: 30px auto;
+        grid-template-rows: 30px auto;
+    }
+
+    .regua-topo { grid-area: topo; display: flex; justify-content: space-around; align-items: center; font-weight: bold; }
+    .regua-lateral { grid-area: lateral; display: flex; flex-direction: column; justify-content: space-around; align-items: center; font-weight: bold; }
+
+    .coord-label {
+        font-size: 14px;
+        color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+
+    .mapa-wrapper {
+        grid-area: mapa;
+        position: relative;
+        display: inline-block;
+        border: 4px solid #000;
+        background-color: #000;
+        user-select: none;
+        line-height: 0;
+        max-width: 60vw;
+        max-height: 70vh;
+        overflow: hidden;
+    }
+
+    .mapa-imagem {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 70vh;
+        object-fit: contain;
+        z-index: 10;
+    }
+
+    .grid-overlay {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        display: grid;
+        z-index: 20; 
+    }
+
+    #svgLinhas {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none;
+        z-index: 30; 
+        overflow: visible;
+    }
+
+    #camadaIconesBase, #camadaIconesSuperior, #camadaIconesUltra { 
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; 
+    }
+    #camadaIconesBase { z-index: 40; }
+    #camadaIconesSuperior { z-index: 50; }
+    #camadaIconesUltra { z-index: 60; }
+
+    .icone-mapa {
+        position: absolute;
+        transform: translate(-50%, -50%); 
+        pointer-events: none;
+    }
+
+    .icone-mapa.arrastavel {
+        pointer-events: auto !important;
+        cursor: move;
+    }
+
+    .grid-cell {
+        cursor: pointer;
+        border: 1px solid rgba(0,0,0,0.05);
+        box-sizing: border-box;
+    }
+
+    .grid-cell.escondido { background-color: var(--cor-esconder); }
+
+    .apendice-botoes { gap: 15px; }
+
+    .btn-nav {
+        padding: 10px 2px;
+        background-color: #11806A;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 10px;
+        text-transform: uppercase;
+    }
+
+    .btn-nav.ativo { background-color: #000; }
+    .btn-reset { background-color: #a00; margin-top: 10px; }
+
+    .container-tamanhos {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+    }
+
+    .grid-componentes {
+        display: grid;
+        grid-template-rows: repeat(9, 1fr);
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-flow: column;
+        gap: 6px;
+        background: #f0f0f0;
+        padding: 10px;
+        border-radius: 8px;
+        border: 2px solid #333;
+        flex-grow: 1; 
+    }
+
+    .btn-componente {
+        aspect-ratio: 1/1;
+        background-color: #11806A;
+        border: 1px solid #000;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 2px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.1s;
+    }
+
+    .btn-componente.selecionado {
+        background-color: #ffd700;
+        border: 2px solid #ff4500;
+        transform: scale(1.1);
+    }
+
+    .btn-componente img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    .label-secao {
+        text-align: center;
+        font-weight: bold;
+        font-size: 11px;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+    }
+</style>
 </head>
 <body>
     <div class="layout-principal">
@@ -263,6 +395,24 @@
                     <div id="camadaIconesUltra"></div>
                 </div>
             </div>
+			<div class="mobile-controls-row">
+				<button id="btnModoCaminho" class="btn-nav" style="background-color: #000; flex: 1;" onclick="alternarModoCaminho()">Caminhos: OFF</button>
+				<button id="btnModoMeeple" class="btn-nav" style="background-color: #000; flex: 1;" onclick="alternarModoMeeple()">Meeple: OFF</button>
+			</div>
+			<div class="mobile-controls-row">
+				<button class="btn-nav" style="background-color: #000; flex: 1;" onclick="toggleInstrucoes(true)">Instruções</button>
+				<button class="btn-nav btn-reset" style="margin-top: 0; flex: 1;" onclick="resetarGridAtual()">Resetar Mapa Atual</button>
+			</div>
+			
+			<div id="modalInstrucoes" class="overlay-instrucoes" onclick="toggleInstrucoes(false)">
+				<div class="overlay-conteudo">
+					<div class="regras-texto-scroll">
+						<div class="regras-texto" id="conteudoClone">
+							</div>
+					</div>
+					<button class="btn-nav" style="background-color: #000; width: 100%; margin-top: 15px;">Fechar</button>
+				</div>
+			</div>
         </div>
 
         <div class="apendice-botoes">
@@ -604,33 +754,58 @@
         }
 
         function posicionarIconeFixo(cell) {
-            const index = cell.dataset.index;
-            const centro = getCentro(cell);
-            let idCamada = (componenteSelecionado >= 19 && componenteSelecionado <= 27) ? 'camadaIconesSuperior' : 'camadaIconesBase';
-            const camada = document.getElementById(idCamada);
-            const antigo = camada.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
-            if (antigo) antigo.remove();
-            const img = document.createElement('img');
-            img.src = `Componente (${componenteSelecionado}).png`;
-            img.className = 'icone-mapa';
-            img.dataset.cellId = index;
-            img.dataset.compId = componenteSelecionado;
-            const dim = configMapas[tamanhoAtual].dim;
-            const containerMapa = document.getElementById('containerMapa');
-            const size = (containerMapa.offsetWidth / dim) * 0.7;
-            img.style.width = size + "px";
-            img.style.left = centro.x + "px";
-            img.style.top = centro.y + "px";
-            cell.classList.add('escondido');
-            camada.appendChild(img);
-            historico.push({ tipo: 'dupla_acao', icone: img, quadrante: cell });
-            
-            // Nova lógica: não limpa se shift estiver pressionado
-            if (!shiftPressionado) {
-                componenteSelecionado = null;
-                document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
-            }
-        }
+			const index = cell.dataset.index;
+			const centro = getCentro(cell);
+			const isMobile = window.innerWidth <= 850;
+    
+			// Determina a camada correta com base no componente selecionado
+			let idCamada = (componenteSelecionado >= 19 && componenteSelecionado <= 27) ? 'camadaIconesSuperior' : 'camadaIconesBase';
+			const camada = document.getElementById(idCamada);
+    
+			// Busca se já existe um ícone neste quadrante
+			const antigo = camada.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+
+			// NOVA LÓGICA MOBILE: Se for o mesmo componente, remove e encerra
+			if (isMobile && antigo && antigo.dataset.compId == componenteSelecionado) {
+				antigo.remove();
+				// Se não sobrar nenhum ícone (base ou superior), remove o fundo escondido
+				const temOutro = document.querySelector(`.icone-mapa[data-cell-id="${index}"]`);
+				if (!temOutro) cell.classList.remove('escondido');
+        
+				if (!shiftPressionado) {
+					componenteSelecionado = null;
+					document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+				}
+				return;
+			}
+
+			// Comportamento padrão: Substitui o ícone existente
+			if (antigo) antigo.remove();
+    
+			const img = document.createElement('img');
+			img.src = `Componente (${componenteSelecionado}).png`;
+			img.className = 'icone-mapa';
+			img.dataset.cellId = index;
+			img.dataset.compId = componenteSelecionado;
+    
+			const dim = configMapas[tamanhoAtual].dim;
+			const containerMapa = document.getElementById('containerMapa');
+			const size = (containerMapa.offsetWidth / dim) * 0.7;
+    
+			img.style.width = size + "px";
+			img.style.left = centro.x + "px";
+			img.style.top = centro.y + "px";
+    
+			cell.classList.add('escondido'); // Garante que o fundo fique colorido sob o ícone
+			camada.appendChild(img);
+    
+			historico.push({ tipo: 'dupla_acao', icone: img, quadrante: cell });
+    
+			if (!shiftPressionado) {
+				componenteSelecionado = null;
+				document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+			}
+		}
 
         function lidarMouseUp(e, cell) {
             if (e.button === 0 && criandoLinha && cellInicial && cellInicial !== cell) {
@@ -773,6 +948,155 @@
         gerarGrid();
         gerarReguas();
         gerarBotoesComponentes();
+		
+		function toggleInstrucoes(abrir) {
+			const modal = document.getElementById('modalInstrucoes');
+			if (abrir) {
+				// Copia o texto do apêndice original para o modal
+				const original = document.querySelector('.apendice-regras .regras-texto').innerHTML;
+				document.getElementById('conteudoClone').innerHTML = original;
+        
+				modal.classList.add('ativo-mobile'); // Usa a classe para vencer o !important do CSS
+				document.querySelector('.regras-texto-scroll').scrollTop = 0;
+			} else {
+				modal.classList.remove('ativo-mobile');
+			}
+		}
+		
+		let estadoCaminhoMobile = 0; // 0: OFF, 1: Interno, 2: Externo
+		let primeiroCliqueCaminho = null;
+
+		function alternarModoCaminho() {
+			estadoCaminhoMobile = (estadoCaminhoMobile + 1) % 3;
+			const btn = document.getElementById('btnModoCaminho');
+    
+			// Reset de seleções anteriores
+			if (primeiroCliqueCaminho) {
+				primeiroCliqueCaminho.classList.remove('selecao-caminho');
+				primeiroCliqueCaminho = null;
+			}
+
+			// Reset de estilos do botão
+			btn.classList.remove('modo-interno', 'modo-externo');
+    
+			if (estadoCaminhoMobile === 1) {
+				btn.innerText = "Caminhos: INTERNO";
+				btn.classList.add('modo-interno');
+				componenteSelecionado = null; // Trava outros componentes
+			} else if (estadoCaminhoMobile === 2) {
+				btn.innerText = "Caminhos: EXTERNO";
+				btn.classList.add('modo-externo');
+			} else {
+				btn.innerText = "Caminhos: OFF";
+			}
+		}
+		
+		let modoMeepleMobile = false;
+
+		function alternarModoMeeple() {
+			modoMeepleMobile = !modoMeepleMobile;
+			const btn = document.getElementById('btnModoMeeple');
+    
+			if (modoMeepleMobile && estadoCaminhoMobile > 0) alternarModoCaminho();
+
+			if (modoMeepleMobile) {
+				btn.innerText = "Meeple: ON";
+				btn.classList.add('modo-meeple');
+				document.body.classList.add('modo-meeple-ativo');
+				componenteSelecionado = null;
+				document.querySelectorAll('.btn-componente').forEach(b => b.classList.remove('selecionado'));
+			} else {
+				btn.innerText = "Meeple: OFF";
+				btn.classList.remove('modo-meeple');
+				document.body.classList.remove('modo-meeple-ativo'); // Desativa sobreposição
+			}
+		}
+
+		// Atualize sua função lidarMouseDown para incluir esta nova lógica de interceptação
+		function lidarMouseDown(e, cell) {
+			// LÓGICA MOBILE DE CAMINHOS (Mantida conforme original)
+			const isMobile = window.innerWidth <= 850;
+
+			// LÓGICA MOBILE DE ESCONDER QUADRANTE (Apenas se nenhuma ferramenta estiver ativa)
+			if (isMobile && estadoCaminhoMobile === 0 && !modoMeepleMobile && !componenteSelecionado) {
+				cell.classList.toggle('escondido');
+				salvarAcao('esconder', cell);
+				return; // Interrompe para não disparar outras lógicas
+			}
+			
+			
+			if (estadoCaminhoMobile > 0) {
+				if (!primeiroCliqueCaminho) {
+					primeiroCliqueCaminho = cell;
+					cell.classList.add('selecao-caminho');
+				} else {
+					const c1 = getCentro(primeiroCliqueCaminho);
+					const c2 = getCentro(cell);
+					const usarShift = (estadoCaminhoMobile === 2);
+					criarLinhaFinal(c1, c2, usarShift);
+					primeiroCliqueCaminho.classList.remove('selecao-caminho');
+					primeiroCliqueCaminho = null;
+				}
+				return; 
+			}
+    
+			if (modoMeepleMobile) {
+				return;
+			}
+
+			// --- LÓGICA DESKTOP ---
+
+			// 1. Clique Esquerdo (Botão 0)
+			if (e.button === 0) {
+				if (componenteSelecionado) {
+					posicionarIconeFixo(cell);
+				} else {
+					// Se não há componente, inicia a criação de caminho
+					cellInicial = cell;
+					criandoLinha = true;
+					const centro = getCentro(cell);
+					const lg = document.getElementById('linhaGuia');
+					lg.setAttribute("x1", centro.x); lg.setAttribute("y1", centro.y);
+					lg.setAttribute("x2", centro.x); lg.setAttribute("y2", centro.y);
+					lg.setAttribute("stroke-width", calcularGrossura());
+					lg.style.display = "block";
+				}
+			} 
+			// 2. Clique Direito (Botão 2)
+			else if (e.button === 2) {
+				// Apenas esconde/revela se não houver componente sendo colocado
+				cell.classList.toggle('escondido');
+				salvarAcao('esconder', cell);
+			}
+		}
+		
+		// Suporte para arrastar com o dedo (Touch Events)
+		document.addEventListener('touchstart', function(e) {
+			if (e.target.classList.contains('arrastavel') && modoMeepleMobile) {
+				arrastandoElemento = e.target;
+				// Evita rolar a página enquanto arrasta o Meeple
+				e.preventDefault();
+			}
+		}, { passive: false });
+
+		document.addEventListener('touchmove', function(e) {
+			if (arrastandoElemento && modoMeepleMobile) {
+				const rect = document.getElementById('containerMapa').getBoundingClientRect();
+				const touch = e.touches[0];
+        
+				let x = Math.max(0, Math.min(touch.clientX - rect.left, rect.width));
+				let y = Math.max(0, Math.min(touch.clientY - rect.top, rect.height));
+        
+				arrastandoElemento.style.left = x + "px";
+				arrastandoElemento.style.top = y + "px";
+				e.preventDefault();
+			}
+		}, { passive: false });
+
+		document.addEventListener('touchend', function() {
+			arrastandoElemento = null;
+		});
     </script>
 </body>
 </html>
+

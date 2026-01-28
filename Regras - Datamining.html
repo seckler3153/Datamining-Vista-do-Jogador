@@ -28,22 +28,16 @@
             position: relative;
         }
 
-        /* Estilo do botão lateral */
+        /* Botão fixado no canto superior direito do box branco */
         .apendice-botoes {
-            background-color: white;
-            padding: 20px;
-            border-radius: 15px;
-            border: 8px solid #000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            width: 150px; 
-            position: sticky;
-            top: 40px;
-            display: flex;
-            flex-direction: column;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
         }
 
         .btn-nav {
-            padding: 10px;
+            padding: 10px 15px;
             background-color: #11806A;
             color: white;
             border: none;
@@ -53,6 +47,7 @@
             font-size: 12px;
             text-align: center;
             text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         h1 {
@@ -63,6 +58,7 @@
             margin-top: 0;
             margin-bottom: 40px;
             color: #000;
+            padding: 0 100px;
         }
 
         .categoria-bloco {
@@ -158,6 +154,28 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
+        @media (max-width: 1100px) {
+            .quadro-regras-completo {
+                width: 95%;
+                padding: 60px 20px 30px 20px;
+            }
+            h1 {
+                font-size: 22px;
+                padding: 0;
+                text-align: center; /* Garantindo a centralização no mobile */
+                margin-top: 20px;
+                margin-right: 0; /* Removendo a margem lateral */
+            }
+            .regra-com-imagem {
+                flex-direction: column;
+                align-items: center;
+            }
+            .imagem-regra {
+                max-width: 100%;
+                height: auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -167,6 +185,10 @@
     </div>
 
     <div class="quadro-regras-completo">
+        <div class="apendice-botoes">
+            <button class="btn-nav" onclick="trocarModoManual()">Mudar Modo</button>
+        </div>
+
         <h1 id="titulo-principal">Protocolos do Modo Competitivo</h1>
 
         <div id="conteudo-pvp">
@@ -345,9 +367,9 @@
                 <div class="regra-com-imagem">
                     <div class="texto-regra">
                         <p>• <b>Objetivo:</b> Proteger o <strong>Arquivo Vital</strong>, que está na pasta de Diretório Principal, e levá-lo até sua Zona Segura. O grupo vence se todos iniciarem a rodada na Zona Segura com o Arquivo Vital em seu <strong>Banco de Dados</strong>.</p>
-						<p>• <b>Jogadores:</b> Um jogador é o <strong>Sistema Operacional (SO)</strong> sendo corrompido e os outros são um programa de <strong>Antivírus</strong> trabalhando juntos para resgatar o SO. (Mínimo de 3 e máximo de 8 jogadores além do SO)
-						<p>• <b>SO:</b> Apenas o SO vê a <strong>Tabela Mestra de Diretórios (TMD)</strong>. Ele informa as direções possíveis e a distância após a escolha do jogador sobre qual caminho seguir.
-						<p>• <b>Antivírus:</b> Os jogadores Antivírus têm como ações: realizar um movimento, usar um <strong>Recurso</strong>, usar seus <strong>Patches</strong>, realizar um <strong>Jogo Cooperativo</strong> ou rodar uma roleta. (Não pode repetir uma ação no mesmo turno normalmente)
+						<p>• <b>Jogadores:</b> Um jogador é o <strong>Sistema Operacional (SO)</strong> sendo corrompido e os outros são um programa de <strong>Antivírus</strong> trabalhando juntos para resgatar o SO. (Mínimo de 3 e máximo de 8 jogadores além do SO)</p>
+						<p>• <b>SO:</b> Apenas o SO vê a <strong>Tabela Mestra de Diretórios (TMD)</strong>. Ele informa as direções possíveis e a distância após a escolha do jogador sobre qual caminho seguir.</p>
+						<p>• <b>Antivírus:</b> Os jogadores Antivírus têm como ações: realizar um movimento, usar um <strong>Recurso</strong>, usar seus <strong>Patches</strong>, realizar um <strong>Jogo Cooperativo</strong> ou rodar uma roleta. (Não pode repetir uma ação no mesmo turno normalmente)</p>
                     </div>
                     <img src="Regras Coop (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
                 </div>
@@ -363,7 +385,7 @@
                     <div class="texto-regra">
                         <p>• <b>Turnos:</b> O jogo terá 120 turnos inicialmente.</p>
 						<p>• <b>Esgotamento:</b> Caso o grupo fique com ambos V e A abaixo de zero ou o número de turnos chegue a 0, o jogo acaba.</p>
-						<p>• <b>Exploração:</b> Com exceção das pasta de Zona Segura, do Diretório Principal, de Quarentena e de Downloads, encontrar uma pasta nunca explorada concede ao jogador uma <strong>Criptomoeda</strong>, que dá +1A ou +1B pro grupo a escolha do jogador que a encontrou.
+						<p>• <b>Exploração:</b> Com exceção das pasta de Zona Segura, do Diretório Principal, de Quarentena e de Downloads, encontrar uma pasta nunca explorada concede ao jogador uma <strong>Criptomoeda</strong>, que dá +1A ou +1B pro grupo a escolha do jogador que a encontrou.</p>
 						<p>• <b>Rodadas:</b> Durante uma rodada, cada jogador do grupo pode ter seu turno em qualquer ordem, mas cada jogador deve ter um turno por rodada. Ao final de cada rodada, é rolada a roleta de Arquivo Desconhecido.</p>
                     </div>
                     <img src="Regras Coop (3).png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -480,10 +502,6 @@
                 </ul>
             </div>
         </div>
-    </div>
-
-    <div class="apendice-botoes">
-        <button class="btn-nav" onclick="trocarModoManual()">Mudar Modo</button>
     </div>
 
     <script>
