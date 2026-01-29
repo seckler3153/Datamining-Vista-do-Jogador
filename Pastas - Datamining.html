@@ -202,7 +202,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Zona Segura</div>
 							<div class="texto-regra">
-							<p>Onde cada jogador inicia o jogo. Seus locais no mapa são sempre os mesmos <i>(Exceto no Modo Extremo)</i>, variando apenas qual é a pasta inicial de cada jogador. São informados onde estão no mapa aos seus respectivos jogadores <i>(Exceto nos Modos Difícil e Extremo)</i>. Independente de quantos jogadores tenham no jogo, sempre há 8 pastas de Zona Segura espalhadas pelo mapa, uma para cada cor de jogador. Toda vez que um jogador passar pela sua própria Zona Segura, recebe +2B. Caso jogador entre na pasta de Zona Segura de outro jogador, deve pagar 2B ao dono da pasta. Caso um jogador encontre uma pasta de Zona Segura que não pertença a nenhum jogador, ele pode pagar 5B para trocar a sua pasta de Zona Segura por esta, recebendo também uma parte do mapa com suas pastas adjacentes, do contrário, recebe +2A. Um jogador com o Arquivo Vital não pode adquirir uma nova pasta de Zona Segura, enquanto já possuir uma. Caso um jogador esteja em sua pasta de Zona Segura e outro jogador entre nela, o dono da pasta pode escolher entre lutar contra o outro jogador ou não. Caso escolha não lutar, deve dar um Recurso seu para o outro jogador e não recebe o pagamento do outro jogador por entrar em sua Zona Segura <i>(Este efeito não imuniza o jogador dentro de sua Zona Segura de entrar em luta com outros jogadores por outros métodos)</i>.</p>
+							<p>Onde cada jogador inicia o jogo. Seus locais no mapa são sempre informados a todos os jogadores <i>(Exceto nos Modos Difícil e Extremo)</i>, variando apenas qual é a pasta inicial de cada jogador, que é informada secretamente para cada um <i>(Exceto no Modo Extremo)</i>. Independente de quantos jogadores tenham no jogo, sempre há 8 pastas de Zona Segura espalhadas pelo mapa. Toda vez que um jogador passar pela sua própria Zona Segura, recebe +2B. Caso jogador entre na pasta de Zona Segura de outro jogador, deve pagar 2B ao dono da pasta. Caso um jogador encontre uma pasta de Zona Segura que não pertença a nenhum jogador, ele pode pagar 5B para trocar a sua pasta de Zona Segura por esta, recebendo também um Pedaço do Mapa de onde esta pasta está, do contrário, recebe +2A. Um jogador com o Arquivo Vital não pode adquirir uma nova pasta de Zona Segura, enquanto já possuir uma. Caso um jogador esteja em sua pasta de Zona Segura e outro jogador entre nela, o dono da pasta pode escolher entre entrar em Combate contra o outro jogador ou não. Caso escolha não entrar em Combate, deve dar um Recurso seu para o outro jogador e também não recebe o pagamento do outro jogador por entrar em sua Zona Segura <i>(Este efeito não imuniza o jogador dentro de sua Zona Segura de entrar em Combate com outros jogadores por outros métodos)</i>.</p>
 						</div>
                     </div>
                     <img src="Pasta (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -231,7 +231,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Downloads</div>
 							<div class="texto-regra">
-							<p>Os jogadores podem usar seus Bits para comprar Recursos. Toda vez que um jogador entrar nesta pasta, são aleatorizados entre 4 a 7 Recursos que estão à venda. Recursos melhores aparecem conforme o jogador progride pelo jogo. Os Recursos à venda e seus efeitos somente aparecem para o jogador que está comprando, porém são mostrados aos outros jogadores a imagem representativa dos Recursos comprados. Máximo de 2 Recursos podem ser comprados por turno.</p>
+							<p>Os jogadores podem usar seus Bits para comprar Recursos. A cada vez que um jogador entrar nesta pasta, são aleatorizados entre 4 a 7 Recursos que estão à venda. Recursos melhores aparecem conforme o jogador progride pelo jogo. Os Recursos à venda e seus efeitos somente aparecem para o jogador que está comprando, porém são mostrados aos outros jogadores apenas o ícone dos Recursos comprados, em seu Banco de Dados. Máximo de 2 Recursos podem ser comprados por turno numa mesma pasta de Download.</p>
 						</div>
                     </div>
                     <img src="Pasta (4).png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -261,7 +261,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Chave de Acesso</div>
 							<div class="texto-regra">
-							<p>O jogador recebe secretamente uma pista de onde está a pasta do Diretório Principal <i>(É tratada como uma Pasta Vazia, durante o turno do jogador que a encontrou)</i>. A cada final de rodada em que algum jogador tenha encontrado pelo menos uma pasta de Chave de Acesso, o SO informa a todos quantos jogadores possuem Chaves de Acesso e quantas cada um possui, sem informar quais jogadores as têm. Encontrando todas, permite ao jogador encontrar o Diretório Principal.</p>
+							<p>O jogador recebe secretamente uma pista de onde está a pasta do Diretório Principal <i>(É tratada como uma Pasta Vazia, durante o turno do jogador que a encontrou)</i>. A cada final de rodada em que algum jogador tenha encontrado pelo menos uma pasta de Chave de Acesso, o SO informa a todos quantos jogadores possuem Chaves de Acesso e quantas cada um possui, sem informar quais jogadores as têm. Encontrando todas, permite ao jogador encontrar a pasta do Diretório Principal.</p>
 						</div>
                     </div>
                     <img src="Pasta (7).png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -271,7 +271,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Diretório Principal</div>
 							<div class="texto-regra">
-							<p>É disfarçada de alguma outra Pasta Vazia até o jogador encontrar todas as Chaves de Acesso e ter V necessário para acessá-la. É onde está o Arquivo Vital.</p>
+							<p>É disfarçada de alguma outra Pasta Vazia até o jogador encontrar todas as Chaves de Acesso e ter V necessário para acessá-la. É onde inicialmente está o Arquivo Vital.</p>
 						</div>
                     </div>
                     <img src="Pasta (8).png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -296,7 +296,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Zona Segura</div>
 							<div class="texto-regra">
-							<p>Onde cada jogador inicia o jogo. Seus locais no mapa são sempre os mesmos, variando apenas qual é a pasta inicial de cada jogador. Todos os jogadores são informados onde estão as pastas de cada um no mapa <i>(Exceto no Modo Difícil)</i>. Independente de quantos jogadores tenham no jogo, sempre há 8 pastas de Zona Segura no mapa. Toda vez que um jogador passar por alguma Zona Segura pertencente ao grupo que não seja da sua mesma cor, o grupo recebe +2B. Caso um jogador encontre uma pasta de Zona Segura que não pertença ao grupo, ele pode pagar 8B para trocar a sua Zona Segura por esta, recebendo também uma parte do mapa com suas pastas adjacentes, do contrário, recebe +3A. Enquanto o grupo possuir o Arquivo Vital, todas as pastas de Zona Segura são dadas como perdidas e apenas uma delas é escolhida aleatoriamente para ser a única saída do grupo. Enquanto possuírem o Arquivo Vital, o grupo não pode adquirir uma nova pasta de Zona Segura e, caso esta seja perdida por algum efeito, apenas altera a Zona Segura para outra escolhida aleatoriamente.</p>
+							<p>Onde cada jogador inicia o jogo. Seus locais no mapa não são informados aos jogadores <i>(Exceto no Modo Fácil)</i>, mas as coordenadas das pastas iniciais de cada jogador são <i>(Exceto no Modo Difícil)</i>. Independente de quantos jogadores tenham no jogo, sempre há 8 pastas de Zona Segura no mapa. Toda vez que um jogador passar por alguma Zona Segura pertencente ao grupo que não seja da sua mesma cor, o grupo recebe +2B <i>(Se a pasta de Zona Segura e o jogador forem da mesma cor, o grupo não recebe nada)</i>. Caso um jogador encontre uma pasta de Zona Segura que não pertença ao grupo, ele pode pagar 8B para trocar a sua Zona Segura por esta, recebendo também um Pedaço do Mapa com suas pastas adjacentes, do contrário, recebe +3A. Enquanto o grupo possuir o Arquivo Vital, todas as pastas de Zona Segura são dadas como perdidas e apenas uma delas é escolhida aleatoriamente para ser a única saída do grupo. Enquanto possuírem o Arquivo Vital, o grupo não pode adquirir uma nova pasta de Zona Segura e, caso esta seja perdida por algum efeito, apenas altera a Zona Segura para outra escolhida aleatoriamente.</p>
 						</div>
                     </div>
                     <img src="Pasta (1).png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -325,7 +325,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Downloads</div>
 							<div class="texto-regra">
-							<p>O grupo pode usar seus Bits para comprar Recursos. Toda vez que um jogador entrar nesta pasta, são aleatorizados entre 4 a 7 Recursos que estão à venda. Recursos melhores aparecem conforme o grupo progride durante o jogo. Máximo de 2 Recursos podem ser comprados por turno.</p>
+							<p>O grupo pode usar seus Bits para comprar Recursos. A cada vez que um jogador entrar nesta pasta, são aleatorizados entre 4 a 7 Recursos que estão à venda. Recursos melhores aparecem conforme o grupo progride durante o jogo. Máximo de 2 Recursos podem ser comprados por turno.</p>
 						</div>
                     </div>
                     <img src="Pasta (4).png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -335,7 +335,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Jogo Cooperativo</div>
 							<div class="texto-regra">
-							<p>O grupo roda a roleta Cooperativa. Caso ganhem o jogo, recebem +3A ou +3B, a escolha do grupo, além de 1 Patch e 1 Datamine Portátil. Caso percam, recebem -3B, -3A ou se perdem um Recurso aleatoriamente, a escolha do SO, e 1 Bug.</p>
+							<p>O grupo roda a roleta Cooperativa. Caso ganhem o jogo, recebem +3A ou +3B, a escolha do grupo, além de 1 Patch e 1 Datamine Portátil. Caso percam, recebem -3B, -3A ou perdem um Recurso aleatoriamente, a escolha do SO, além de 1 Bug.</p>
 						</div>
                     </div>
                     <img src="Pasta (5)c.png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -355,7 +355,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Chave de Acesso</div>
 							<div class="texto-regra">
-							<p>O grupo recebe uma pista de onde está a pasta do Diretório Principal. Encontrando todas, permite ao grupo encontrar o Diretório Principal.</p>
+							<p>O grupo recebe uma pista de onde está a pasta do Diretório Principal. Encontrando todas, permite ao grupo encontrar a pasta do Diretório Principal.</p>
 						</div>
                     </div>
                     <img src="Pasta (7).png" class="imagem-regra" onclick="expandirImagem(this.src)">
@@ -365,7 +365,7 @@
                     <div class="conteudo-dificuldade">
                         <div class="subtitulo-dif">Diretório Principal</div>
 							<div class="texto-regra">
-							<p>É disfarçada de alguma outra pasta até o grupo encontrar todas as Chaves de Acesso e ter V necessário para acessá-la. Local onde está o Arquivo Vital.</p>
+							<p>É disfarçada de alguma outra pasta até o grupo encontrar todas as Chaves de Acesso e ter V necessário para acessá-la. É onde inicialmente está o Arquivo Vital.</p>
 						</div>
                     </div>
                     <img src="Pasta (8).png" class="imagem-regra" onclick="expandirImagem(this.src)">
