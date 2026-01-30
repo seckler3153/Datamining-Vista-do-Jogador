@@ -283,7 +283,8 @@
     }
 
     const imageSelector = document.getElementById('global-image-selector');
-    for (let i = 1; i <= 42; i++) {
+	const totalRecursos = 42;
+    for (let i = 1; i <= totalRecursos; i++) {
         const img = document.createElement('img');
         img.src = `Recurso (${i}).png`; 
         img.className = 'img-option';
