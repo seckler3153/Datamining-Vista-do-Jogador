@@ -121,6 +121,8 @@
         .player-name { text-decoration: underline; outline: none; }
         .mode-1 .player-name { font-size: 45px; }
         .mode-4 .player-name { font-size: 32px; }
+		.mode-6 .player-name { font-size: 25px; }
+		.mode-8 .player-name { font-size: 20px; }
 
         .grid-frame { border: 5px solid #000; flex-grow: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
         .drop-zone { border: 1px solid #000; position: relative; background-color: #fff; display: flex; justify-content: center; align-items: center; cursor: pointer; overflow: hidden; }
@@ -134,7 +136,7 @@
         .coop-container .grid-frame { grid-template-columns: repeat(3, 1fr); grid-template-rows: 1fr 1fr; border: 8px solid #000; }
         
         /* Alterado para metade do tamanho (50px -> 25px) */
-        .coop-container #player-name { font-size: 25px; text-decoration: underline; outline: none; }
+        .coop-container #player-name { font-size: 50px; text-decoration: underline; outline: none; }
         .coop-container #contador-header { font-size: 80px; font-weight: bold; color: #333; background: #eee; padding: 0 20px; border: 4px solid #000; text-align: center; }
 
         .mobile-counter-controls {
@@ -163,7 +165,11 @@
             .mode-1, .mode-4, .mode-6, .mode-8 { 
                 grid-template-columns: 1fr !important; 
                 width: 100%;
-            }
+			}
+			
+			.coop-container #player-name { 
+				font-size: 25px !important; 
+			}
 
             .main-container, .coop-container { 
                 width: 95vw !important; 
@@ -226,6 +232,21 @@
             border: 5px solid #fff;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
+		.draggable-card {
+			transition: transform 0.2s ease, opacity 0.2s ease;
+			cursor: grab;
+		}
+
+		.main-container.dragging {
+			opacity: 0.4;
+			transform: scale(0.95);
+			border: 5px dashed #000;
+		}
+
+		/* Evita problemas de seleção de texto durante o arraste */
+		.grid-players {
+			user-select: none;
+		}
     </style>
 </head>
 <body>
@@ -358,7 +379,8 @@
     const pvpGrid = document.getElementById('pvp-grid');
     for (let p = 1; p <= 8; p++) {
         const card = document.createElement('div');
-        card.className = `main-container pvp-card-${p}`;
+        card.className = `main-container pvp-card-${p} draggable-card`;
+		card.setAttribute('draggable', 'true');
         card.innerHTML = `
             <div class="sidebar">
                 ${icons.map((icon, i) => `
@@ -439,6 +461,46 @@
         if (e.key === "Enter") { alterarContador(-1); e.preventDefault(); }
         else if (e.code === "Space") { alterarContador(1); e.preventDefault(); }
     });
+	
+	const container = document.getElementById('pvp-grid');
+
+		container.addEventListener('dragstart', e => {
+			const target = e.target.closest('.draggable-card');
+			if (target) {
+				target.classList.add('dragging');
+				// Define um efeito visual no cursor
+				e.dataTransfer.effectAllowed = "move";
+			}
+		});
+
+		container.addEventListener('dragend', e => {
+			const target = e.target.closest('.draggable-card');
+			if (target) {
+				target.classList.remove('dragging');
+				// Remove transformações residuais
+				document.querySelectorAll('.draggable-card').forEach(c => c.style.transform = '');
+			}
+		});
+
+		container.addEventListener('dragover', e => {
+			e.preventDefault();
+			const dragging = document.querySelector('.dragging');
+			const target = e.target.closest('.draggable-card');
+
+			if (!dragging || !target || dragging === target) return;
+
+			const bounding = target.getBoundingClientRect();
+			const offset = (e.clientY - bounding.top) / (bounding.bottom - bounding.top);
+			const offsetHorizontal = (e.clientX - bounding.left) / (bounding.right - bounding.left);
+
+			// Lógica para Grid: decide se insere antes ou depois baseado na posição do mouse
+			// Se o mouse estiver na metade de baixo (ou metade da direita), insere após o alvo
+			if (offset > 0.5 || offsetHorizontal > 0.5) {
+				target.after(dragging);
+			} else {
+				target.before(dragging);
+			}
+		});
 
     document.addEventListener('DOMContentLoaded', () => updateLayout('4'));
 </script>
