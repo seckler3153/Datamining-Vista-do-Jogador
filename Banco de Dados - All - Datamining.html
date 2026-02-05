@@ -323,12 +323,22 @@
 
     function selectImage(src) {
         if (targetZoneId) {
-            const imgElement = document.querySelector(`#${targetZoneId} img`);
-            imgElement.src = src;
-            imgElement.style.display = 'block';
-        }
-        imageSelector.style.display = 'none';
-    }
+			const imgElement = document.querySelector(`#${targetZoneId} img`);
+        
+			// Verifica se a imagem atual (src) já é a mesma que está no quadrado
+			// Usamos .getAttribute('src') para comparar o caminho relativo ou .includes()
+			if (imgElement.style.display === 'block' && imgElement.src.includes(src)) {
+				// Se for igual, apaga (comportamento de toggle)
+				imgElement.src = '';
+				imgElement.style.display = 'none';
+			} else {
+				// Se for diferente ou vazio, define a nova imagem
+				imgElement.src = src;
+				imgElement.style.display = 'block';
+			}
+		}
+		imageSelector.style.display = 'none';
+	}
 
     function clearZone(e, id) {
         e.preventDefault();
