@@ -202,8 +202,8 @@
         .color-menu button:hover { background: #eee; }
 
         .image-selector-menu {
-            grid-template-columns: repeat(6, 50px);
-            grid-template-rows: repeat(7, 50px);
+            grid-template-columns: repeat(5, 50px);
+            grid-template-rows: repeat(9, 50px);
             gap: 2px;
             padding: 5px;
             background: #484848;
@@ -304,7 +304,7 @@
     }
 
     const imageSelector = document.getElementById('global-image-selector');
-	const totalRecursos = 42;
+	const totalRecursos = 45;
     for (let i = 1; i <= totalRecursos; i++) {
         const img = document.createElement('img');
         img.src = `Recurso (${i}).png`; 
