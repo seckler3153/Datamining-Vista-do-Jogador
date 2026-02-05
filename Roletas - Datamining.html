@@ -238,6 +238,14 @@
 
             /* MODIFICAÇÃO SOLICITADA: Diminuir fonte apenas dos botões de escolha de roleta */
             .btn-roleta-opcao { font-size: 11px; }
+			
+			.caixa-config label {
+				font-size: 0 !important;
+			}
+			.caixa-config label::before {
+				content: "ROLETAS:";
+				font-size: 11px;
+			}
         }
     </style>
 </head>
@@ -251,6 +259,24 @@
 
 <div id="modal-ajuda" onclick="this.style.display='none'">
     <img id="img-ajuda-src" class="img-ajuda" src="" alt="Ajuda">
+</div>
+
+<div id="modal-dados" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1001; justify-content: center; align-items: center;" onclick="fecharModalDados(event)">
+    <div class="card-resultado" style="padding: 25px; min-width: 300px;" onclick="event.stopPropagation()">
+        <h3 style="margin-top: 0; text-transform: uppercase;">Rolar Dados (D10)</h3>
+        <div style="display: flex; gap: 20px; justify-content: center; margin-bottom: 20px;">
+            <div>
+                <input type="number" id="qtd-dado-1" value="1" min="1" style="width: 60px; text-align: center; font-size: 18px;">
+                <div id="res-dado-1" style="margin-top: 10px; font-weight: bold; color: #11806A; min-height: 20px;">-</div>
+            </div>
+            <div style="align-self: center; font-weight: bold;">VS</div>
+            <div>
+                <input type="number" id="qtd-dado-2" value="1" min="1" style="width: 60px; text-align: center; font-size: 18px;">
+                <div id="res-dado-2" style="margin-top: 10px; font-weight: bold; color: #11806A; min-height: 20px;">-</div>
+            </div>
+        </div>
+        <button class="btn" style="width: 100%;" onclick="rolarDadosD10()">Rolar</button>
+    </div>
 </div>
 
 <div class="quadro-roleta">
@@ -573,49 +599,72 @@
     }
 
     function renderizarPainel() {
-        const modo = modoAtual;
-        const containerItens = document.getElementById('lista-itens-container');
-        const gradeBotoes = document.getElementById('grade-botoes-roletas');
-        const chavesFiltradas = Object.keys(bancoDados).filter(k => {
-            return modo === "Coop" ? k.endsWith("-c") : !k.endsWith("-c");
-        });
-        if (!chavesFiltradas.includes(roletaAtualKey)) roletaAtualKey = chavesFiltradas[0] || "";
-        const data = bancoDados[roletaAtualKey];
-        const itensVisiveis = data.itens.filter(i => (parseInt(i.peso) || 0) > 0);
-        if(itensVisiveis.length > 0) {
-            const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
-            const primeiraFatia = (parseInt(itensVisiveis[0].peso) / pesoTotal) * (Math.PI * 2);
-            anguloOffset = - (primeiraFatia / 2);
-            anguloAtual = anguloOffset;
-        } else {
-            anguloOffset = 0;
-            anguloAtual = 0;
-        }
-        document.getElementById('titulo-pagina').innerText = `${roletaAtualKey.replace("-c", "")} - ${modo}`;
-        gradeBotoes.innerHTML = "";
-        chavesFiltradas.forEach(k => {
-            const btn = document.createElement('button');
-            btn.className = 'btn-roleta-opcao' + (k === roletaAtualKey ? ' ativa' : '');
-            btn.innerText = k.replace("-c", "");
-            btn.onclick = () => { 
-                roletaAtualKey = k; 
-                renderizarPainel(); 
-            };
-            gradeBotoes.appendChild(btn);
-        });
-        containerItens.innerHTML = "";
-        bancoDados[roletaAtualKey].itens.forEach((item, i) => {
-            const div = document.createElement('div');
-            div.className = 'item-linha';
-            div.innerHTML = `
-                <input type="color" value="${item.cor}" onchange="editarItem(${i}, 'cor', this.value)">
-                <input type="text" value="${item.texto}" oninput="editarItem(${i}, 'texto', this.value)">
-                <input type="number" value="${item.peso}" min="0" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" oninput="editarItem(${i}, 'peso', this.value)">
-            `;
-            containerItens.appendChild(div);
-        });
-        desenhar();
-    }
+		const modo = modoAtual;
+		const containerItens = document.getElementById('lista-itens-container');
+		const gradeBotoes = document.getElementById('grade-botoes-roletas');
+    
+		const caixaConfig = document.querySelector('.caixa-config');
+		const btnDadosExistente = document.getElementById('btn-dados');
+		if (btnDadosExistente) btnDadosExistente.remove();
+
+		// Se for modo PvP, cria o botão e insere antes do botão de ajuda (¿?)
+		if (modo === "PvP") {
+			const btnDados = document.createElement('button');
+			btnDados.id = 'btn-dados';
+			btnDados.className = 'btn-modo btn-ajuda-pos';
+			btnDados.style.right = '80px';
+			btnDados.innerText = 'Dados';
+			btnDados.onclick = abrirModalDados;
+			caixaConfig.appendChild(btnDados);
+		}
+		// ---------------------------------------
+
+		const chavesFiltradas = Object.keys(bancoDados).filter(k => {
+			return modo === "Coop" ? k.endsWith("-c") : !k.endsWith("-c");
+		});
+    
+		if (!chavesFiltradas.includes(roletaAtualKey)) roletaAtualKey = chavesFiltradas[0] || "";
+    
+		const data = bancoDados[roletaAtualKey];
+		const itensVisiveis = data.itens.filter(i => (parseInt(i.peso) || 0) > 0);
+    
+		if(itensVisiveis.length > 0) {
+			const pesoTotal = itensVisiveis.reduce((acc, item) => acc + (parseInt(item.peso) || 0), 0);
+			const primeiraFatia = (parseInt(itensVisiveis[0].peso) / pesoTotal) * (Math.PI * 2);
+			anguloOffset = - (primeiraFatia / 2);
+			anguloAtual = anguloOffset;
+		} else {
+			anguloOffset = 0;
+			anguloAtual = 0;
+		}
+    
+		document.getElementById('titulo-pagina').innerText = `${roletaAtualKey.replace("-c", "")} - ${modo}`;
+    
+		gradeBotoes.innerHTML = "";
+		chavesFiltradas.forEach(k => {
+			const btn = document.createElement('button');
+			btn.className = 'btn-roleta-opcao' + (k === roletaAtualKey ? ' ativa' : '');
+			btn.innerText = k.replace("-c", "");
+			btn.onclick = () => { 
+				roletaAtualKey = k; 
+				renderizarPainel(); 
+			};
+			gradeBotoes.appendChild(btn);
+		});
+    
+		containerItens.innerHTML = "";
+		bancoDados[roletaAtualKey].itens.forEach((item, i) => {
+			const div = document.createElement('div');
+			div.className = 'item-linha';
+			div.innerHTML = `
+				<input type="color" value="${item.cor}" onchange="editarItem(${i}, 'cor', this.value)">
+				<input type="text" value="${item.texto}" oninput="editarItem(${i}, 'texto', this.value)">
+				<input type="number" value="${item.peso}" min="0" step="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" oninput="editarItem(${i}, 'peso', this.value)">
+			`;
+			containerItens.appendChild(div);
+		});
+		desenhar();
+	}
 
     function editarItem(i, campo, val) { 
         bancoDados[roletaAtualKey].itens[i][campo] = val; 
@@ -675,6 +724,35 @@
         document.getElementById('vencedor-nome').innerText = vencedor;
         document.getElementById('modal-vencedor').style.display = 'flex';
     }
+	
+	function abrirModalDados() {
+		document.getElementById('modal-dados').style.display = 'flex';
+		document.getElementById('res-dado-1').innerText = '-';
+		document.getElementById('res-dado-2').innerText = '-';
+	}
+
+	function fecharModalDados(event) {
+		document.getElementById('modal-dados').style.display = 'none';
+	}
+
+	function rolarDadosD10() {
+		const qtd1 = parseInt(document.getElementById('qtd-dado-1').value) || 0;
+		const qtd2 = parseInt(document.getElementById('qtd-dado-2').value) || 0;
+    
+		document.getElementById('res-dado-1').innerText = rolarVarios(qtd1);
+		document.getElementById('res-dado-2').innerText = rolarVarios(qtd2);
+	}
+
+	function rolarVarios(quantidade) {
+		if (quantidade <= 0) return "0";
+		let resultados = [];
+		for (let i = 0; i < quantidade; i++) {
+			resultados.push(Math.floor(Math.random() * 10) + 1);
+		}
+		// Retorna a soma e os valores individuais entre parênteses para clareza
+		const soma = resultados.reduce((a, b) => a + b, 0);
+		return `${soma} (${resultados.join(',')})`;
+	}
 
     window.onload = renderizarPainel;
 </script>
