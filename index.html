@@ -42,13 +42,13 @@
             border: 2px solid #fff;
             padding: 5px; 
             cursor: pointer; 
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase; 
             transition: all 0.2s; 
             border-radius: 5px;
             /* MODIFICAÇÃO: flex-grow em 0 e largura fixa para desktop */
-            flex: 0 0 150px;
-            width: 150px;
+            flex: 0 0 135px;
+            width: 135px;
             height: 45px;
             display: flex;
             align-items: center;
@@ -163,10 +163,10 @@
     <button class="nav-btn active" onclick="showCommand('welcome', this)">Início</button>
     <button class="nav-btn" onclick="showCommand('regras', this)">Regras</button>
     <button class="nav-btn" onclick="showCommand('pastas', this)">Pastas</button>
-    <button class="nav-btn" onclick="showCommand('banco-all', this)">Banco de Dados</button>
+	<button class="nav-btn" onclick="showCommand('banco-all', this)">Banco de Dados</button>
     <button class="nav-btn" onclick="showCommand('mapas', this)">Mapas</button>
     <button class="nav-btn" onclick="showCommand('caminhos', this)">Caminhos</button>
-    <button class="nav-btn" onclick="showCommand('roletas', this)">Roletas</button>
+	<button class="nav-btn" onclick="showCommand('roletas', this)">Roletas</button>
 </header>
 
 <div id="content-area">
@@ -180,10 +180,10 @@
 
     <iframe id="frame-regras" src="Regras - Datamining.html"></iframe>
     <iframe id="frame-pastas" src="Pastas - Datamining.html"></iframe>
-    <iframe id="frame-banco-all" src="Banco de Dados - All - Datamining.html"></iframe>
+	<iframe id="frame-banco-all" src="Banco de Dados - All - Datamining.html"></iframe>
     <iframe id="frame-mapas" src="Mapas - Datamining.html"></iframe>
     <iframe id="frame-caminhos" src="Caminhos - Datamining.html"></iframe>
-    <iframe id="frame-roletas" src="Roletas - Datamining.html"></iframe>
+	<iframe id="frame-roletas" src="Roletas - Datamining.html"></iframe>
 </div>
 
 <script>
@@ -211,5 +211,4 @@
     };
 </script>
 </body>
-
 </html>
