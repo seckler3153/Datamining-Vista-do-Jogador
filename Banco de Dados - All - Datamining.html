@@ -441,8 +441,8 @@
 
 			<div class="tool-group">
 				<span>Tam:</span>
-				<input type="range" id="tool-size" min="5" max="50" value="10" oninput="syncSize(this.value)">
-				<input type="number" id="tool-size-num" min="5" max="50" value="10" 
+				<input type="range" id="tool-size" min="1" max="50" value="10" oninput="syncSize(this.value)">
+				<input type="number" id="tool-size-num" min="1" max="50" value="10" 
 					   style="width: 45px; border: 1px solid #000; font-family: monospace;" 
 					   oninput="syncSize(this.value)">
 				
@@ -760,7 +760,7 @@
 	function syncSize(val) {
 		// Garante que o valor respeite o min/max de 5 a 50
 		let value = parseInt(val);
-		if (value < 5) value = 5;
+		if (value < 1) value = 1;
 		if (value > 50) value = 50;
 
 		document.getElementById('tool-size').value = value;
