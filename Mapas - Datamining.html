@@ -423,7 +423,7 @@
 
             <hr style="width: 100%; border: 1px solid #ddd;">
 
-            <button class="btn-nav" onclick="alternarCorFundo()">Alternar Fundo</button>
+            <button id="btn-toggle-fundo" class="btn-nav" onclick="alternarCorFundo()">Alterar Cor do Fundo</button>
             <div>
                 <div class="label-secao">Tamanho do Mapa:</div>
                 <div class="container-tamanhos">
@@ -611,21 +611,34 @@
         }
 
         function mudarTamanho(novoTamanho) {
-            salvarEstadoAtual();
-            tamanhoAtual = novoTamanho;
-            document.querySelectorAll('.container-tamanhos .btn-nav').forEach(btn => {
-                btn.classList.toggle('ativo', btn.innerText === novoTamanho);
-            });
-            const config = configMapas[tamanhoAtual];
-            document.getElementById('mapaPrincipal').src = fundoVerde ? config.imgVerde : config.imgBranco;
-            document.getElementById('tituloMapa').innerText = `${config.nome} (${novoTamanho})`;
-            
-            limparVisualParaTroca();
-            gerarGrid();
-            gerarReguas();
-            carregarEstado(novoTamanho);
-            historico = [];
-        }
+			salvarEstadoAtual();
+			tamanhoAtual = novoTamanho;
+
+			// 1. Seleciona todos os botões que estão dentro da div de tamanhos
+			const botoes = document.querySelectorAll('.container-tamanhos .btn-nav');
+			
+			botoes.forEach(btn => {
+				// 2. Remove a classe ativo de TODOS os botões do grupo
+				btn.classList.remove('ativo');
+				
+				// 3. Verifica se o texto do botão (limpo) é igual ao tamanho solicitado
+				// Usamos trim() para ignorar espaços e toLowerCase() por segurança
+				if (btn.innerText.trim().toLowerCase() === novoTamanho.toLowerCase()) {
+					btn.classList.add('ativo');
+				}
+			});
+
+			// Atualiza a imagem e o título
+			const config = configMapas[tamanhoAtual];
+			document.getElementById('mapaPrincipal').src = fundoVerde ? config.imgVerde : config.imgBranco;
+			document.getElementById('tituloMapa').innerText = `${config.nome} (${novoTamanho})`;
+			
+			limparVisualParaTroca();
+			gerarGrid();
+			gerarReguas();
+			carregarEstado(novoTamanho);
+			historico = [];
+		}
 
         function limparVisualParaTroca() {
             document.getElementById('camadaIconesBase').innerHTML = '';
@@ -899,11 +912,25 @@
         }
 
         function alternarCorFundo() {
-            fundoVerde = !fundoVerde;
-            const config = configMapas[tamanhoAtual];
-            document.getElementById('mapaPrincipal').src = fundoVerde ? config.imgVerde : config.imgBranco;
-            document.documentElement.style.setProperty('--cor-esconder', fundoVerde ? '#11806A' : '#FFFFFF');
-        }
+			fundoVerde = !fundoVerde;
+			const config = configMapas[tamanhoAtual];
+			const btnFundo = document.getElementById('btn-toggle-fundo');
+
+			// Atualiza a imagem do mapa
+			document.getElementById('mapaPrincipal').src = fundoVerde ? config.imgVerde : config.imgBranco;
+			
+			// Atualiza a cor da variável CSS para os quadrantes escondidos
+			document.documentElement.style.setProperty('--cor-esconder', fundoVerde ? '#11806A' : '#FFFFFF');
+
+			// --- LÓGICA DE COR DO BOTÃO ---
+			if (fundoVerde) {
+				// Se o fundo voltou a ser verde, removemos o preto (volta ao verde original)
+				btnFundo.classList.remove('ativo');
+			} else {
+				// Se o fundo mudou para branco, adicionamos o preto (classe ativo)
+				btnFundo.classList.add('ativo');
+			}
+		}
 
         function finalizarCriacao() {
             criandoLinha = false; arrastandoElemento = null;
