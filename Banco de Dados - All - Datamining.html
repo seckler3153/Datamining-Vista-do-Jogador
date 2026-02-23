@@ -710,12 +710,31 @@
 	
 	function toggleNotepad() {
 		const notepad = document.getElementById('notepad-lightbox');
+		const btnMode = document.getElementById('btn-toggle-mode');
+		const tools = document.getElementById('paint-tools');
+		const cvs = document.getElementById('draw-canvas');
+
+		// 1. Sempre garante que o modo inicial ao abrir seja "Texto"
+		btnMode.innerText = "Modo Livre"; // O texto do botão sugere para o que ele PODE mudar
+		tools.classList.remove('visible'); // Esconde as ferramentas de pintura
+		cvs.classList.remove('active');   // Desativa a interação com o canvas
+
+		// 2. Abre o lightbox
 		notepad.style.display = 'flex';
-		// Adicione esta linha para redimensionar o canvas ao abrir:
+		
+		// 3. Redimensiona o canvas para o tamanho atual do container
 		if(canvas) {
 			const container = canvas.parentElement;
 			canvas.width = container.offsetWidth;
 			canvas.height = container.offsetHeight;
+			
+			// Opcional: Recarregar o último estado do desenho após o redimensionamento
+			// para evitar que o desenho "suma" ao abrir/fechar
+			let img = new Image();
+			if (history.length > 0) {
+				img.src = history[history.length - 1];
+				img.onload = () => ctx.drawImage(img, 0, 0);
+			}
 		}
 	}
 
