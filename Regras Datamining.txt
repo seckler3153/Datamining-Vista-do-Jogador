@@ -1,0 +1,587 @@
+**Regras** __Modo Competitivo__
+	- Um jogador é o Sistema Operacional (SO) sendo corrompido e os outros são Antivírus concorrentes entre si. Mínimo de 3 e máximo de 8 jogadores Antivírus.
+	- O objetivo principal dos jogadores é proteger o Arquivo Vital, presente na pasta de Diretório Principal do computador, e levá-lo até sua pasta de Zona Segura. Vence o jogador que iniciar o seu turno na sua pasta de Zona Segura com o Arquivo Vital em seu Banco de Dados.
+	- Cada jogador escolhe sua cor (Vermelho-1, Laranja-2, Amarelo-3, Verde-4, Ciano-5, Azul-6, Roxo-7 e Magenta-8) e inicia o jogo na Versão (V) 1, Atualização (A) 0 e com 5 Bits (B), ou seja: 1V-0A-5B.
+	- Apenas o SO pode ver a Tabela Mestra de Diretórios (TMD), o mapa do jogo. Ele diz aos jogadores Antivírus quais caminhos eles podem tomar a cada movimento, mesmo que estejam bloqueados (Alguns mapas já podem começar com caminhos bloqueados). O SO informa os caminhos, preferencialmente no sentido horário, começando pelo de Cima (Cima, Superior Direita, Direita, Inferior Direita, Baixo, Inferior Esquerda, Esquerda, Superior Esquerda ou qualquer variação dessas nomenclaturas) e, após escolhido o caminho, o SO diz o quão longo ele é (1 pasta de distância, 2 pastas de distância, 3 pastas de distância, etc.).
+	- A cada turno, os jogadores têm direito a um movimento, caso queiram, e realizar suas ações (Podendo ser o uso de Recursos, uso de Patches, realizar um Combate ou rodar uma Roleta) em qualquer ordem, em condições normais. Um jogador não pode fazer uma mesma ação no mesmo turno, a não ser que algum efeito o permita. Após os turnos de todos os jogadores se encerrarem, se encerra a rodada atual e é iniciada uma nova.
+	- Quando uma pasta é encontrada pela primeira vez no jogo por qualquer jogador, ele recebe uma Criptomoeda, contendo +1A ou +1B a sua escolha (Com exceção das pastas de Zonas Seguras, do Diretório Principal, de Quarentenas ou de Downloads).
+	- Existe uma Datamine colocada aleatoriamente em uma pasta. Ao ser encontrada, revela para o jogador o Pedaço do Mapa em que o jogador que a encontrou está. Após isso, a Datamine é colocada em outra pasta aleatória pelo mapa (Com exceção das pastas de Zonas Seguras, do Diretório Principal, de Quarentenas ou de Downloads).
+	- A cada 5A, o jogador volta a ter 0A e recebe +1V e um Patch. Caso um jogador fique com A abaixo de 0, ele recebe -1V, um Bug (exceto no caso de cair de 1V para 0V) e volta a ter 4A.
+	- Patch:
+		- O jogador do turno sempre usa seus Patches antes dos demais, durante suas ações. Máximo de 3 Patches por jogador (Não pode ser usado para remover um elemento da roleta que já tenha sido duplicado).
+		- O jogador pode gastar 1 Patch para duplicar ou remover a chance de algum elemento numa roleta própria ou de outro jogador, para bloquear ou desbloquear um caminho adjacente da pasta em que o jogador está ou alterar a ordem de sua posição nas rodadas.
+		- O jogador pode gastar 2 Patches para ganhar um movimento adicional neste turno, remover 1 Bug próprio ou entrar em Combate contra outro jogador a sua escolha (Para Combates, ele pode usar 1 Patch próprio e 1 Bug do outro jogador).
+		- O jogador pode gastar 3 Patches para fazer aparecer um Recurso a sua escolha, que já tenha sido usado por algum jogador durante esta partida, na pasta de Download que ele estiver ou para ganhar +1V.
+	- Bug:
+		- Outros jogadores podem usar os Bugs do jogador a qualquer momento do turno deste. Máximo de 3 Bugs por jogador.
+		- Outro jogador pode gastar 1 Bug do jogador para duplicar ou remover a chance de algum elemento numa roleta deste, para bloquear ou desbloquear um caminho adjacente da pasta de onde está o jogador ou para alterar a ordem da posição do jogador nas rodadas.
+		- Outro jogador pode gastar 2 Bugs do jogador para impedi-lo de fazer um movimento, fazê-lo perder 1 Patch ou para forçá-lo a entrar em um Combate entre eles (Para Combates, o jogador pode usar 1 Patch próprio e 1 Bug do jogador do turno).
+		- Outro jogador pode gastar 3 Bugs do jogador para remover um Recurso do Banco de Dados deste (com exceção do Arquivo Vital) ou deixá-lo com -1V.
+	- Caso um jogador chegue no 0V e 0A e continue perdendo V ou A, ele é colocado de volta na sua pasta de Zona Segura (caso não tenha nenhuma, será colocado em uma pasta de Download aleatória pelo mapa), seus Recursos são distribuídos como este quiser para os outros jogadores (Exceto o Arquivo Vital, que volta para a pasta de Diretório Principal) e volta a ter 1V-0A-5B, mantendo apenas seus pedaços do mapa que tiver.
+	- Toda vez que dois ou mais jogadores estiverem na mesma pasta, eles Combatem entre si. O último jogador a entrar escolhe contra quem é o Combate, caso tenham dois ou mais outros jogadores na mesma pasta. O vencedor recebe +2A ou +3B a sua escolha e uma Datamine Portátil. O perdedor recebe -1A, -2B ou um Bug, a escolha do jogador vencedor.
+	- O Banco de Dados de cada jogador carrega até 4 Recursos. Um mesmo jogador não pode ter 2 do mesmo Recurso em seu Banco de Dados ao mesmo tempo (Caso receba aleatoriamente algum Recurso que já possua, este é automaticamente descartado).
+	- Apenas um Recurso de cada jogador pode ser usado a cada turno.
+	- A decisão da ordem dos jogadores é tirada na roleta de Antivírus.
+	- A pasta do Diretório Principal está disfarçada de uma Pasta Vazia e é tratada como tal até o jogador encontrar todas as Chaves de Acesso e estiver com o V necessário ou acima para acessá-la (Exceto no Modo Muito Fácil, que não possui travas para encontrar a pasta do Diretório Principal).
+	- Enquanto estiver fora do Diretório Principal, qualquer jogador pode ter o Arquivo Vital em seu Banco de Dados, independentemente de ter todas as Chaves de Acesso ou de estar no V necessário.
+	- No caso de empate em algum Combate ou indecisão do resultado de alguma roleta ou escolha, quem desempata são os jogadores externos à ação. Caso haja mais de um jogador externo, esta escolha deve ser feita de forma unânime. Caso os jogadores externos não entrem num consenso sobre o que fazer por muito tempo, o SO pode, a qualquer momento, interromper a decisão e rodar a roleta de Quarentena para todos os jogadores (sejam participantes ou externos à ação).
+
+**Níveis de Dificuldade** __(Competitivo):__
+	- __**Modo Muito Fácil:**__
+		- Recomendado para no máximo 4 jogadores.
+		- O mapa é 5x5 e não possui pastas de Chave de Acesso.
+		- O mapa é completo, não tendo espaços vazios entre as pastas no mapa.
+		- Sem caminhos bloqueados no início do jogo.
+		- O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.
+		- No início do jogo, os jogadores são informados sobre onde estão todas as pastas de Zonas Seguras do mapa. Cada jogador recebe secretamente as coordenadas de onde ele mesmo inicia o jogo, mas não sabe onde se iniciam os outros jogadores.
+		- Ao invés de escolher entre receber +A ou +B, seja por vitórias ou encontrar criptomoedas, os jogadores recebem ambos.
+		- Não há limite de uso de Recursos por turno.
+		- Multipastas não podem ser de Atalho ou de Quarentena.
+		- Sem pasta de Atalho pelo mapa.
+		- Sem pasta de Quarentena pelo mapa.
+		- Recursos à venda na pasta de Downloads custam -2B que seus preços normais (Mínimo de 1B).
+	- __**Modo Fácil:**__
+		- Recomendado para no máximo 5 jogadores.
+		- O mapa é 7x7 e tem 1 pasta de Chave de Acesso.
+		- A pasta de Diretório Principal só pode ser acessada por jogadores no 3V.
+		- Sem caminhos bloqueados no início do jogo.
+		- O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.
+		- No início do jogo, os jogadores são informados sobre onde estão todas as pastas de Zonas Seguras do mapa. Cada jogador recebe secretamente as coordenadas de onde ele mesmo inicia o jogo, mas não sabe onde se iniciam os outros jogadores.
+		- Ao invés de escolher entre receber +A ou +B, seja por vitórias ou encontrar criptomoedas, os jogadores recebem ambos.
+		- Limite de uso de 2 Recursos por jogador a cada turno.
+		- Sem pasta de Atalho pelo mapa.
+		- Há no mínimo 0 e no máximo 1 pasta de Quarentena pelo mapa.
+		- Recursos à venda na pasta de Downloads custam -1B que seus preços normais (Mínimo de 1B).
+	- __**Modo Normal:**__
+		- Recomendado para 3 a 6 jogadores.
+		- O mapa é 9x9 e tem 2 pastas de Chave de Acesso.
+		- A pasta de Diretório Principal só pode ser acessada por jogadores no 5V.
+		- Alguns caminhos podem começar o jogo já bloqueados.
+		- O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.
+		- No início do jogo, os jogadores são informados sobre onde estão todas as pastas de Zonas Seguras do mapa. Cada jogador recebe secretamente as coordenadas de onde ele mesmo inicia o jogo, mas não sabe onde se iniciam os outros jogadores.
+		- Limite de uso de 1 Recurso por jogador a cada turno.
+		- Há no mínimo 2 e no máximo 3 pastas de Atalho pelo mapa.
+		- Há no mínimo 1 e no máximo 3 pastas de Quarentena pelo mapa.
+		- Recursos à venda na pasta de Downloads custam os seus preços normais.
+	- __**Modo Difícil:**__
+		- Recomendado para 4 a 6 jogadores.
+		- O mapa é 12x12 e tem 3 pastas de Chave de Acesso.
+		- A pasta de Diretório Principal só pode ser acessada por jogadores no 7V.
+		- Mais caminhos podem começar o jogo já bloqueados.
+		- O SO não informará a distância que deslocará, após o jogador escolher um caminho, nem quais caminhos poderão ser seguidos da pasta que o jogador está (O jogador informará uma direção e o SO dirá se o jogador se moveu ou falará para o jogador escolher outra).
+		- No início do jogo, cada jogador recebe secretamente as coordenadas de onde ele mesmo inicia o jogo, mas não sabe onde se iniciam os outros jogadores. Os jogadores não são informados sobre onde estão as demais pastas de Zonas Seguras do mapa.
+		- Limite de uso de 1 Recurso por jogador a cada turno.
+		- Há no mínimo 3 e no máximo 4 pastas de Atalho pelo mapa.
+		- Há no mínimo 2 e no máximo 4 pastas de Quarentena pelo mapa e o jogador fica 1 turno preso nelas.
+		- Recursos à venda na pasta de Downloads custam +1B que seus preços normais.
+	- __**Modo Extremo:**__
+		- Recomendado para 6 a 8 jogadores.
+		- O mapa é 15x15 e tem 5 pastas de Chave de Acesso.
+		- A pasta de Diretório Principal só pode ser acessada por jogadores no 10V.
+		- Muitos caminhos podem começar o jogo já bloqueados.
+		- O SO não informará a distância que deslocará, após o jogador escolher um caminho, nem quais caminhos poderão ser seguidos da pasta que o jogador está (O jogador informará uma direção e o SO dirá se o jogador se moveu ou falará para o jogador escolher outra).
+		- Os jogadores não são informados sobre onde estão nenhuma das pastas de Zonas Seguras do mapa, nem mesmo as suas próprias.
+		- Caminhos diagonais não são necessariamente em 45º.
+		- Limite de uso de 1 Recurso por jogador a cada rodada.
+		- Todas as perdas de A ou B são duplicadas.
+		- Apenas 3 Recursos são vendidos na pasta de Download no máximo normalmente (3 Comuns no primeiro patamar; 2 Comuns e 1 Incomum no segundo patamar; e 1 Comum, 1 Incomum e 1 Raro no terceiro patamar).
+		- Há no mínimo 4 pastas de Atalho pelo mapa.
+		- Há no mínimo 4 pastas de Quarentena pelo mapa e o jogador fica 1 turno preso nelas.
+		- Recursos à venda na pasta de Downloads custam +3B que seus preços normais.
+
+**Pastas especiais** __(Competitivo):__
+	- Zona Segura (Contorno Branco + Cor do Jogador): Onde cada jogador inicia o jogo. Seus locais no mapa são sempre informados a todos os jogadores (Exceto nos Modos Difícil e Extremo), variando apenas qual é a pasta inicial de cada jogador, que é informada secretamente para cada um (Exceto no Modo Extremo). Independente de quantos jogadores tenham no jogo, sempre há 8 pastas de Zona Segura espalhadas pelo mapa. Toda vez que um jogador passar pela sua própria Zona Segura, recebe +2B. Caso jogador entre na pasta de Zona Segura de outro jogador, deve pagar 2B ao dono da pasta. Caso um jogador encontre uma pasta de Zona Segura que não pertença a nenhum jogador, ele pode pagar 5B para trocar a sua pasta de Zona Segura por esta, recebendo também um Pedaço do Mapa de onde esta pasta está, do contrário, recebe +2A. Um jogador com o Arquivo Vital não pode adquirir uma nova pasta de Zona Segura, enquanto já possuir uma. Caso um jogador esteja em sua pasta de Zona Segura e outro jogador entre nela, o dono da pasta pode escolher entre entrar em Combate contra o outro jogador ou não. Caso escolha não entrar em Combate, deve dar um Recurso seu para o outro jogador e também não recebe o pagamento do outro jogador por entrar em sua Zona Segura (Este efeito não imuniza o jogador dentro de sua Zona Segura de entrar em Combate com outros jogadores por outros métodos).
+		__- Uma pasta de Zona Segura tem um contorno branco no mapa, mas seu interior varia entre ser branco, se não pertencer a nenhum jogador, ou ter a cor do jogador que a possuir. Um jogador pode escolher não se mover, caso esteja dentro de sua própria pasta de Zona Segura, para ganhar +2A.__
+	- Pasta Vazia (Cinza): O jogador ganha um movimento adicional não obrigatório (Apenas se for a primeira Pasta Vazia do turno). O jogador não pode retornar à pasta que estava anteriormente antes de entrar numa Pasta Vazia no mesmo turno.
+	- Download (Ciano): Os jogadores podem usar seus Bits para comprar Recursos. A cada vez que um jogador entrar nesta pasta, são aleatorizados entre 4 a 7 Recursos que estão à venda. Recursos melhores aparecem conforme o jogador progride pelo jogo. Os Recursos à venda e seus efeitos somente aparecem para o jogador que está comprando, porém são mostrados aos outros jogadores apenas o ícone dos Recursos comprados, em seu Banco de Dados. Máximo de 2 Recursos podem ser comprados por turno numa mesma pasta de Download.
+	- Combate (Azul): O jogador escolhe outro jogador para lutar contra e roda a roleta de Combate. O vencedor recebe +2A ou +3B, a sua escolha, além de 1 Patch e 1 Datamine Portátil. O perdedor receberá -1A, -2B ou um Bug, a escolha do jogador vencedor.
+	- Arquivo Desconhecido (Amarelo): O SO roda a roleta de Arquivo Desconhecido para o jogador, que fica com o que a roleta disser, podendo ser algo bom ou ruim. (O elemento em preto na roleta não pode ter sua chance aumentada ou zerada).
+	- Chave de Acesso (Magenta): O jogador recebe secretamente uma pista de onde está a pasta do Diretório Principal (É tratada como uma Pasta Vazia, durante o turno do jogador que a encontrou). A cada final de rodada em que algum jogador tenha encontrado pelo menos uma pasta de Chave de Acesso, o SO informa a todos quantos jogadores possuem Chaves de Acesso e quantas cada um possui, sem informar quais jogadores as têm. Encontrando todas, permite ao jogador encontrar a pasta do Diretório Principal.
+	- Diretório Principal (Vermelho): É disfarçada de alguma outra Pasta Vazia até o jogador encontrar todas as Chaves de Acesso e ter V necessário para acessá-la. É onde inicialmente está o Arquivo Vital.
+	- Quarentena (Roxo): O SO roda a roleta de Quarentena para o jogador, que fica com o que a roleta disser. A roleta de Quarentena não pode ser negada.
+	- Atalho (Verde): O SO roda a roleta de Atalho para o jogador, que vai para outra pasta de Atalho que a roleta disser. Na dificuldade Normal, o jogador pode escolher se quer ir para outra pasta ou não.
+	- Multipasta (Colorida): O SO roda a roleta de Multipasta para o jogador. Trate esta pasta durante este turno como a que cair na roleta.
+
+**Recursos** __(Competitivo)__
+- **Recursos Comuns**
+___(Estes recursos estão liberados desde o começo do jogo. Aparecem 4 Recursos Comuns na pasta de Download.)___
+	- __**Cookie:**__ Receba +2A ou 1 Patch a sua escolha. ___[Custo: 1B]___
+	- __**Adware:**__ Escolha um jogador para rodar a roleta de Arquivo Desconhecido. ___[Custo: 1B]___
+	- __**Tecla - Home:**__ Retorne à sua pasta de Zona Segura. Caso o jogador tenha o Arquivo Vital em seu Banco de Dados, retorne para a pasta do Diretório Principal (Não pode ser usado por um jogador que não possua uma pasta de Zona Segura). ___[Custo: 1B]___
+	- __**Caixa de Spam:**__ Coloque 1 Arquivo Pesado no Banco de Dados de outro jogador. ___[Custo: 1B]___
+	- __**Criptomoeda de Platina:**__ Rode a roleta de Cara ou Coroa, escolhendo não só se quer Cara ou Coroa, como também se quer A ou B. Caso ganhe, receba 3 do status escolhido. Caso perca, receba 2 do status não escolhido. ___[Custo: 1B]___
+	- __**Flag:**__ Coloque numa Pasta Vazia que o jogador esteja. Na próxima vez que qualquer jogador passar por ela, o jogador que colocou a Flag é avisado secretamente pelo SO. Caso o mesmo jogador tenha mais de uma Flag ativa, ele é avisado apenas que alguém passou por uma delas, sem ser informado de qual foi. Após notificar o jogador, a Flag some. ___[Custo: 2B]___
+	- __**Firewall:**__ Bloqueie ou desbloqueie um caminho adjacente a pasta que o jogador está. ___[Custo: 2B]___
+	- __**E-Loja:**__ Abra a pasta de Downloads imediatamente (Não conta como uso de Recurso do turno). ___[Custo: 2B]___
+	- __**Reboot:**__ Reinicie o turno do jogador. ___[Custo: 2B]___
+	- __**Machine Learning:**__ Da próxima vez que qualquer jogador for rodar a roleta de Arquivo Desconhecido, ignore esta ação e faça com que o resultado seja o mesmo da última rolagem. (Pode ser usado no turno de outro jogador). ___[Custo: 3B]___
+	- __**Cashback:**__ Descarte Recursos Comuns, Incomuns ou Raros do seu Banco de Dados e receba o valor em B igual à metade do tamanho de todos. (Arredondado para baixo). ___[Custo: 3B]___
+	- __**Cooler:**__ Rearrume a ordem dos jogadores como quiser. ___[Custo: 3B]___
+	- __**Tecla - Shift:**__ Caso um jogador fosse sofrer alguma ação ou consequência, você pode usar este Recurso para substituí-lo (Não conta como uso de Recurso do turno. Pode ser usado no turno de outro jogador). ___[Custo: 3B]___
+	- __**Compartilhamento:**__ Escolha pelo menos um outro jogador para jogarem um jogo Cooperativo. Caso vençam, trate como uma vitória de Combate para todos os jogadores participantes, porém você quem escolhe o ganho de todos (+2A ou +3B). Caso percam, considere como uma derrota de jogo Cooperativo normal individualmente. ___[Custo: 3B]___
+	- __**Recarregar:**__ Rerole os Recursos de uma pasta de Downloads. Se for possível, apenas aparecem Recursos que não vieram antes do uso do Recarregar. ___[Custo: 4B]___
+	- __**Glitch:**__ Dê um Arquivo Corrompido a um jogador. Caso o Banco de Dados do jogador esteja cheio, ele deve descartar um de seus Recursos para colocar o Arquivo Corrompido. ___[Custo: 4B]___
+	- __**Espelhar a Tela:**__ Quando estiver em uma pasta de Download, adicione a venda um Recurso que outro jogador possua em seu Banco de Dados a sua escolha (Exceto o Arquivo Vital). ___[Custo: 4B]___
+	- __**Phishing:**__ Receba o mesmo Pedaço do Mapa que outro jogador acabou de receber. (Pode ser usado no turno de outro jogador). ___[Custo: 4B]___
+
+- **Recursos Incomuns**
+___(Estes recursos só são liberados quando o jogador passar da metade do V requerido para pegar o Arquivo Vital e tiver mais do que a metade das Chaves de Acesso; ou quando já tiver o necessário de V com menos da metade das Chaves de Acesso ou todas as Chaves de Acesso antes de ter a metade do V necessário para acessar o Diretório Principal. Passa a aparecer 5 Recursos na pasta de Download: 3 Comuns e 2 Incomuns.)___
+	- __**Blacklist**__ Nega uma ação ou escolha de um jogador (Exceto quaisquer efeitos, perda ou aquisição do Arquivo Vital. Só pode ser usado por um jogador envolvido na ação a ser negada. Não nega Recursos ou efeitos presentes no mapa. Pode ser usado no turno de outro jogador. Caso seja usado no próprio jogador, anule uma ação sobre si ou de ser escolhido para algo. Caso seja usado na roleta de Arquivo Desconhecido, esta é rolada novamente. Em um Combate ou uso de Recursos, apenas impede a ação de ocorrer neste turno, não gastando o outro Recurso). ___[Custo: 5B]___
+	- __**Enviar à Lixeira:**__ Entre em Combate contra outro jogador a sua escolha. ___[Custo: 5B]___
+	- __**Patch Notes:**__ Transforme seus Bugs em Patches ou os Patches de outro jogador em Bugs. ___[Custo: 5B]___
+	- __**Tecla - End:**__ Encerre o turno do jogador (Pode ser usado no turno de outro jogador). ___[Custo: 5B]___	
+	- __**Tecla - Page Up:**__ Faça todos os jogadores se moverem uma pasta para cima, se for possível (Os movimentos podem ser Cima, Cima-Esquerda ou Cima-Direita. Caso tenha mais de uma possibilidade de movimento, este é escolhido aleatoriamente pelo SO. Cada jogador é informado da direção do seu movimento pelo SO, porém não é informado em qual pasta está e não ativa seus efeitos). ___[Custo: 6B]___
+	- __**Tecla - Page Down:**__ Faça todos os jogadores se moverem uma pasta para baixo, se for possível (Os movimentos podem ser Baixo, Baixo-Esquerda ou Baixo-Direita. Caso tenha mais de uma possibilidade de movimento, este é escolhido aleatoriamente pelo SO. Cada jogador é informado da direção do seu movimento pelo SO, porém não é informado em qual pasta está e não ativa seus efeitos). ___[Custo: 6B]___
+	- __**Tecla - Adiantar:**__ Faça todos os jogadores se moverem uma pasta para a direita, se for possível (Os movimentos podem ser Direita, Cima-Direita ou Baixo-Direita. Caso tenha mais de uma possibilidade de movimento, este é escolhido aleatoriamente pelo SO. Cada jogador é informado da direção do seu movimento pelo SO, porém não é informado em qual pasta está e não ativa seus efeitos). ___[Custo: 6B]___
+	- __**Tecla - Retroceder:**__ Faça todos os jogadores se moverem uma pasta para a esquerda, se for possível (Os movimentos podem ser Esquerda, Cima-Esquerda ou Baixo-Esquerda. Caso tenha mais de uma possibilidade de movimento, este é escolhido aleatoriamente pelo SO. Cada jogador é informado da direção do seu movimento pelo SO, porém não é informado em qual pasta está e não ativa seus efeitos). ___[Custo: 6B]___	
+	- __**Aumentar a Resolução:**__ Durante este turno, antes de fazer um movimento, o jogador é informado de quais são todas as pastas adjacentes e a distância até elas. ___[Custo: 7B]___
+	- __**Malware:**__ Roube um Recurso aleatório de um jogador a sua escolha. ___[Custo: 7B]___
+	- __**Conversão de Formato de Recursos:**__ Todos seus Recursos Comuns e Incomuns são transformados em Recursos aleatórios de um nível acima. (Caso o jogador possua Recursos de Fontes Desconhecidas, pode optar por transformá-los em Recursos Raros aleatórios). ___[Custo: 7B]___
+	- __**Varredura:**__ Ignore os efeitos de uma pasta ou roleta de Quarentena. (Caso esteja jogando no Muito Fácil ou no Fácil, pode optar receber um Pedaço do Mapa aleatório, que não é necessariamente onde você está). ___[Custo: 7B]___
+
+- **Recursos Raros**
+___(Estes recursos só são liberados quando o jogador alcançar o V requerido para pegar o Arquivo Vital com mais da metade das Chaves de Acesso; ou tendo todas as Chaves de Acesso e mais da metade do V necessário para acessar o Diretório Principal. Passa a aparecer 7 Recursos na pasta de Download: 3 Comuns, 2 Incomuns e 2 Raros.)___
+	- __**Estabilizador:**__ Escolha um: faça com que todos os outros jogadores tenham a mesma quantidade de Patches e Bugs que você; ou copie apenas para você a quantidade de Patches e Bugs de outro jogador a sua escolha. ___[Custo: 8B]___
+	- __**Arquivo Compactado:**__ Permite que o jogador use até +2 Recursos neste turno. ___[Custo: 8B]___
+	- __**Tecla - Esc:**__ Caso um jogador entre na mesma pasta que você, use Esc para evitar um Combate e ganhar um movimento adicional imediatamente. (Pode ser usado no turno de outro jogador. Ignore o efeito da pasta que você entrar). ___[Custo: 8B]___
+	- __**Tecla - Pause Break:**__ O jogador que usar o Pause Break vence o próximo Combate automaticamente, porém não pode se mover no seu próximo turno. (Pode ser usado no turno de outro jogador. Caso ambos os jogadores usem o Pause Break no mesmo Combate, considere o resultado como se fosse um empate). ___[Custo: 9B]___
+	- __**VPN:**__ Durante este turno, suas ações e movimentos são feitos secretamente, apenas com o SO. Suas ações não podem ser negadas. ___[Custo: 9B]___
+	- __**Backbone:**__ Receba todos os dados de um jogador a sua escolha, incluindo descrição dos seus Recursos, quantas Chaves de Acesso ele já possui e sua localização atual. ___[Custo: 9B]___
+	- __**Ransomware:**__ Impeça outro jogador de usar ou receber Recursos novos até que ele te dê o equivalente em B ao dobro de seu próprio V (Esta ação conta como uso de Recurso ao jogador sob os efeitos do Ransomware. Um jogador com o Arquivo Vital no seu Banco de Dados não pode ganhar o jogo enquanto estiver sob o efeito do Ransomware). ___[Custo: 10B]___
+	- __**Troca de Memória RAM:**__ Troque os Bancos de Dados entre a metade dos jogadores (Arredondado para cima) escolhidos aleatoriamente pela roleta de jogadores. ___[Custo: 10B]___
+	- __**Proteção de DNS:**__ Enquanto você possuir este Recurso, seu Banco de Dados não pode ser esvaziado ou ser alterado por efeitos de roletas ou pelos outros jogadores. Seus Recursos não podem ser descartados, copiados ou roubados por efeitos de roletas ou pelos outros jogadores. No início do seu turno, pague 3B para manter este Recurso. Caso não possa pagar, gaste o que tiver de B e descarte este Recurso. ___[Custo: 10B]___
+	- __**Mouse:**__ Escolha o que quiser de uma roleta de um jogador (Pode ser usado no turno de outro jogador). ___[Custo: 12B]___
+	
+- **Recursos de Fontes Desconhecidas**
+___(Não podem ser obtidos naturalmente nas pastas de Download, vindo de outros recursos, roletas ou de outras fontes.)___
+	- __**Arquivo Pesado:**__ Não podem ser descartados do Banco de Dados do jogador. Usar um Arquivo Pesado apenas o remove de seu Banco de Dados. Enquanto estiver no Banco de Dados do jogador, ele só pode ter um movimento por turno, independente do efeito. ___[Custo: 0B]___
+	- __**Datamine Portátil:**__ O jogador pode usar uma Datamine Portátil para revelar o Pedaço do Mapa em que está. No momento em que adquirir uma Datamine Portátil, o jogador pode optar por descartá-la e rodar a roleta de Antivírus. Caso consiga rolar seu próprio nome, o jogador recebe uma Datamine Dourada (Esta rolagem não pode ser manipulada ou ter seus itens na roleta zerados ou duplicados). ___[Custo: 0B]___
+	- __**Arquivo Corrompido:**__ Ao final do seu turno, rode a roleta de Cara ou Coroa. Se ganhar, transforme este Recurso em algum outro aleatoriamente (podendo ser Comum, Incomum ou Raro). Se perder, transforme este Recurso e outro no seu Banco de Dados escolhido aleatoriamente em Arquivos Pesados.___[Custo: 0B]___
+	- __**Bet Online:**__ Receba +2B. No início do turno do jogador, antes dele poder fazer qualquer outra ação, rode a roleta de Cara ou Coroa. Se ganhar, duplique o ganho em B da Bet Online. Se perder, descarte a Bet Online. ___[Custo: 0B]___
+	- __**Datamine Dourada:**__ Uma Datamine Dourada não pode ser copiada, negada, descartada, roubada ou ter seu efeito replicado. Revela o Pedaço de Mapa atual de todos os jogadores. ___[Custo: 0B]___
+	
+- **Recurso Único**
+___(O objetivo do jogo.)___
+	- __**Arquivo Vital:**__ O objetivo do jogo. Quando um jogador entrar em Combate contra ou entrar na mesma pasta que outro jogador com o Arquivo Vital, ele pode escolher Combater pelo Arquivo Vital. Caso ganhe, ignore as consequências de vitória e receba o Arquivo Vital do outro jogador. Do contrário, receba -3B ou -2A, a escolha do jogador com o Arquivo Vital. Independente de qual jogador ganhar, faça um movimento instantaneamente e bloqueie o caminho que veio (Mesmo que o jogador tenha algum Arquivo Pesado no seu Banco de Dados). Caso seja perdido do Banco de Dados de um jogador, retorne à pasta de Diretório Principal.
+
+-------------------------------------------------------------------------------------------------------
+
+**Regras** __Modo Cooperativo__
+	- Um jogador é o Sistema Operacional (SO) sendo corrompido e os outros são um grupo, representando o mesmo programa de Antivírus. Mínimo de 3 e máximo de 8 jogadores Antivírus.
+	- O objetivo principal do grupo é proteger o Arquivo Vital, presente na pasta de Diretório Principal do computador, e levá-lo até a pasta de Zona Segura. O grupo vence se todos os jogadores iniciarem a rodada na pasta de Zona Segura com o Arquivo Vital em seu Banco de Dados.
+	- Cada jogador escolhe sua cor (Vermelho-1, Laranja-2, Amarelo-3, Verde-4, Ciano-5, Azul-6, Roxo-7 e Magenta-8). O grupo inicia o jogo na Versão (V) 1, Atualização (A) 0 e com 5 Bits (B) compartilhados entre todos os jogadores, ou seja: 1V-0A-5B.
+	- Apenas o SO pode ver a Tabela Mestra de Diretórios (TMD), o mapa do jogo. Ele diz aos jogadores Antivírus quais caminhos eles podem tomar a cada movimento, mesmo que estejam bloqueados (Alguns mapas já podem começar com caminhos bloqueados). O SO informa os caminhos, preferencialmente no sentido horário, começando pelo de Cima (Cima, Superior Direita, Direita, Inferior Direita, Baixo, Inferior Esquerda, Esquerda, Superior Esquerda ou qualquer variação dessas nomenclaturas) e, após escolhido o caminho, o SO diz o quão longo ele é (1 pasta de distância, 2 pastas de distância, 3 pastas de distância, etc).
+	- A cada turno, os jogadores têm direito a um movimento, caso queiram, e realizar suas ações (Podendo ser o uso de Recursos, uso de Patches, fazer parte de um jogo Cooperativo ou rodar uma Roleta) em qualquer ordem, em condições normais. Um jogador não pode fazer uma mesma ação no mesmo turno, a não ser que algum efeito o permita. Após os turnos de todos os jogadores se encerrarem, se encerra a rodada atual e é iniciada uma nova.
+	- Durante uma rodada, cada jogador do grupo pode ter seu turno em qualquer ordem, mas cada jogador deve ter um turno por rodada.
+	- Ao final de cada rodada, é rolada a Roleta de Arquivo Desconhecido.
+	- O jogo começa com 120 turnos.
+	- Quando uma pasta é encontrada pela primeira vez no jogo por qualquer jogador, o grupo ganha uma Criptomoeda, contendo +1A ou +1B, a escolha do jogador que a encontrou (Com exceção das pastas de Zonas Seguras, do Diretório Principal, de Quarentenas ou de Downloads).
+	- Existe uma Datamine colocada aleatoriamente em uma pasta. Ao ser encontrada, revela para o grupo o Pedaço do Mapa em que o jogador que a encontrou está. Após isso, a Datamine é colocada em outra pasta aleatória pelo mapa (Com exceção das pastas de Zonas Seguras, do Diretório Principal, de Quarentenas ou de Downloads).
+	- A cada 10A, o grupo volta a ter 0A e recebe +1V e um Patch. Caso o grupo fique com A abaixo de 0, recebe -1V, um Bug (exceto no caso de cair de 1V para 0V), volta a ter 9A e perde 1 da contagem total de turnos para cada jogador Antivírus.
+	- Patch:
+		- Máximo de 3 Patches para o grupo (Não pode ser usado para remover um elemento da roleta que já tenha sido duplicado).
+		- Um jogador do grupo pode usar 1 Patch para remover ou duplicar a chance de algum elemento numa roleta, bloquear ou desbloquear um caminho adjacente ou ganhar 1 turno a mais na contagem total.
+		- Um jogador do grupo pode usar 2 Patches para até 3 jogadores ganharem um movimento adicional cada nesta rodada, remover 1 Bug ou para ganhar 3 turnos a mais na contagem total.
+		- Um jogador do grupo pode usar 3 Patches para fazer aparecer um Recurso a sua escolha, que já tenha sido usado por algum jogador durante esta partida, na pasta de Download, ganhar +1V ou para ganhar 5 turnos a mais na contagem total.
+	- Bug:
+		- Usado pelo SO contra o grupo. Máximo de 3 Bugs para o grupo.
+		- O SO pode usar 1 Bug do grupo para remover ou duplicar a chance de algum elemento numa roleta ou para bloquear um caminho adjacente a um jogador.
+		- O SO pode usar 2 Bugs do grupo para negar um jogador de realizar um movimento neste turno ou anular o uso de um Recurso do grupo.
+		- Toda vez que o grupo juntar 3 Bugs, o SO automaticamente gasta todos os Bugs do grupo e tira 4 turnos da contagem total restante ou dá ao grupo -1V (O grupo não recebe 1 Bug pela perda de V, neste caso, mas ainda perde 1 turno da contagem total restante) escolhido aleatoriamente.
+	- Caso o grupo chegue no 0V e 0A e continue perdendo V ou A ou o total de turnos restantes chegue a 0, o jogo termina.
+	- Quando dois ou mais jogadores terminam a rodada na mesma pasta, é iniciado um jogo Cooperativo apenas entre eles. Caso vençam, recebem +3A ou +3B, a escolha do grupo, e uma Datamine Portátil. Caso percam, recebem -2B ou -2A, escolhido pelo SO, e um Bug. Estes mesmos jogadores não podem ter outro jogo Cooperativo exclusivamente entre si até que já tenha acontecido outro jogo entre qualquer outra combinação de jogadores ou com o grupo inteiro.
+	- O Banco de Dados do grupo é compartilhado entre os jogadores Antivírus e carrega até 6 Recursos. O grupo não pode ter 2 do mesmo Recurso em seu Banco de Dados ao mesmo tempo (Caso recebam aleatoriamente algum Recurso que já tenham, este é automaticamente descartado).
+	- Apenas um Recurso pode ser usado a cada turno.
+	- A pasta do Diretório Principal está disfarçada de uma Pasta Vazia e é tratada como tal até o grupo encontrar todas as Chaves de Acesso e estiver com o V necessário ou acima para acessá-la.
+	- No caso de demora ou indecisão do resultado de alguma roleta ou escolha, o SO pode decidir encerrar a decisão e rodar a roleta de Quarentena para o grupo.
+
+**Níveis de Dificuldade** __(Cooperativo):__
+	- __**Modo Fácil:**__
+		- Recomendado para no máximo 4 jogadores.
+		- O mapa é 9x9 e tem 2 pastas de Chave de Acesso.
+		- A pasta de Diretório Principal só pode ser acessada pelo grupo no 3V.
+		- Sem caminhos bloqueados no início do jogo.
+		- Limite de uso de 1 Recurso do grupo por turno.
+		- O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.
+		- No início do jogo, o grupo é informado sobre onde estão todas as pastas de Zonas Seguras do mapa e recebe as coordenadas de onde cada jogador inicia o jogo.
+		- Ao invés de escolher entre ganhar +A ou +B, seja por vitórias ou encontrar criptomoedas, o grupo recebe ambos.
+		- Ao final de cada rodada, a roleta de Arquivo Desconhecido é rolada.
+		- Há no mínimo 2 e no máximo 3 pastas de Atalho pelo mapa.
+		- Há no mínimo 1 e no máximo 3 pastas de Quarentena pelo mapa.
+		- Adquirir uma nova Zona Segura custa 6B.
+		- Recursos à venda na pasta de Downloads custam -2B que seus preços normais (Mínimo de 1B).
+	- __**Modo Normal:**__
+		- Recomendado para 3 a 6 jogadores.
+		- O mapa é 12x12 e tem 3 pastas de Chave de Acesso.
+		- A pasta de Diretório Principal só pode ser acessada pelo grupo no 5V.
+		- Alguns caminhos podem começar o jogo já bloqueados.
+		- Limite de uso de 1 Recurso do grupo por turno.
+		- O SO informará a distância que deslocará, após o jogador escolher um caminho, e quais caminhos poderão ser seguidos da pasta que o jogador está.
+		- No início do jogo, o grupo recebe as coordenadas de onde cada jogador inicia o jogo, porém não é informado sobre onde estão as demais pastas de Zonas Seguras do mapa.
+		- Ao final de cada rodada, a roleta de Arquivo Desconhecido é rolada.
+		- Há no mínimo 3 e no máximo 4 pastas de Atalho pelo mapa.
+		- Há no mínimo 2 e no máximo 5 pastas de Quarentena pelo mapa e o jogador fica 1 turno preso nelas.
+		- Adquirir uma nova Zona Segura custa 8B.
+		- Recursos à venda na pasta de Downloads custam seus preços normais.
+	- __**Modo Difícil:**__
+		- Recomendado para 5 a 8 jogadores.
+		- O mapa é 15x15 e tem 5 pastas de Chave de Acesso.
+		- A pasta de Diretório Principal só poderá ser acessada pelo grupo no 7V.
+		- Muitos caminhos podem começar o jogo já bloqueados.
+		- Todas as perdas de A, B e número de turnos são duplicadas.
+		- Limite de uso de 1 Recurso do grupo por rodada.
+		- O SO não informará a distância que deslocará, após o jogador escolher um caminho, nem quais caminhos poderão ser seguidos da pasta que o jogador está.
+		- O grupo não é informado sobre onde estão as pastas de Zonas Seguras do mapa, nem as coordenadas de onde cada jogador inicia o jogo.
+		- Caminhos diagonais não são necessariamente em 45º.
+		- Ao final de cada rodada, a roleta de Quarentena é rolada.
+		- Há no mínimo 4 pastas de Atalho pelo mapa.
+		- Há no mínimo 4 pastas de Quarentena pelo mapa e o jogador fica 1 turno preso nelas.
+		- Adquirir uma nova Zona Segura custa 12B.
+		- Recursos à venda na pasta de Downloads custam +3B que seus preços normais.
+
+**Pastas especiais** __(Cooperativo):__
+	- Zona Segura (Contorno Branco + Colorido): Onde cada jogador inicia o jogo. Seus locais no mapa não são informados aos jogadores (Exceto no Modo Fácil), mas as coordenadas das pastas iniciais de cada jogador são (Exceto no Modo Difícil). Independente de quantos jogadores tenham no jogo, sempre há 8 pastas de Zona Segura no mapa. Toda vez que um jogador passar por alguma Zona Segura pertencente ao grupo que não seja da sua mesma cor, o grupo recebe +2B (Se a pasta de Zona Segura e o jogador forem da mesma cor, o grupo não recebe nada). Caso um jogador encontre uma pasta de Zona Segura que não pertença ao grupo, ele pode pagar 8B para trocar a sua Zona Segura por esta, recebendo também um Pedaço do Mapa com suas pastas adjacentes, do contrário, recebe +3A. Enquanto o grupo possuir o Arquivo Vital, todas as pastas de Zona Segura são dadas como perdidas e apenas uma delas é escolhida aleatoriamente para ser a única saída do grupo. Enquanto possuírem o Arquivo Vital, o grupo não pode adquirir uma nova pasta de Zona Segura e, caso esta seja perdida por algum efeito, apenas altera a Zona Segura para outra escolhida aleatoriamente.
+		__- Uma pasta de Zona Segura sempre tem um contorno branco no mapa, mas seu interior pode variar entre ser branco, se não pertencer a nenhum jogador, ser da cor do jogador que a possuir ou colorida, caso o grupo possua o Arquivo Vital em seu Banco de Dados. Um jogador pode escolher não se mover, caso esteja dentro de sua própria pasta de Zona Segura, para ganhar +2A.__
+	- Pasta Vazia (Cinza): O jogador ganha um movimento adicional não obrigatório (Apenas se for a primeira Pasta Vazia do turno). O jogador não pode retornar à pasta que estava anteriormente antes de entrar numa Pasta Vazia no mesmo turno.
+	- Download (Ciano): O grupo pode usar seus Bits para comprar Recursos. A cada vez que um jogador entrar nesta pasta, são aleatorizados entre 4 a 7 Recursos que estão à venda. Recursos melhores aparecem conforme o grupo progride durante o jogo. Máximo de 2 Recursos podem ser comprados por turno.
+	- Cooperativo (Laranja): O grupo roda a roleta Cooperativa. Caso ganhem o jogo, recebem +3A ou +3B, a escolha do grupo, além de 1 Patch e 1 Datamine Portátil. Caso percam, recebem -3B, -3A ou perdem um Recurso aleatoriamente, a escolha do SO, além de 1 Bug.
+	- Arquivo Desconhecido (Amarelo): O SO roda a roleta de Arquivo Desconhecido para o grupo, que fica com o que a roleta disser, podendo ser algo bom ou ruim. (O elemento em preto na roleta não pode ter sua chance aumentada ou zerada).
+	- Chave de Acesso (Magenta): O grupo recebe uma pista de onde está a pasta do Diretório Principal. Encontrando todas, permite ao grupo encontrar a pasta do Diretório Principal.
+	- Diretório Principal (Vermelho): É disfarçada de alguma outra pasta até o grupo encontrar todas as Chaves de Acesso e ter V necessário para acessá-la. É onde inicialmente está o Arquivo Vital.
+	- Quarentena (Roxo): O SO roda a roleta de Quarentena para o grupo, que fica com o que a roleta disser. A roleta de Quarentena não pode ser negada.
+	- Atalho (Verde): O SO roda a roleta de Atalho para o jogador do turno, que vai para outra pasta de Atalho que a roleta disser. Nas dificuldades Fácil e Normal, o jogador pode escolher se quer ir para outra pasta ou não.
+	- Multipasta (Colorida): O SO roda a roleta de Multipasta para o jogador do turno. Trate esta pasta durante este turno como a que cair na roleta.
+
+**Recursos** __(Cooperativo)__
+- **Recursos Comuns**
+___(Estes recursos estão liberados desde o começo do jogo. Aparecem 4 Recursos Comuns na pasta de Download.)___
+	- __**Cookie:**__ Recebam +3A ou 1 Patch a escolha do grupo. ___[Custo: 1B]___
+	- __**Adware:**__ Rodem a roleta de Arquivo Desconhecido. ___[Custo: 1B]___
+	- __**Tecla - Home:**__ Retorne à sua pasta de Zona Segura. Caso o grupo tenha o Arquivo Vital em seu Banco de Dados, o jogador retorna para a pasta do Diretório Principal (Não pode ser usado por um grupo que não possua ao menos uma pasta de Zona Segura). ___[Custo: 1B]___
+	- __**Criptomoeda de Platina:**__ Rodem a roleta de Cara ou Coroa, escolhendo não só se querem Cara ou Coroa, como também se querem A ou B. Caso ganhem, recebam 5 do status escolhido. Caso percam, recebam 3 do status não escolhido. ___[Custo: 2B]___
+	- __**Firewall:**__ Bloqueiem ou desbloqueiem um caminho adjacente. ___[Custo: 2B]___
+	- __**Recarregar:**__ Rerolem os Recursos de uma pasta de Downloads. Se for possível, apenas aparecem Recursos que não vieram antes do uso do Recarregar. ___[Custo: 3B]___
+	- __**Flag:**__ Coloquem numa Pasta Vazia que o jogador esteja. Da próxima vez que qualquer jogador passar por ela, o grupo será avisado. Caso o grupo tenha mais de uma Flag ativa, são avisados apenas que alguém passou por uma delas, sem serem informados de qual foi. Após notificar o grupo, a Flag some. ___[Custo: 3B]___
+	- __**E-Loja:**__ Abram a pasta de Downloads imediatamente (Não conta como uso de Recurso do turno). ___[Custo: 4B]___
+	- __**Atalho de Programa:**__ Ganhem um movimento adicional por um turno. ___[Custo: 4B]___
+	- __**Spyware:**__ Joguem Cara ou Coroa com o SO, após rodarem a roleta de Arquivo Desconhecido. Caso dê o resultado que o grupo escolheu, duplique o ganho da roleta. Caso percam, ignorem o resultado da roleta. ___[Custo: 5B]___
+	- __**Conexões em LAN:**__ Não há limite para quanta Conexões em LAN há no Banco de Dados do grupo. O grupo pode usar 3 Conexões em LAN no mesmo turno para trocar por uma Chave de Acesso ou por +1V. ___[Custo: 5B]___
+	- __**Compartilhamento:**__ Joguem um jogo Cooperativo. ___[Custo: 6B]___
+	- __**Machine Learning:**__ Da próxima vez que qualquer jogador for rodar a roleta de Arquivo Desconhecido, ignore esta ação e faça com que o resultado seja o mesmo da última rolagem. ___[Custo: 6B]___
+	- __**Reboot:**__ Reinicie o turno do jogador. ___[Custo: 7B]___
+	- __**Cashback:**__ Descartem Recursos Comuns, Incomuns ou Raros do seu Banco de Dados e recebam o valor em B igual à metade do tamanho de todos. (Arredondado para baixo). ___[Custo: 7B]___
+
+- **Recursos Incomuns**
+___(Estes recursos só são liberados quando o grupo passar da metade do V requerido para pegar o Arquivo Vital e encontrarem mais do que a metade das pastas Chaves de Acesso; ou quando já tiverem o necessário de V com menos da metade das Chaves de Acesso; ou todas as Chaves de Acesso antes de ter a metade do V necessário para acessar o Diretório Principal. Passa a aparecer 5 Recursos na pasta de Download: 3 Comuns e 2 Incomuns.)___
+	- __**Tecla - Page Up:**__ Faça todos os jogadores se moverem uma pasta para cima, se for possível (Os movimentos podem ser Cima, Cima-Esquerda ou Cima-Direita. Caso tenha mais de uma possibilidade de movimento, este é escolhido aleatoriamente pelo SO. Cada jogador é informado da direção do seu movimento pelo SO, porém não é informado em qual pasta está e não ativa seus efeitos). ___[Custo: 8B]___
+	- __**Tecla - Page Down:**__ Faça todos os jogadores se moverem uma pasta para baixo, se for possível (Os movimentos podem ser Baixo, Baixo-Esquerda ou Baixo-Direita. Caso tenha mais de uma possibilidade de movimento, este é escolhido aleatoriamente pelo SO. Cada jogador é informado da direção do seu movimento pelo SO, porém não é informado em qual pasta está e não ativa seus efeitos). ___[Custo: 8B]___
+	- __**Tecla - Adiantar:**__ Faça todos os jogadores se moverem uma pasta para a direita, se for possível (Os movimentos podem ser Direita, Cima-Direita ou Baixo-Direita. Caso tenha mais de uma possibilidade de movimento, este é escolhido aleatoriamente pelo SO. Cada jogador é informado da direção do seu movimento pelo SO, porém não é informado em qual pasta está e não ativa seus efeitos). ___[Custo: 8B]___
+	- __**Tecla - Retroceder:**__ Faça todos os jogadores se moverem uma pasta para a esquerda, se for possível (Os movimentos podem ser Esquerda, Cima-Esquerda ou Baixo-Esquerda. Caso tenha mais de uma possibilidade de movimento, este é escolhido aleatoriamente pelo SO. Cada jogador é informado da direção do seu movimento pelo SO, porém não é informado em qual pasta está e não ativa seus efeitos). ___[Custo: 8B]___
+	- __**Conversão de Formato de Recursos:**__ Todos seus Recursos Comuns e Incomuns são transformados em Recursos aleatórios de um nível acima. (Caso o grupo possua Recursos de Fontes Desconhecidas, pode optar por transformá-los em Recursos Raros aleatórios). ___[Custo: 9B]___
+	- __**Mover Arquivos Entre Pastas:**__ Mova todos os jogadores que estiverem em uma mesma Pasta Vazia para outra que também tenha ao menos um jogador (Pode ser utilizado para ignorar o jogo Cooperativo entre os jogadores na mesma pasta, tanto antes quanto depois de seu uso). ___[Custo: 9B]___
+	- __**Hyperlink:**__ Escolha um tipo de pasta (Exceto as pastas de Zona Segura e do Diretório Principal). O jogador do turno é colocado numa pasta aleatória adjacente a uma das pastas escolhidas, sem ativar a pasta. ___[Custo: 9B]___
+	- __**Tecla - Shift:**__ Caso um jogador do grupo fosse sofrer alguma ação ou consequência, o grupo pode usar este Recurso para escolher outro jogador para substituí-lo (Não conta como uso de Recurso do turno). ___[Custo: 9B]___
+	- __**Aumentar a Resolução:**__ Durante este turno, antes de fazer um movimento, o jogador é informado de quais são todas as pastas adjacentes e a distância até elas. ___[Custo: 10B]___
+	- __**Patch Notes:**__ Transformem seus Bugs em Patches. ___[Custo: 10B]___
+	- __**Backup:**__ Usem para copiar o efeito de outro Recurso usado nesta mesma rodada. ___[Custo: 10B]___
+	- __**Varredura:**__ Ignorem os efeitos de uma pasta ou roleta de Quarentena. ___[Custo: 10B]___
+
+- **Recursos Raros**
+___(Estes recursos só são liberados quando o grupo passar do V requerido para pegar o Arquivo Vital com mais da metade das Chaves de Acesso; ou tendo todas as Chaves de Acesso e mais da metade do V necessário para acessar o Diretório Principal. Passa a aparecer 7 Recursos na pasta de Download: 3 Comuns, 2 Incomuns e 2 Raros.)___
+	- __**Alterar Código Binário:**__ Rodem a roleta de Cara ou Coroa. Caso ganhem, aumente mais 2 turnos na contagem total e podem escolher repetir o efeito deste Recurso. Caso falhem, descarte este Recurso (Caso falhem na primeira roleta, percam 3 turnos da contagem total). ___[Custo: 11B]___
+	- __**Limpar Cache:**__ Durante toda a próxima rodada, reative todas as Criptomoedas previamente adquiridas. ___[Custo: 11B]___
+	- __**Salvar o Progresso:**__ Caso o grupo fosse perder o jogo, descartem este Recurso para que tenham 1 turno a mais ou que fiquem com 0V e 1A no mínimo. ___[Custo: 12B]___
+	- __**Tecla - Esc:**__ Caso um jogador entre na mesma pasta que você, use Esc para evitar um jogo Cooperativo e ganhar um movimento adicional imediatamente. (Ignore o efeito da pasta que você entrar). ___[Custo: 12B]___
+	- __**Tecla - Pause Break:**__ O grupo pode usar o Pause Break para vencer o próximo jogo Cooperativo automaticamente, porém os jogadores não podem se mover nos seus respectivos próximos turnos. ___[Custo: 13B]___
+	- __**Blacklist**__ Neguem uma ação ou escolha sobre um jogador ou sobre o grupo (Exceto quaisquer efeitos, perda ou aquisição do Arquivo Vital. Não nega Recursos ou efeitos presentes no mapa. Caso seja usado em algum jogador do grupo, anule uma ação sobre si ou de ser escolhido para algo, fazendo o SO ter que escolher outro jogador do grupo. Caso seja usado num elemento da roleta de Arquivo Desconhecido, esta é rolada novamente). ___[Custo: 13B]___
+	- __**Clock Rate:**__ Enquanto um Recurso não for usado, cada jogador tem 1 movimento extra, durante seu próximo turno. ___[Custo: 14B]___
+	- __**Proteção de DNS:**__ Enquanto o grupo possuir este Recurso, seu Banco de Dados não pode ser esvaziado ou ser alterado por efeitos de roletas. Seus Recursos não podem ser descartados por efeitos de roletas ou pelos outros jogadores. No início da rodada, paguem 1B por cada jogador do grupo para manterem este Recurso. Caso não possam pagar, gastem o que tiverem de B e descartem este Recurso. ___[Custo: 14B]___
+	- __**Arquivo Compactado:**__ Permite que o próximo jogador use até +2 Recursos no turno imediatamente seguinte a este. ___[Custo: 15B]___
+	- __**Mouse:**__ Quando forem rodar uma roleta, ignore esta ação e escolha o que quiser desta roleta. ___[Custo: 18B]___
+	
+- **Recursos de Fontes Desconhecidas**
+___(Não podem ser obtidos naturalmente nas pastas de Download, vindo de outros recursos, roletas ou de outras fontes.)___
+	- __**Arquivo Pesado:**__ Não podem ser descartados, uma vez que estejam no Banco de Dados do grupo. Usar um Arquivo Pesado apenas o remove de seu Banco de Dados. Enquanto estiver no Banco de Dados do grupo, os jogadores só podem fazer apenas um movimento por turno, independente do efeito. ___[Custo: 0B]___
+	- __**Datamine Portátil:**__ O grupo pode usar uma Datamine Portátil para revelar o Pedaço do Mapa em que um jogador está. No momento em que adquirirem uma Datamine Portátil, o grupo pode optar por descartá-la e rodar a roleta de Antivírus. Caso consigam rolar o nome do jogador do turno atual, o grupo recebe uma Datamine Dourada (Esta rolagem não pode ser manipulada ou ter seus itens na roleta zerados ou duplicados). ___[Custo: 0B]___
+	- __**Arquivo Corrompido:**__ Ao final do turno que foi adquirido, o grupo roda a roleta de Cara ou Coroa. Se ganharem, transforme este Recurso em algum outro aleatoriamente (pode ser Comum, Incomum ou Raro). Se perderem, este e outro Recurso aleatório no seu Banco de Dados são transformados em Arquivos Pesados. ___[Custo: 0B]___
+	- __**Bet Online:**__ Recebam +3B. No início da rodada, antes do grupo poder fazer qualquer outra ação, rodem a roleta de Cara ou Coroa. Se ganharem, duplique o ganho em B da Bet Online. Se perderem, descartem a Bet Online. ___[Custo: 0B]___
+	- __**Datamine Dourada:**__ Uma Datamine Dourada não pode ser copiada, negada, descartada, roubada ou ter seu efeito replicado. Revela o Pedaço de Mapa atual de todos os jogadores. ___[Custo: 0B]___
+	
+- **Recurso Único**
+___(O objetivo do jogo.)___
+	- __**Arquivo Vital:**__ O objetivo do jogo. Enquanto estiver no Banco de Dados do grupo, ao invés de rolar a roleta de Arquivo Desconhecido todo início de rodada, é rolada a roleta de Quarentena. Caso seja perdido do Banco de Dados do grupo, retorne à pasta de Diretório Principal.
+
+-------------------------------------------------------------------------------------------------------------
+
+**Roleta de Combate:**
+	- __**Stopots:**__ O jogador seguinte ao desafiante, sem ser o desafiado, anuncia uma letra e o SO anuncia uma categoria. Ganha o primeiro jogador que disser uma palavra que se encaixar nestas categorias.
+	- __**Nem a Pato:**__ O SO fará uma pergunta cuja resposta é algum número. O desafiante começa respondendo alternadamente com o desafiado, sempre aumentando o número anterior. A qualquer momento, um dos jogadores pode contestar o número do outro dizendo "Nem a pato". Caso o número esteja correto ou abaixo da resposta, ganha o jogador contestado. Caso o número tenha passado do número da resposta, ganha o jogador que contestou.
+	- __**GeoGuessr:**__ O SO irá abrir um local aleatório no Google Earth e irá de pouco em pouco tirando o zoom da imagem. O primeiro jogador que acertar o país, ganha. Caso o jogador erre, o outro ganha automaticamente.
+	- __**Duelo de Dados:**__ Cada jogador rolará uma quantidades de dados de 10 lados (d10) igual ao seu V, começando pelo desafiante. Quem ficar com o maior número, ganha. Neste combate, empates contam como vitória para o jogador com menos dados (Caso empatem com o mesmo número de dados, a escolha do vencedor será feita pelos jogadores externos ao combate).
+	- __**Batalha de Rimas:**__ O SO escolherá uma palavra e o desafiado terá de criar um verso que rime com a mesma. Em seguida, será a vez do desafiante de rimar com a última palavra dita pelo desafiado e vice-versa. Quem demorar a rimar ou repetir uma palavra já rimada é o perdedor.
+	- __**Gartic:**__ O jogador seguinte ao desafiante, sem ser o desafiado, mandará secretamente algo para o SO desenhar. Ganha o jogador que acertar o desenho primeiro e em menos de 60s.
+	- __**Quiz:**__ O SO rolará a roleta de Quiz e fará uma pergunta da carta relacionada a categoria que cair ou a que o desafiante escolher, no caso de duas categorias. O jogador que acertar a pergunta mais rápido, é o vencedor.
+	- __**Jo-Ken-Po:**__ Ambos os jogadores mandam secretamente para o SO um emoji de ✊🏻✋🏻✌🏻. ✊🏻 > ✌🏻 > ✋🏻 > ✊🏻. Quando o SO revelar ambas as escolhas, ganha quem tiver escolhido o emoji vitorioso.
+		
+**Roleta Cooperativa**
+***(Quando possível, comece pelo jogador que encontrou a pasta Cooperativa e prossiga no sentido horário):***
+	- __**Top 10:**__ O SO escolherá uma categoria com 10 itens. A partir daí, o SO irá citar cada item da lista (do 10º ao 1º) e os jogadores, em 20 tentativas, devem dizer qual é a categoria escolhida (A cada 2 tentativas, o SO irá dizer um novo item da lista).
+	- __**Conexo:**__ O grupo terá que descobrir as quatro palavras de cada um dos quatro elementos escolhidos pelo jogo. Ganharão se terminarem o jogo em menos de 7 tentativas.
+	- __**Segue o Fluxo:**__ O SO tirará três cartas e cada um dos jogadores devem respondê-las secretamente, uma após a outra. Caso os jogadores deem as mesmas respostas entre si de pelo menos uma das cartas, eles ganham. Caso acertem as 3, duplique seus ganhos de vitória.
+	- __**C-S-Composto:**__ O SO dirá uma palavra inicial. Um de cada vez, e na ordem dos jogadores, cada jogador deverá dizer uma palavra que se relacione com a dita pelo jogador anterior e que não inicie com as letras C ou S, nem seja composta. Não será permitido usar uma palavra repetida. Os jogadores vencerão após 5 rodadas (Se algum jogador disser alguma palavra fora do seu turno para tentar ajudar outro ou demorar muito é considerado derrota automática).
+	- __**Quiz:**__ O SO rolará a roleta de Quiz e fará 3 perguntas da categoria que cair ou a que o grupo escolher, no caso de duas categorias. Para ganhar, o grupo precisa acertar ao menos 2 perguntas.
+	- __**Sintonia:**__ Melhor de 3. O SO tirará uma carta com 2 opostos, girará a roda principal e secretamente ver onde parou. Depois disso, cobrirá a roda e dirá algo corresponde a um dos itens na carta, baseado na maior pontuação onde a roda parou. Caso os jogadores acertem pelo menos na faixa dos 3 ou 4 pontos na roda, eles ganharão.
+	- __**Tibitar:**__ O SO irá aleatorizar um verbo que, durante o jogo, será substituído pelo verbo "tibitar". Os jogadores poderão fazer cada um 2 perguntas incluindo o verbo "tibitar" para tentar adivinhá-lo. Ganham se acertarem o verbo correto de forma unânime.
+	- __**Batata Quente Alfabética:**__ O SO escolherá um tema. Um de cada vez, e na ordem dos jogadores, cada jogador deverá dizer uma palavra que se relacione com o tema, seguindo a ordem alfabética, começando pela letra A. Caso um jogador demore mais de 10 segundos para dizer a próxima palavra, fale uma palavra que não se relacione com o tema ou fale fora da sua vez, o jogo será perdido. Ganharão se chegarem até a letra Z (As letras K, W e Y ficarão a critério dos jogadores se entram ou não).
+
+**Roleta Arquivo Desconhecido - PvP**
+	- Escolha o que quiser desta roleta.
+	- Receba 1 Patch.
+	- Bloqueie um caminho aleatório adjacente.
+	- Receba 1 Recurso Comum aleatório.
+	- Lute contra outro jogador.
+	- Receba +2A.
+	- Dê +1B a cada outro jogador.
+	- Receba +3B.
+	- Receba 1 Bug.
+	- Ganhe 1 movimento extra neste turno.
+	- Receba -1V.
+	- Receba 1 Recurso do tipo Tecla aleatório.
+	- Receba -2A.
+	- Jogue um jogo Cooperativo com os outros jogadores.
+	- Receba -3B.
+	- Receba uma Bet Online.
+	- Receba um Arquivo Corrompido.
+	- Passe a ser o primeiro jogador da rodada.
+	- Passe a ser o último jogador da rodada.
+	- Receba uma Datamine Portátil.
+	- Rode a roleta de Quarentena.
+	- Receba +1B de cada outro jogador.
+	- Perca sua Zona Segura.
+	- Receba 1 Recurso Incomum aleatório.
+	- Não se mova no seu próximo turno.
+	- Escolha um jogador para ganhar 1 Bug.
+	- Descarte 1 Recurso.
+	- Receba +1V.
+	- Receba até 2 Arquivos Pesados.
+	- Receba um Pedaço de Mapa imediatamente.
+	- Receba -1A e -2B.
+	- Receba 1 Recurso Raro aleatório.
+	- Retorne para a última pasta que você esteve.
+	- Copie 1 Recurso não Único no seu Banco de Dados a sua escolha.
+	- Retorne para sua Zona Segura (Aplicando as regras de retorno para Zona Segura).
+	- Receba +1A e +2B.
+	- Tenha sua posição revelada a todos os jogadores.
+
+**Roleta Arquivo Desconhecido - Coop**
+	- Escolham o que quiserem desta roleta.
+	- Recebam 1 Recurso Comum aleatório.
+	- Bloqueie um caminho aleatório adjacente a cada jogador.
+	- O próximo jogador ganha 1 movimento extra neste turno.
+	- -1 ao número máximo de turnos.
+	- Recebam +3A.
+	- Percam uma de suas Zonas Seguras aleatoriamente.
+	- Recebam +5B.
+	- Recebam 1 Bug.
+	- Recebam 1 Recurso do tipo Tecla aleatório.
+	- Recebam -1V.
+	- Escolham o próximo jogo Cooperativo, quando forem jogar.
+	- Recebam -3A.
+	- +1 ao número máximo de turnos.
+	- Recebam -5B.
+	- Recebam uma Bet Online.
+	- Recebam um Arquivo Corrompido.
+	- Dupliquem seu B.
+	- O próximo jogador não pode se mover.
+	- Recebam uma Datamine Portátil.
+	- Rodem a roleta de Quarentena.
+	- Recebam 1 Recurso Incomum aleatório.
+	- Recebam -1B por jogador.
+	- Recebam +1V.
+	- Durante a próxima rodada, nenhuma Pasta Especial será ativada (Todas as pastas serão tratadas com Pastas Vazias).
+	- Joguem um jogo Cooperativo.
+	- Descartem 1 Recurso a escolha do grupo.
+	- Recebam 1 Patch.
+	- Recebam até 3 Arquivos Pesados.
+	- Recebam um Pedaço de Mapa imediatamente.
+	- Recebam -2A e -3B.
+	- Recebam 1 Recurso Raro aleatório.
+	- O próximo recurso que o grupo for comprar custará +2B.
+	- Copiem 1 Recurso não Único do Banco de Dados a escolha do grupo.
+	- Retornem um jogador aleatório para sua Zona Segura (Aplicando as regras de retorno para Zona Segura).
+	- Recebam +2A e +3B.
+	- Rodem esta roleta +2 vezes e fiquem com o pior resultado (a decisão do SO).
+	
+**Roleta Quarentena - PvP**
+	- Nada acontece.
+	- Receba -3B.
+	- Perca sua Zona Segura.
+	- Receba -2A.
+	- Dê 1 Recurso seu de maior raridade a outro jogador.
+	- Receba 1 Arquivo Pesado e 1 Arquivo Corrompido.
+	- Receba 2 Bugs.
+	- Seja teletransportado para um Pasta Vazia aleatória.
+	- Receba -1V.
+	- Dê a outro jogador uma cópia de um de seus pedaços de mapa.
+	- Esvazie seu Banco de Dados.
+	- Não realize nenhuma ação no próximo turno, além de se mover.
+
+**Roleta Quarentena - Coop**
+	- Nada acontece.
+	- Recebam -5B.
+	- -3 ao número máximo de rodadas.
+	- Recebam -4A.
+	- Recebam 2 Arquivos Pesados e 1 Arquivo Corrompido.
+	- Percam 1 de suas Zonas Seguras aleatoriamente.
+	- Recebam 2 Bugs.
+	- Sejam teletransportados para Pastas Vazias aleatórias.
+	- Recebam -1V.
+	- Percam 2 Recursos aleatórios.
+	- Esvaziem seu Banco de Dados.
+	- Não realizem nenhuma ação no próximo turno, além de se mover.
+
+-------------------------------------------------------------------------------------------------------------
+
+**Segue o Fluxo**
+1 - Qual o melhor suco de frutas de todos?
+2 - Qual é a primeira coisa que se faz ao acordar?
+3 - Qual o melhor gênero de filmes de todos?
+4 - Qual o nome do bombom mais gostoso de todos?
+5 - Qual a melhor comida pra se usar como arma em uma batalha de alimentos?
+6 - Qual a escola de samba mais famosa do Brasil?
+7 - Qual é a peça mais gostosa de um combinado japonês?
+8 - Nomeie um pintor, exceto Picasso.
+9 - Fora pão, salsicha e batata palha, qual outro elemento não pode faltar num cachorro quente ideal?
+10 - Nomeie uma banda ou cantor/cantora que use números em seu nome.
+11 - Qual é a quantidade ideal de pedaços de pizza para um pessoa comer em uma refeição?
+12 - Qual o melhor item do menu do McDonald's?
+13 - Qual o melhor petisco pra se comer num dia ensolarado na praia?
+14 - Qual o maior clube de futebol do mundo?
+15 - Qual o número mais difícil de se fazer a tabuada, entre 1 e 10?
+16 - Qual a primeira coisa que se faz ao chegar em casa após o trabalho/faculdade?
+17 - Nomeie um Pokémon que não seja o Pikachu.
+18 - Qual arma medieval, exceto a espada, é a melhor pra se usar em um combate?
+19 - Qual o vilão mais marcante no mundo do cinema?
+20 - Qual o melhor programa do Microsoft Office?
+21 - Qual a melhor forma geométrica de todas?
+22 - Qual é a melhor franquia de animação infantil?
+23 - Qual o melhor animal de estimação pra se ter, tirando cachorros e gatos?
+24 - Qual é o melhor filme com o Leonardo Di Caprio?
+25 - Qual é a melhor música dos Beatles?
+26 - Qual é a vacina mais importante de se tomar?
+27 - Qual é a melhor maneira de se preparar um ovo?
+28 - Nomeie uma das 7 notas musicais.
+29 - Nomeie um estilo arquitetônico.
+30 - Nomeie um animal que as pessoas usam como montaria, exceto o cavalo.
+31 - Qual é a letra mais inútil do alfabeto?
+32 - Qual é a melhor marca de cerveja para se tomar?
+33 - Qual é o melhor sabor de geleia?
+34 - Nomeie uma das peças de xadrez que não seja o rei nem a rainha.
+35 - Qual é o animal mais legal para se observar em um zoológico?
+36 - Qual o eletrodoméstico mais inútil que as pessoas costumam ter?
+37 - Qual a invenção mais impactante da humanidade?
+38 - Qual é o melhor país para se morar, fora o Brasil?
+39 - Quem é a pessoa mais querida pelos brasileiros de todos os tempos?
+40 - Qual é o melhor petisco de boteco de todos?
+41 - Qual é o melhor Talk Show (programa de entrevistas) da TV?
+42 - Nomeie algo que tem em um carro.
+43 - Qual é o elemento mais importante para se garantir uma boa festa?
+44 - Qual é a melhor série de TV de todos os tempos?
+45 - Qual é a melhor atração de um parque de diversões, exceto a montanha russa?
+46 - Nomeie um planeta do sistema solar que não seja a Terra nem Marte.
+47 - Qual é o embutido mais gostoso?
+48 - Qual flor é a mais bonita, tirando a rosa?
+49 - Nomeie uma das cores do arco-íris.
+50 - Nomeie um país da Europa.
+51 - Qual é o melhor sabor de pizza?
+52 - Qual é o esporte mais legal de se assistir, exceto o futebol?
+53 - Qual o personagem mais emblemático de Star Wars?
+54 - Quem foi o melhor jogador brasileiro de futebol, depois do Rei Pelé?
+55 - Nomeie um Teletubbies.
+56 - Qual é a atriz de cinema mais renomada da atualidade?
+57 - Qual é o esporte de inverno mais legal de todos?
+58 - Qual é a melhor fruta para se comer sozinha, sem nenhum acompanhamento?
+59 - Em minutos, qual a duração ideal de um banho?
+60 - Nomeie um filme com alienígenas.
+61 - Qual a raça de cachorro mais impopular de todas?
+62 - Qual era a matéria mais divertida de aprender no ensino médio?
+63 - Qual a pedra preciosa mais bonita de todas, exceto o diamante?
+64 - Um grupo de gente precisa ter, no mínimo, quantas pessoas?
+65 - Qual é a jogada mais forte para abrir uma partida de Jokenpô?
+66 - Em minutos, qual o tempo ideal de uma escovação de dentes?
+67 - Nomeie uma montadora de Fórmula 1, exceto a Ferrari.
+68 - Qual é a culinária típica mais gostosa de todas?
+69 - Qual é o melhor tipo de pão, exceto o pão francês?
+70 - Qual é a tecla do computador mais importante de todas, fora as letras?
+71 - Nomeie uma peça de roupa, exceto camiseta.
+72 - Qual o melhor jogo de se jogar com um baralho?
+73 - Nomeie um país da Ásia.
+74 - Nomeie um móvel doméstico de madeira, tirando mesa.
+75 - Nomeie um personagem do Castelo Rá-Tim-Bum, tirando o Nino.
+76 - Qual é o mais esquecível animal de fazenda?
+77 - Qual o melhor dos Vingadores, tirando o Capitão América e o Homem de Ferro?
+78 - Nomeie um oceano.
+79 - Qual é o melhor jogo de videogame de todos os tempos?
+80 - Qual o item mais indispensável em uma varanda?
+81 - Qual o tipo de árvore mais famoso do mundo?
+82 - Qual o melhor personagem fictício que resolve mistérios, tirando Sherlock Holmes?
+83 - Nomeie um serviço online de streaming, tirando o Netflix.
+84 - Nomeie uma empresa de eletrônicos.
+85 - Nomeie um país da África.
+86 - Qual é a melhor franquia de filmes de terror de todos os tempos?
+87 - Nomeie um deus ou semideus de origem grega, exceto Zeus.
+88 - Qual é a mais bonita das 7 maravilhas do mundo moderno?
+89 - Que carne não pode faltar em um churrasco?
+90 - Qual é o melhor filme com a Meryl Streep?
+91 - Qual é a melhor cor para se pintar a parede de um quarto, exceto branco?
+92 - Qual é o melhor sabor de bolo, exceto chocolate?
+93 - Nomeie uma série de TV com super-heróis.
+94 - Qual é o melhor chá para de tomar à noite?
+95 - Nomeie uma franquia de livros que tenham virado filmes.
+96 - Qual é a melhor atividade física para emagrecer?
+97 - Qual é o melhor tempero, depois de sal e pimenta?
+98 - Qual é a mais mencionada direção cardeal de todos os tempos?
+99 - Nomeie um elemento da tabela periódica.
+100 - Nomeie um cômodo da casa que não seja o quarto.
+
+-------------------------------------------------------------------------------------------------------------
+
+**Dados:**
+***Cada dado tem 21 como a soma de todos os seus lados (incluindo ganho ou perda de bits, quando necessário) e possuem aproximadamente a mesma chance de vitória.***
+
+	- Dado Cinza (Dado de Fuga): 1 / 2 / 3 / 4 / 5 / 6
+	- Dado Branco (Dado Par): 0 / 2 / 2 / 4 / 6 / 8(-1B)
+	- Dado Preto (Dado Ímpar): 1 / 3 / 3 / 3 / 5 / 7(-1B)
+	- Dado Vermelho (Dado 50-50): 0 / 0 / 0 / 7 / 7 / 7
+	- Dado Verde (Dado Binário): 0(-1B) / 0 / 1 / 1 / 10 / 10
+	- Dado Azul (Dado Periculoso): 1 / 1 / 1 / 1 / 1 / 16
+	- Dado Amarelo (Dado Tri): 0 / 0 / 3 / 3 / 6 / 9
+	- Dado Rosa (Dado 5ª Série): 1(-1B) / 1(-1B) / 2 / 4 / 6 / 9
+	- Dado Marrom (Dado Primo): 0(+2B) / 0(+2B) / 2 / 3 / 5 / 7
+	- Dado Bege (Dado Fibonacci): 1 / 1 / 2 / 3 / 5 / 8(+1B)
+	- Dado Roxo (Dado Quadrático): 1 / 1 / 1 / 4 / 4 / 9(+1B)
+	- Dado Laranja (Dado Coringa): 🃟 / 4,2 / 4,2 / 4,2 / 4,2 / 4,2
+	
+	🃟 = Vence de todos os números de 7 para cima, mas perde para todos os números de 6 para baixo.
+	
+**Links pro jogo:**
+	- https://wheelofnames.com/pt/
+	- https://www.canva.com
+	- https://miro.com/app/board/uXjVGVcpgYs=/
+	- https://www.palavrasque.com/palavra-aleatoria.php?Submit=Nova+palavra
+	- https://www.customdiceroller.com
+	- https://docs.google.com/spreadsheets/d/1mKCqxETtYdbd23S7okIlVqidfhWSiwFQas1RCPmpxZc/edit?gid=0#gid=0
+	- https://docs.google.com/document/d/1axAUcc5Yc8cpvAsKjQMLxoqSJ7hwGfE26T7Kw5-viO8/edit?tab=t.0
+	- https://www.google.com.br/earth/
+	- https://pt.safetydetectives.com/blog/glossario-antivirus/
+	- https://pt.wikipedia.org/wiki/Lista_de_termos_de_computação
+	- https://www.dafont.com/pt/ds-digital.font?text=0123456789&psize=l&back=author
+	- https://conexo.ws/pt/
+	- https://www.figma.com/
+	- https://miro.com/
+	
+	
+	
+	- __**Gerenciador de Tarefas:**__ O jogador tem direito a um pedido "sem restrições" (Sumirá do jogo enquanto qualquer jogador possuir o Arquivo Vital. Se retornar ao jogo, sendo o caso de mais nenhum jogador possuir o arquivo do Diretório Principal, independente de onde estivesse antes de sumir, o Gerenciador de Tarefas retornará à pasta de Downloads. Proibido pedidos que mencionem ou se relacionem com o Arquivo Vital ou que revelem o mapa. O máximo de rodadas na mochila de um jogador antes de retornar à pasta de Downloads é 3. O efeito do pedido dura no máximo 3 rodadas/vezes. O efeito do pedido pode continuar mesmo que algum jogador pegue o Arquivo Vital ou que outro jogador compre o Gerenciador de Tarefas enquanto o tempo do anterior ainda estiver valendo. O SO poderá escolher vetar ou alterar o pedido, caso julgue necessário. Pedidos não podem ser repetidos, nem por jogadores diferentes).
+	- __**Hyperlink:**__ O jogador é colocado numa pasta aleatória adjacente a uma pasta de Chave de Acesso ou a pasta de Diretório Principal (Caso o grupo já tenha todas as Chaves de Acesso). ___[Custo: 10B]___ Coop
+	- __**Hyperlink:**__ Vá para uma pasta aleatória adjacente a uma pasta de Chave de Acesso ou a pasta de Diretório Principal (Caso o jogador já tenha todas as Chaves de Acesso). ___[Custo: 4B]___ PvP
