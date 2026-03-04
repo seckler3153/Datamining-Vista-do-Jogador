@@ -121,6 +121,25 @@
             transform: scale(2);
             transform-origin: 0 0;
         }
+		
+		/* Correção para Desktop (Opera GX e outros) */
+		@media (min-width: 769px) {
+			body {
+				zoom: 0.9;
+				/* Garante que o conteúdo comece no topo esquerdo */
+				transform-origin: top left; 
+				/* Expande a largura para que os 90% ocupem 100% da visão real */
+				width: 111.11vw; 
+				height: 111.11vh;
+				margin: 0;
+				padding: 0;
+			}
+
+			header {
+				/* Garante que a barra preta superior se estenda por toda a nova largura */
+				width: 100%; 
+			}
+		}
 
         /* AJUSTES MOBILE */
         @media (max-width: 768px) {
