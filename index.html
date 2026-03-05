@@ -36,6 +36,18 @@
             box-sizing: border-box;
         }
 
+        /* Barra de Menu Retraída (Mobile) */
+        #mobile-menu-bar {
+            display: none;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+            justify-content: center;
+            border-bottom: 4px solid #000;
+            z-index: 1001;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
         .nav-btn {
             background: #444; 
             color: white; 
@@ -46,7 +58,6 @@
             text-transform: uppercase; 
             transition: all 0.2s; 
             border-radius: 5px;
-            /* MODIFICAÇÃO: flex-grow em 0 e largura fixa para desktop */
             flex: 0 0 135px;
             width: 135px;
             height: 45px;
@@ -122,50 +133,106 @@
             transform-origin: 0 0;
         }
 		
-		/* Correção para Desktop (Opera GX e outros) */
+		#password-modal {
+			display: none;
+			position: fixed;
+			z-index: 2000;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0,0,0,0.8);
+			justify-content: center;
+			align-items: center;
+		}
+
+		.modal-content {
+			background-color: #222;
+			padding: 20px;
+			border: 2px solid var(--primary);
+			border-radius: 10px;
+			text-align: center;
+			width: 300px;
+		}
+
+		.password-container {
+			position: relative;
+			margin: 15px 0;
+		}
+
+		.password-container input {
+			width: 100%;
+			padding: 10px;
+			padding-right: 40px;
+			box-sizing: border-box;
+			background: #000;
+			border: 1px solid #555;
+			color: white;
+			font-size: 16px;
+		}
+
+		.toggle-password {
+			position: absolute;
+			right: 10px;
+			top: 50%;
+			transform: translateY(-50%);
+			cursor: pointer;
+			font-size: 20px;
+			user-select: none;
+		}
+
+		.modal-btns {
+			display: flex;
+			gap: 10px;
+			justify-content: center;
+		}
+
+		.modal-btns button {
+			padding: 8px 15px;
+			cursor: pointer;
+			border: none;
+			border-radius: 5px;
+			font-weight: bold;
+		}
+
+		.btn-confirm { background: var(--primary); color: white; }
+		.btn-cancel { background: #666; color: white; }
+		
 		@media (min-width: 769px) {
 			body {
 				zoom: 0.9;
-				/* Garante que o conteúdo comece no topo esquerdo */
 				transform-origin: top left; 
-				/* Expande a largura para que os 90% ocupem 100% da visão real */
 				width: 111.11vw; 
 				height: 111.11vh;
 				margin: 0;
 				padding: 0;
 			}
-
-			header {
-				/* Garante que a barra preta superior se estenda por toda a nova largura */
-				width: 100%; 
-			}
+			header { width: 100%; }
 		}
 
-        /* AJUSTES MOBILE */
         @media (max-width: 768px) {
             header {
-                padding: 10px 5px;
-                gap: 8px; /* Espaçamento entre botões */
-                max-height: 40vh;
-                overflow-y: visible; /* Garante que não apareça scroll desnecessário */
-                justify-content: center;
+                padding: 5px;
+                gap: 5px;
+                max-height: 35vh;
+                overflow-y: auto;
             }
 
             .nav-btn {
                 font-size: 11px;
-                height: 45px;
-                /* Resetamos as larguras fixas anteriores */
-                flex: 0 0 auto;
+                flex: 0 0 30%;
+                width: 30%;
+                height: 40px;
             }
 
-            /* Configuração: 1ª linha com 3 botões */
-            .nav-btn:nth-child(-n+3) {
-                width: calc(33% - 10px); /* Aproximadamente 1/3 da tela */
+            /* Esconde as abas quando o modo retrátil está ativo */
+            header.mobile-retracted {
+                display: none;
             }
 
-            /* Configuração: Próximas linhas com 2 botões */
-            .nav-btn:nth-child(n+4) {
-                width: calc(33% - 10px); /* Aproximadamente metade da tela */
+            /* Mostra a barra do botão MENU quando retraído */
+            #mobile-menu-bar.active {
+                display: flex;
             }
 
             #frame-caminhos.active {
@@ -178,13 +245,31 @@
 </head>
 <body>
 
-<header>
+<div id="password-modal">
+    <div class="modal-content">
+        <h3 style="color: white; margin-top: 0;">Acesso Restrito</h3>
+        <div class="password-container">
+            <input type="password" id="pass-input" placeholder="Digite a senha...">
+            <span class="toggle-password" onclick="togglePass()">👁️</span>
+        </div>
+        <div class="modal-btns">
+            <button class="btn-confirm" onclick="checkPassword()">Entrar</button>
+            <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div id="mobile-menu-bar">
+    <button class="nav-btn" onclick="openMobileMenu()">MENU</button>
+</div>
+
+<header id="main-header">
     <button class="nav-btn active" onclick="showCommand('welcome', this)">Início</button>
     <button class="nav-btn" onclick="showCommand('regras', this)">Regras</button>
     <button class="nav-btn" onclick="showCommand('pastas', this)">Pastas</button>
 	<button class="nav-btn" onclick="showCommand('banco-all', this)">Banco de Dados</button>
     <button class="nav-btn" onclick="showCommand('mapas', this)">Mapas</button>
-    <button class="nav-btn" onclick="showCommand('caminhos', this)">Caminhos</button>
+	<button class="nav-btn" onclick="showCommand('caminhos', this)">Caminhos</button>
 	<button class="nav-btn" onclick="showCommand('roletas', this)">Roletas</button>
 </header>
 
@@ -201,24 +286,85 @@
     <iframe id="frame-pastas" src="Pastas - Datamining.html"></iframe>
 	<iframe id="frame-banco-all" src="Banco de Dados - All - Datamining.html"></iframe>
     <iframe id="frame-mapas" src="Mapas - Datamining.html"></iframe>
-    <iframe id="frame-caminhos" src="Caminhos - Datamining.html"></iframe>
+	<iframe id="frame-caminhos" src="Caminhos - Datamining.html"></iframe>
 	<iframe id="frame-roletas" src="Roletas - Datamining.html"></iframe>
 </div>
 
 <script>
+    let recursosAutorizados = false;
+    const SENHA_RECURSOS = "16053153#";
+    let pendingBtn = null; 
+
     function showCommand(id, btn) {
+        if (id === 'recursos' && !recursosAutorizados) {
+            pendingBtn = btn;
+            document.getElementById('password-modal').style.display = 'flex';
+            document.getElementById('pass-input').focus();
+            return;
+        }
+
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
         document.getElementById('welcome').classList.remove('active');
         document.querySelectorAll('iframe').forEach(f => f.classList.remove('active'));
 
+        const header = document.getElementById('main-header');
+        const mobileBar = document.getElementById('mobile-menu-bar');
+
         if (id === 'welcome') {
             document.getElementById('welcome').classList.add('active');
+            header.classList.remove('mobile-retracted');
+            mobileBar.classList.remove('active');
         } else {
-            document.getElementById('frame-' + id).classList.add('active');
+            const frame = document.getElementById('frame-' + id);
+            if(frame) frame.classList.add('active');
+            
+            // Retrai o menu no mobile
+            if (window.innerWidth <= 768) {
+                header.classList.add('mobile-retracted');
+                mobileBar.classList.add('active');
+            }
         }
     }
+
+    function openMobileMenu() {
+        document.getElementById('main-header').classList.remove('mobile-retracted');
+        document.getElementById('mobile-menu-bar').classList.remove('active');
+    }
+
+    function checkPassword() {
+        const input = document.getElementById('pass-input');
+        if (input.value === SENHA_RECURSOS) {
+            recursosAutorizados = true;
+            closeModal();
+            showCommand('recursos', pendingBtn);
+        } else {
+            alert("Senha Incorreta!");
+            input.value = "";
+        }
+    }
+
+    function togglePass() {
+        const input = document.getElementById('pass-input');
+        const icon = document.querySelector('.toggle-password');
+        if (input.type === "password") {
+            input.type = "text";
+            icon.textContent = "🔒";
+        } else {
+            input.type = "password";
+            icon.textContent = "👁️";
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('password-modal').style.display = 'none';
+        document.getElementById('pass-input').value = "";
+    }
+
+    document.getElementById('pass-input')?.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') checkPassword();
+    });
 
     window.onload = function() {
         if (!document.querySelector('meta[name="viewport"]')) {
