@@ -566,7 +566,13 @@
 		
 		document.getElementById('soma-vermelha').innerText = '';
 		document.getElementById('soma-azul').innerText = '';
+		
 		renderizarTriangulo();
+
+		// Fecha o modal automaticamente apenas se estiver no modo mobile (largura <= 768px)
+		if (window.innerWidth <= 768) {
+			fecharModalBH();
+		}
 	}
 
     // --- LOGICA ORIGINAL ADAPTADA ---
