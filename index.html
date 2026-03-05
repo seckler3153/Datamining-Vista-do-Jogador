@@ -224,6 +224,14 @@
                 width: 30%;
                 height: 40px;
             }
+			
+			/* Configuração: 1ª linha com 3 botões */
+            .nav-btn:nth-child(-n+3) {
+                width: calc(33% - 10px); /* Aproximadamente 1/3 da tela */
+			
+			/* Configuração: Próximas linhas com 2 botões */
+            .nav-btn:nth-child(n+4) {
+                width: calc(33% - 10px); /* Aproximadamente metade da tela */
 
             /* Esconde as abas quando o modo retrátil está ativo */
             header.mobile-retracted {
